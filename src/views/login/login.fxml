@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXPasswordField?>
+<?import com.jfoenix.controls.JFXSpinner?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import java.net.URL?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Text?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="400.0" styleClass="login-background" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <JFXTextField focusColor="#6456d0" labelFloat="true" layoutX="61.0" layoutY="201.0" prefHeight="36.0" prefWidth="279.0" promptText="Nombre de usuario" styleClass="login-input" unFocusColor="WHITE">
+      </JFXTextField>
+
+      <JFXPasswordField focusColor="#6456d0" labelFloat="true" layoutX="61.0" layoutY="300.0" prefHeight="36.0" prefWidth="279.0" promptText="Contraseña" styleClass="login-input" unFocusColor="WHITE">
+      </JFXPasswordField>
+
+      <Text fill="WHITE" layoutX="28.0" layoutY="95.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="login-title" text="Clothy" textAlignment="CENTER" wrappingWidth="344.0">
+      </Text>
+
+      <JFXButton layoutX="155.0" layoutY="463.0" ripplerFill="#d3d3d3" styleClass="login-button" text="Entrar" textFill="WHITE">
+      </JFXButton>
+
+      <Pane prefHeight="600.0" prefWidth="400.0" styleClass="loader-container" visible="false">
+         <children>
+            <JFXSpinner layoutX="166.0" layoutY="266.0" radius="30.0" />
+         </children>
+      </Pane>
+
+   </children>
+   <stylesheets>
+      <URL value="@../../resources/stylesheets/login.css" />
+      <URL value="@../../resources/stylesheets/style.css" />
+   </stylesheets>
+</Pane>
