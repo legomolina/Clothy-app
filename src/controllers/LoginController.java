@@ -1,6 +1,6 @@
 package controllers;
 
-import Utils.AnimationHandler;
+import utils.AnimationHandler;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
