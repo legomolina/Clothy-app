@@ -1,5 +1,7 @@
 .login-background {
-	-fx-background-color: linear-gradient(to bottom right, #ffd89b, #19547b);
+	/*-fx-background-color: linear-gradient(to bottom right, #ffd89b, #19547b);*/
+	-fx-background-image: url("../../images/backgrounds/hangers_bg.jpg");
+    -fx-background-size: cover;
 }
 
 .login-title {
@@ -9,7 +11,7 @@
 .login-input {
 	-fx-text-fill: #FFFFFF;
 	-fx-prompt-text-fill: #DDDDDD;
-	-fx-font: 16px 'Open Sans', sans-serif;
+	-fx-font: 18px 'Open Sans', sans-serif;
 	-fx-font-weight: bold;
 }
 
@@ -17,6 +19,8 @@
 	-fx-font: 20px 'Open Sans', sans-serif;
 	-fx-font-weight: normal;
 	-fx-cursor: hand;
+	-fx-border-color: white;
+	-fx-border-radius: 3px;
 }
 
 .loader-container {
