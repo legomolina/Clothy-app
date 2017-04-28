@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.Pane?>
+<?import java.net.URL?>
+<Pane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+      prefHeight="400.0" prefWidth="600.0" styleClass="user-input" xmlns="http://javafx.com/javafx/8"
+      xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.UsersController">
+    <children>
+        <JFXTextField labelFloat="true" layoutX="249.0" layoutY="53.0" promptText="Nombre" styleClass="user-input"/>
+        <JFXTextField labelFloat="true" layoutX="249.0" layoutY="119.0" promptText="Apellidos" styleClass="user-input"/>
+        <JFXTextField labelFloat="true" layoutX="249.0" layoutY="189.0" promptText="Teléfono" styleClass="user-input"/>
+        <ImageView fx:id="userImage" fitHeight="132.0" fitWidth="154.0" layoutX="35.0" layoutY="35.0"
+                   pickOnBounds="true" preserveRatio="true">
+            <image>
+                <Image url="@../../resources/images/skull.jpg"/>
+            </image>
+        </ImageView>
+    </children>
+
+    <stylesheets>
+        <URL value="@../../resources/stylesheets/users/users.css"/>
+        <URL value="@../../resources/stylesheets/style.css"/>
+    </stylesheets>
+</Pane>

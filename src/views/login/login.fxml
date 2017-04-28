@@ -35,7 +35,7 @@
 
     </children>
     <stylesheets>
-        <URL value="@../../resources/stylesheets/login.css"/>
+        <URL value="@../../resources/stylesheets/login/login.css"/>
         <URL value="@../../resources/stylesheets/style.css"/>
     </stylesheets>
 </Pane>

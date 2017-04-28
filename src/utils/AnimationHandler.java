@@ -27,8 +27,7 @@ public class AnimationHandler {
         return new AnimationBuilder(animation);
     }
 
-
-    public class AnimationBuilder {
+    public static class AnimationBuilder {
         private Transition animation;
 
         AnimationBuilder(Transition animation) {
