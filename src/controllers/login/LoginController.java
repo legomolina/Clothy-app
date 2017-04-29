@@ -3,16 +3,29 @@ package controllers.login;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
-import com.jfoenix.validation.RequiredFieldValidator;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Rectangle2D;
+import javafx.scene.SnapshotParameters;
+import javafx.scene.control.Label;
 import javafx.scene.effect.BoxBlur;
+import javafx.scene.effect.Glow;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
-import models.User;
+import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
+import models.Employee;
 import utils.AnimationHandler;
 import utils.BCrypt;
 import utils.DatabaseHandler;
+import views.main_menu.MainMenu;
+import views.users.UserTab;
 
+import javax.swing.text.BoxView;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -22,30 +35,35 @@ import java.util.ResourceBundle;
 
 public class LoginController implements Initializable {
 
+    private static final double width = 847;
+    private static final double height = 1271;
+
     @FXML
     private JFXTextField username;
     @FXML
-    private RequiredFieldValidator usernameValidator;
-    @FXML
     private JFXPasswordField password;
-    @FXML
-    private RequiredFieldValidator passwordValidator;
     @FXML
     private JFXButton submit;
     @FXML
+    private Label errorText;
+    @FXML
     private Pane loader;
     @FXML
-    private Pane loginBackground;
+    private Pane frostView;
+    @FXML
+    private ImageView frostImage;
 
     private void setListeners() {
-        username.getValidators().add(usernameValidator);
-        username.focusedProperty().addListener((o, oldVal, newVal) -> {
-            if (!newVal) username.validate();
+        submit.disableProperty().bind((username.textProperty().isNotEmpty()).and(password.textProperty().isNotEmpty()).not());
+
+        username.textProperty().addListener((observableValue, s, t1) -> {
+            if(errorText.isVisible())
+                new AnimationHandler().fadeOut(errorText, 250).execute(actionEvent -> errorText.setVisible(false));
         });
 
-        password.getValidators().add(passwordValidator);
-        password.focusedProperty().addListener((o, oldVal, newVal) -> {
-            if (!newVal) password.validate();
+        password.textProperty().addListener((observableValue, s, t1) -> {
+            if(errorText.isVisible())
+                new AnimationHandler().fadeOut(errorText, 250).execute(actionEvent -> errorText.setVisible(false));
         });
 
         submit.setOnAction(actionEvent -> {
@@ -55,8 +73,8 @@ public class LoginController implements Initializable {
             new Thread(() -> {
 
                 Connection connection = DatabaseHandler.getConnection();
-                String selectSQL = "SELECT * FROM users WHERE user_login_name = ?";
-                User activeUser = null;
+                String selectSQL = "SELECT * FROM employees WHERE employee_login_name = ?";
+                Employee activeEmployee = null;
 
                 try {
                     PreparedStatement statement = connection.prepareStatement(selectSQL);
@@ -65,13 +83,12 @@ public class LoginController implements Initializable {
                     ResultSet result = statement.executeQuery();
 
                     while (result.next()) {
-                        if (BCrypt.checkpw(password.getText(), result.getString("user_login_password"))) {
-                            activeUser = new User(result.getInt("user_id"), result.getString("user_name"),
-                                    result.getString("user_surname"), result.getString("user_address"),
-                                    result.getString("user_phone"), result.getString("user_email"),
-                                    result.getString("user_login_name"), result.getString("user_login_password"),
-                                    result.getString("user_login_type"));
-
+                        if (BCrypt.checkpw(password.getText(), result.getString("employee_login_password")) && result.getInt("employee_is_active") > 0) {
+                            activeEmployee = new Employee(result.getInt("employee_id"), result.getString("employee_name"),
+                                    result.getString("employee_surname"), result.getString("employee_address"),
+                                    result.getString("employee_phone"), result.getString("employee_email"),
+                                    result.getString("employee_login_name"), result.getString("employee_login_password"),
+                                    result.getString("employee_login_type"));
                             break;
                         }
                     }
@@ -79,22 +96,29 @@ public class LoginController implements Initializable {
                     System.out.println("An error occurred with Database connection");
                     e.printStackTrace();
                 } catch (NullPointerException e) {
-                    System.out.println("An error occurred while preparing the Query: " + selectSQL);
+                    System.out.println("An error occurred preparing the Query: " + selectSQL);
                     e.printStackTrace();
                 }
 
-                System.out.println("hola: " + activeUser.getName());
+                if(activeEmployee == null) {
+                    errorText.setVisible(true);
+                    new AnimationHandler().fadeIn(errorText, 500).execute();
+                }
+                else {
+                    System.out.println("hola: " + activeEmployee.getName());
+                }
 
                 new AnimationHandler().fadeOut(loader, 500).execute(finishedEvent -> loader.setVisible(false));
             }).start();
 
-            //new MainMenu();
+            new MainMenu();
         });
     }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        loginBackground.setEffect(new BoxBlur(7, 7, 3));
+        frostImage.setClip(new Rectangle(frostView.getLayoutX(), frostView.getLayoutY(), frostView.getPrefWidth(), frostView.getPrefHeight()));
+        frostView.setClip(new Rectangle(0, 0, frostView.getPrefWidth(), frostView.getPrefHeight()));
 
         setListeners();
     }

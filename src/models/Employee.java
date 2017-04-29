@@ -1,7 +1,7 @@
 package models;
 
 
-public class User {
+public class Employee {
     private int id;
     private String name;
     private String surname;
@@ -12,7 +12,7 @@ public class User {
     private String loginPassword;
     private String loginType;
 
-    public User(int id, String name, String surname, String address, String email, String phone, String loginName, String loginPassword, String loginType) {
+    public Employee(int id, String name, String surname, String address, String email, String phone, String loginName, String loginPassword, String loginType) {
         this.id = id;
         this.name = name;
         this.surname = surname;
