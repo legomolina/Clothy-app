@@ -3,6 +3,7 @@ package controllers.login;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
+import com.jfoenix.validation.RequiredFieldValidator;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.effect.BoxBlur;
@@ -24,7 +25,11 @@ public class LoginController implements Initializable {
     @FXML
     private JFXTextField username;
     @FXML
+    private RequiredFieldValidator usernameValidator;
+    @FXML
     private JFXPasswordField password;
+    @FXML
+    private RequiredFieldValidator passwordValidator;
     @FXML
     private JFXButton submit;
     @FXML
@@ -33,14 +38,21 @@ public class LoginController implements Initializable {
     private Pane loginBackground;
 
     private void setListeners() {
+        username.getValidators().add(usernameValidator);
+        username.focusedProperty().addListener((o, oldVal, newVal) -> {
+            if (!newVal) username.validate();
+        });
+
+        password.getValidators().add(passwordValidator);
+        password.focusedProperty().addListener((o, oldVal, newVal) -> {
+            if (!newVal) password.validate();
+        });
+
         submit.setOnAction(actionEvent -> {
             loader.setVisible(true);
             new AnimationHandler().fadeIn(loader, 500, 0.6).execute();
 
             new Thread(() -> {
-                if(username.getText().equals("")) {
-
-                }
 
                 Connection connection = DatabaseHandler.getConnection();
                 String selectSQL = "SELECT * FROM users WHERE user_login_name = ?";
@@ -73,10 +85,8 @@ public class LoginController implements Initializable {
 
                 System.out.println("hola: " + activeUser.getName());
 
-                new AnimationHandler().fadeOut(loader, 500).execute();
+                new AnimationHandler().fadeOut(loader, 500).execute(finishedEvent -> loader.setVisible(false));
             }).start();
-
-
 
             //new MainMenu();
         });

@@ -2,6 +2,8 @@ package utils;
 
 import javafx.animation.FadeTransition;
 import javafx.animation.Transition;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.util.Duration;
 
@@ -44,6 +46,11 @@ public class AnimationHandler {
 
         public void execute() {
             animation.playFromStart();
+        }
+
+        public void execute(EventHandler<ActionEvent> callback) {
+            animation.playFromStart();
+            animation.setOnFinished(callback);
         }
     }
 }
