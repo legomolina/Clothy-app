@@ -7,15 +7,23 @@ import javafx.util.Duration;
 
 public class AnimationHandler {
 
+    public AnimationBuilder fadeOut(Node node, double time) {
+        return fade(node, time, node.getOpacity(), 0);
+    }
+
+    public AnimationBuilder fadeOut(Node node, double time, double to) {
+        return fade(node, time, node.getOpacity(), to);
+    }
+
     public AnimationBuilder fadeIn(Node node, double time) {
-        return fadeIn(node, time, 0.0, 1.0);
+        return fade(node, time, node.getOpacity(), 1.0);
     }
 
     public AnimationBuilder fadeIn(Node node, double time, double to) {
-        return fadeIn(node, time, 0.0, to);
+        return fade(node, time, node.getOpacity(), to);
     }
 
-    public AnimationBuilder fadeIn(Node node, double time, double from, double to) {
+    private AnimationBuilder fade(Node node, double time, double from, double to) {
         FadeTransition animation = new FadeTransition(Duration.millis(time));
 
         animation.setNode(node);
