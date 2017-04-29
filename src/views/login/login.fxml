@@ -13,7 +13,7 @@
 <?import javafx.scene.text.Text?>
 <?import java.net.URL?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="400.0" styleClass="login-container" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.LoginController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="400.0" styleClass="login-container" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.login.LoginController">
     <children>
       <Pane fx:id="loginBackground" prefHeight="600.0" prefWidth="400.0" styleClass="login-background" />
         <Text fill="WHITE" layoutX="28.0" layoutY="95.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="login-title" text="Clothy" textAlignment="CENTER" wrappingWidth="344.0">

@@ -1,4 +1,4 @@
-package controllers;
+package controllers.login;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPasswordField;
