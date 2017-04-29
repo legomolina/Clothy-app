@@ -10,6 +10,7 @@ public class Clothy extends Application{
         Parent loginRoot = FXMLLoader.load(getClass().getResource("views/login/login.fxml"));
         loginStage.setTitle("Clothy App");
         loginStage.setScene(new Scene(loginRoot));
+        loginStage.setResizable(false);
         loginStage.show();
     }
 
