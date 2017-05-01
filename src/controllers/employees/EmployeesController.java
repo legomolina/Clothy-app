@@ -38,6 +38,15 @@ public class EmployeesController extends BaseController implements Initializable
     @FXML private JFXTreeTableView<Employee> infoTable;
 
     private void fillEmployeeInformation(Employee employee) {
+        String style = "-fx-text-fill: #000000;";
+        employeeName.setStyle(style);
+        employeeEmail.setStyle(style);
+        employeeAddress.setStyle(style);
+        employeePhone.setStyle(style);
+        employeeLoginName.setStyle(style);
+        employeeLoginType.setStyle(style);
+        employeeStatus.setStyle(style);
+
         employeeName.setText(employee.getName().getValue() + " " + employee.getSurname().getValue());
         employeeEmail.setText(employee.getEmail().getValue());
         employeeAddress.setText(employee.getAddress().getValue());
@@ -100,6 +109,15 @@ public class EmployeesController extends BaseController implements Initializable
     public void initialize(URL url, ResourceBundle resourceBundle) {
         ImageUtils.cropImage(employeeImage, 120, 120);
         ImageUtils.roundImage(employeeImage, 60);
+
+        String style = "-fx-text-fill: #CCCCCC;";
+        employeeName.setStyle(style);
+        employeeEmail.setStyle(style);
+        employeeAddress.setStyle(style);
+        employeePhone.setStyle(style);
+        employeeLoginName.setStyle(style);
+        employeeLoginType.setStyle(style);
+        employeeStatus.setStyle(style);
 
         final Service<Void> service = new Service<Void>() {
             @Override

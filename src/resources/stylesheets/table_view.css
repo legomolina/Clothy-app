@@ -26,7 +26,7 @@
     -fx-font: 20px "Open Sans", sans-serif;
 }
 
-.tree-table-view{
+.tree-table-view {
     -fx-background-color: #F6F6F6;
     -fx-tree-table-rippler-color : rgba(255, 0, 0, 0.9);
     -fx-table-cell-border-color: transparent;
