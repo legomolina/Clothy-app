@@ -2,24 +2,21 @@ package views.main_menu;
 
 
 import controllers.main_menu.MainMenuController;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import models.Employee;
+import views.BaseView;
 
-public class MainMenu extends Stage {
-    public MainMenu() {
-        try {
-            FXMLLoader userLoader = new FXMLLoader(getClass().getResource("main_menu.fxml"));
-            Parent userRoot = userLoader.load();
+public class MainMenu extends BaseView {
+    public MainMenu(Stage previousStage, Employee loggedEmployee) {
+        super(previousStage, true);
 
-            MainMenuController controller = userLoader.getController();
-            controller.setInitialText();
+        Stage mainMenuStage = createStage("Clothy App");
+        Scene mainMenuScene = loadScene(mainMenuStage, "main_menu.fxml", new MainMenuController(loggedEmployee));
 
-            this.setScene(new Scene(userRoot));
-            this.show();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        mainMenuStage.getIcons().add(new Image("resources/clothy_icon.png"));
+        mainMenuStage.setScene(mainMenuScene);
+        mainMenuStage.show();
     }
 }

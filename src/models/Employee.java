@@ -1,98 +1,104 @@
 package models;
 
 
-public class Employee {
-    private int id;
-    private String name;
-    private String surname;
-    private String address;
-    private String email;
-    private String phone;
-    private String loginName;
-    private String loginPassword;
-    private String loginType;
+import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+
+public class Employee extends RecursiveTreeObject<Employee> {
+    private IntegerProperty id;
+    private StringProperty name;
+    private StringProperty surname;
+    private StringProperty address;
+    private StringProperty email;
+    private StringProperty phone;
+    private StringProperty loginName;
+    private StringProperty loginPassword;
+    private StringProperty loginType;
 
     public Employee(int id, String name, String surname, String address, String email, String phone, String loginName, String loginPassword, String loginType) {
-        this.id = id;
-        this.name = name;
-        this.surname = surname;
-        this.address = address;
-        this.email = email;
-        this.phone = phone;
-        this.loginName = loginName;
-        this.loginPassword = loginPassword;
-        this.loginType = loginType;
+        this.id = new SimpleIntegerProperty(id);
+        this.name = new SimpleStringProperty(name);
+        this.surname = new SimpleStringProperty(surname);
+        this.address = new SimpleStringProperty(address);
+        this.email = new SimpleStringProperty(email);
+        this.phone = new SimpleStringProperty(phone);
+        this.loginName = new SimpleStringProperty(loginName);
+        this.loginPassword = new SimpleStringProperty(loginPassword);
+        this.loginType = new SimpleStringProperty(loginType);
     }
 
-    public int getId() {
+    public IntegerProperty getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(IntegerProperty id) {
         this.id = id;
     }
 
-    public String getName() {
+    public StringProperty getName() {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(StringProperty name) {
         this.name = name;
     }
 
-    public String getSurname() {
+    public StringProperty getSurname() {
         return surname;
     }
 
-    public void setSurname(String surname) {
+    public void setSurname(StringProperty surname) {
         this.surname = surname;
     }
 
-    public String getAddress() {
+    public StringProperty getAddress() {
         return address;
     }
 
-    public void setAddress(String address) {
+    public void setAddress(StringProperty address) {
         this.address = address;
     }
 
-    public String getEmail() {
+    public StringProperty getEmail() {
         return email;
     }
 
-    public void setEmail(String email) {
+    public void setEmail(StringProperty email) {
         this.email = email;
     }
 
-    public String getPhone() {
+    public StringProperty getPhone() {
         return phone;
     }
 
-    public void setPhone(String phone) {
+    public void setPhone(StringProperty phone) {
         this.phone = phone;
     }
 
-    public String getLoginName() {
+    public StringProperty getLoginName() {
         return loginName;
     }
 
-    public void setLoginName(String loginName) {
+    public void setLoginName(StringProperty loginName) {
         this.loginName = loginName;
     }
 
-    public String getLoginPassword() {
+    public StringProperty getLoginPassword() {
         return loginPassword;
     }
 
-    public void setLoginPassword(String loginPassword) {
+    public void setLoginPassword(StringProperty loginPassword) {
         this.loginPassword = loginPassword;
     }
 
-    public String getLoginType() {
+    public StringProperty getLoginType() {
         return loginType;
     }
 
-    public void setLoginType(String loginType) {
+    public void setLoginType(StringProperty loginType) {
         this.loginType = loginType;
     }
 }
