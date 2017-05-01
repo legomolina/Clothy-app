@@ -5,9 +5,9 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
-public class Clothy extends Application{
+public class Clothy extends Application {
     @Override
-    public void start(Stage loginStage) throws Exception{
+    public void start(Stage loginStage) throws Exception {
         Parent loginRoot = FXMLLoader.load(getClass().getResource("views/login/login.fxml"));
         loginStage.setTitle("Clothy App");
         loginStage.getIcons().add(new Image("resources/clothy_icon.png"));

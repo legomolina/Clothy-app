@@ -3,7 +3,9 @@ package utils;
 
 import config.Constants;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 
 public class DatabaseHandler {
     public static Connection getConnection() {

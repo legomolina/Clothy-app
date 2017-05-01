@@ -3,7 +3,8 @@ package controllers.main_menu;
 
 import com.jfoenix.controls.JFXMasonryPane;
 import com.jfoenix.controls.JFXRippler;
-import controllers.Controller;
+import com.sun.javafx.stage.StageHelper;
+import controllers.BaseController;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
@@ -13,34 +14,38 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 import models.Employee;
+import views.BaseStage;
 import views.employees.Employees;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class MainMenuController implements Initializable, Controller {
+public class MainMenuController extends BaseController implements Initializable {
+
     private Employee loggedEmployee;
 
-    @FXML
-    private Label welcomeLabel;
-    @FXML
-    private Pane titleContainer;
-    @FXML
-    private Pane employeesButton;
-    @FXML
-    private Pane articlesButton;
-    @FXML
-    private Pane clientsButton;
-    @FXML
-    private Pane salesButton;
-    @FXML
-    private Pane ordersButton;
-    @FXML
-    private JFXMasonryPane menuButtons;
+    @FXML private Label welcomeLabel;
+    @FXML private Pane titleContainer;
+    @FXML private Pane employeesButton;
+    @FXML private Pane articlesButton;
+    @FXML private Pane clientsButton;
+    @FXML private Pane salesButton;
+    @FXML private Pane ordersButton;
+    @FXML private JFXMasonryPane menuButtons;
 
     @FXML
     private void openEmployeesManagement() {
-        new Employees((Stage) employeesButton.getScene().getWindow());
+        boolean opened = false;
+
+        for (Stage s : StageHelper.getStages()) {
+            if (((BaseStage) s).getStageIdentification().equals("employees")) {
+                opened = true;
+                break;
+            }
+        }
+
+        if (!opened)
+            new Employees((Stage) employeesButton.getScene().getWindow());
     }
 
     public MainMenuController(Employee loggedEmployee) {

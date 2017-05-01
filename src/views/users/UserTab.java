@@ -1,7 +1,6 @@
 package views.users;
 
 import controllers.users.UserTabController;
-import controllers.users.UsersController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;

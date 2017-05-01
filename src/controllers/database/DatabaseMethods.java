@@ -1,8 +1,6 @@
 package controllers.database;
 
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import models.Employee;
 import utils.DatabaseHandler;
 
@@ -23,12 +21,12 @@ public class DatabaseMethods {
             PreparedStatement statement = connection.prepareStatement(sqlQuery);
             ResultSet result = statement.executeQuery();
 
-            while(result.next()) {
+            while (result.next()) {
                 employees.add(new Employee(result.getInt("employee_id"), result.getString("employee_name"),
                         result.getString("employee_surname"), result.getString("employee_address"),
                         result.getString("employee_email"), result.getString("employee_phone"),
                         result.getString("employee_login_name"), result.getString("employee_login_password"),
-                        result.getString("employee_login_type")));
+                        result.getString("employee_login_type"), result.getInt("employee_is_active") > 0));
             }
 
         } catch (NullPointerException e) {

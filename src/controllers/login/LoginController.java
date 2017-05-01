@@ -3,7 +3,7 @@ package controllers.login;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
-import controllers.Controller;
+import controllers.BaseController;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -25,21 +25,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
-public class LoginController implements Initializable, Controller {
-    @FXML
-    private JFXTextField username;
-    @FXML
-    private JFXPasswordField password;
-    @FXML
-    private JFXButton submit;
-    @FXML
-    private Label errorText;
-    @FXML
-    private Pane loader;
-    @FXML
-    private Pane frostView;
-    @FXML
-    private ImageView frostImage;
+public class LoginController extends BaseController implements Initializable {
+    @FXML private JFXTextField username;
+    @FXML private JFXPasswordField password;
+    @FXML private JFXButton submit;
+    @FXML private Label errorText;
+    @FXML private Pane loader;
+    @FXML private Pane frostView;
+    @FXML private ImageView frostImage;
 
     @FXML
     private void submitLogin() {
@@ -47,7 +40,7 @@ public class LoginController implements Initializable, Controller {
         AnimationHandler.fadeIn(loader, 500, 0.6).execute();
 
         //DEBUG
-        Employee activeEmployeeDEBUG = new Employee(1, "Cristian", "Molina", "", "", "", "", "", "TYPE_ADMIN");
+        Employee activeEmployeeDEBUG = new Employee(1, "Cristian", "Molina", "", "", "", "", "", "TYPE_ADMIN", true);
         Platform.runLater(() -> new MainMenu((Stage) submit.getScene().getWindow(), activeEmployeeDEBUG));
 
         new Thread(() -> {
@@ -69,7 +62,7 @@ public class LoginController implements Initializable, Controller {
                                 result.getString("employee_surname"), result.getString("employee_address"),
                                 result.getString("employee_phone"), result.getString("employee_email"),
                                 result.getString("employee_login_name"), result.getString("employee_login_password"),
-                                result.getString("employee_login_type"));
+                                result.getString("employee_login_type"), result.getInt("employee_is_active") > 0);
                         break;
                     }
                 }
@@ -97,7 +90,7 @@ public class LoginController implements Initializable, Controller {
     @FXML
     private void sendLogin() {
         if (!submit.isDisabled()) {
-           submitLogin();
+            submitLogin();
         }
     }
 

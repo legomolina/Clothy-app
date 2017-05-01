@@ -1,15 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.shape.*?>
-<?import com.jfoenix.controls.*?>
-<?import java.lang.*?>
-<?import java.net.*?>
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.effect.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXPasswordField?>
 <?import com.jfoenix.controls.JFXSpinner?>
@@ -21,61 +11,73 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Text?>
 <?import java.net.URL?>
-
-<Pane fx:id="loginContainer" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="400.0" styleClass="login-container" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.login.LoginController">
+<Pane fx:id="loginContainer" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+      prefHeight="600.0" prefWidth="400.0" styleClass="login-container" xmlns="http://javafx.com/javafx/8"
+      xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.login.LoginController">
     <children>
         <ImageView fx:id="backgroundImage" fitHeight="600.0" fitWidth="400.0" pickOnBounds="true" preserveRatio="true">
             <image>
-                <Image url="@../../resources/images/backgrounds/hangers_bg.jpg" />
+                <Image url="@../../resources/images/backgrounds/hangers_bg.jpg"/>
             </image>
             <viewport>
-                <Rectangle2D height="1271.0" width="847.0" />
+                <Rectangle2D height="1271.0" width="847.0"/>
             </viewport>
         </ImageView>
         <StackPane fx:id="frostView" layoutX="44.0" layoutY="180.0" prefHeight="333.0" prefWidth="310.0">
             <children>
-            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="333.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="310.0" />
+                <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="333.0" stroke="BLACK" strokeType="INSIDE"
+                           strokeWidth="0.0" width="310.0"/>
                 <Pane fx:id="frostPane" prefHeight="200.0" prefWidth="200.0">
                     <children>
-                        <ImageView fx:id="frostImage" fitHeight="600.0" fitWidth="400.0" layoutX="-43.0" layoutY="-180.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="frostImage" fitHeight="600.0" fitWidth="400.0" layoutX="-43.0"
+                                   layoutY="-180.0" pickOnBounds="true" preserveRatio="true">
                             <image>
-                                <Image url="@../../resources/images/backgrounds/hangers_bg.jpg" />
+                                <Image url="@../../resources/images/backgrounds/hangers_bg.jpg"/>
                             </image>
                             <viewport>
-                                <Rectangle2D height="1271.0" width="847.0" />
+                                <Rectangle2D height="1271.0" width="847.0"/>
                             </viewport>
                         </ImageView>
                     </children>
                     <effect>
-                        <BoxBlur height="40.0" iterations="3" width="40.0" />
+                        <BoxBlur height="40.0" iterations="3" width="40.0"/>
                     </effect>
                 </Pane>
             </children>
         </StackPane>
-        <Text fill="WHITE" layoutX="28.0" layoutY="95.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="login-title" text="Clothy" textAlignment="CENTER" wrappingWidth="344.0">
+        <Text fill="WHITE" layoutX="28.0" layoutY="95.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="login-title"
+              text="Clothy" textAlignment="CENTER" wrappingWidth="344.0">
         </Text>
 
-        <JFXTextField fx:id="username" focusColor="WHITE" labelFloat="true" layoutX="62.0" layoutY="225.0" onAction="#sendLogin" prefHeight="36.0" prefWidth="279.0" promptText="Nombre de usuario" styleClass="login-input" unFocusColor="WHITE">
+        <JFXTextField fx:id="username" focusColor="WHITE" labelFloat="true" layoutX="62.0" layoutY="225.0"
+                      onAction="#sendLogin" prefHeight="36.0" prefWidth="279.0" promptText="Nombre de usuario"
+                      styleClass="login-input" unFocusColor="WHITE">
         </JFXTextField>
 
-        <JFXPasswordField fx:id="password" focusColor="WHITE" labelFloat="true" layoutX="60.0" layoutY="310.0" onAction="#sendLogin" prefHeight="36.0" prefWidth="279.0" promptText="Contraseña" styleClass="login-input" unFocusColor="WHITE">
+        <JFXPasswordField fx:id="password" focusColor="WHITE" labelFloat="true" layoutX="60.0" layoutY="310.0"
+                          onAction="#sendLogin" prefHeight="36.0" prefWidth="279.0" promptText="Contraseña"
+                          styleClass="login-input" unFocusColor="WHITE">
         </JFXPasswordField>
 
-        <JFXButton fx:id="submit" layoutX="155.0" layoutY="439.0" onAction="#submitLogin" ripplerFill="#d3d3d3" styleClass="login-button" text="Entrar" textFill="WHITE">
+        <JFXButton fx:id="submit" layoutX="155.0" layoutY="439.0" onAction="#submitLogin" ripplerFill="#d3d3d3"
+                   styleClass="login-button" text="Entrar" textFill="WHITE">
         </JFXButton>
-        <Label fx:id="errorText" alignment="CENTER" layoutX="30.0" layoutY="128.0" opacity="0.0" prefHeight="45.0" prefWidth="344.0" style="-fx-background-color: #f44336DD; -fx-background-radius: 2px;" text="El usuario o la contraseña son incorrectos" textFill="WHITE" visible="false" />
+        <Label fx:id="errorText" alignment="CENTER" layoutX="30.0" layoutY="128.0" opacity="0.0" prefHeight="45.0"
+               prefWidth="344.0" style="-fx-background-color: #f44336DD; -fx-background-radius: 2px;"
+               text="El usuario o la contraseña son incorrectos" textFill="WHITE" visible="false"/>
 
         <Pane fx:id="loader" prefHeight="600.0" prefWidth="400.0" styleClass="loader-container" visible="false">
             <children>
-                <JFXSpinner layoutX="166.0" layoutY="266.0" radius="30.0" />
+                <JFXSpinner layoutX="166.0" layoutY="266.0" radius="30.0"/>
             </children>
         </Pane>
 
     </children>
     <stylesheets>
-        <URL value="@../../resources/stylesheets/login/login.css" />
-        <URL value="@../../resources/stylesheets/style.css" />
+        <URL value="@../../resources/stylesheets/login/login.css"/>
+        <URL value="@../../resources/stylesheets/style.css"/>
     </stylesheets>
 </Pane>

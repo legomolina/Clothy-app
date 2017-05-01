@@ -2,10 +2,7 @@ package models;
 
 
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import javafx.beans.property.*;
 
 public class Employee extends RecursiveTreeObject<Employee> {
     private IntegerProperty id;
@@ -17,8 +14,9 @@ public class Employee extends RecursiveTreeObject<Employee> {
     private StringProperty loginName;
     private StringProperty loginPassword;
     private StringProperty loginType;
+    private BooleanProperty loginActive;
 
-    public Employee(int id, String name, String surname, String address, String email, String phone, String loginName, String loginPassword, String loginType) {
+    public Employee(int id, String name, String surname, String address, String email, String phone, String loginName, String loginPassword, String loginType, Boolean loginActive) {
         this.id = new SimpleIntegerProperty(id);
         this.name = new SimpleStringProperty(name);
         this.surname = new SimpleStringProperty(surname);
@@ -28,6 +26,7 @@ public class Employee extends RecursiveTreeObject<Employee> {
         this.loginName = new SimpleStringProperty(loginName);
         this.loginPassword = new SimpleStringProperty(loginPassword);
         this.loginType = new SimpleStringProperty(loginType);
+        this.loginActive = new SimpleBooleanProperty(loginActive);
     }
 
     public IntegerProperty getId() {
@@ -100,5 +99,13 @@ public class Employee extends RecursiveTreeObject<Employee> {
 
     public void setLoginType(StringProperty loginType) {
         this.loginType = loginType;
+    }
+
+    public BooleanProperty getLoginActive() {
+        return loginActive;
+    }
+
+    public void setLoginActive(BooleanProperty loginActive) {
+        this.loginActive = loginActive;
     }
 }
