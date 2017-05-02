@@ -1,6 +1,7 @@
 package controllers.employees;
 
 
+import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.controls.JFXTreeTableColumn;
 import com.jfoenix.controls.JFXTreeTableView;
 import com.jfoenix.controls.RecursiveTreeItem;
@@ -9,6 +10,8 @@ import controllers.BaseController;
 import controllers.database.DatabaseMethods;
 import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Service;
@@ -24,6 +27,7 @@ import utils.ImageUtils;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.concurrent.CountDownLatch;
+import java.util.function.Predicate;
 
 public class EmployeesController extends BaseController implements Initializable {
 
@@ -35,7 +39,9 @@ public class EmployeesController extends BaseController implements Initializable
     @FXML private Label employeeLoginName;
     @FXML private Label employeeLoginType;
     @FXML private Label employeeStatus;
+
     @FXML private JFXTreeTableView<Employee> infoTable;
+    @FXML private JFXTextField searchInput;
 
     private void fillEmployeeInformation(Employee employee) {
         String style = "-fx-text-fill: #000000;";
@@ -105,6 +111,11 @@ public class EmployeesController extends BaseController implements Initializable
         infoTable.getSelectionModel().selectedItemProperty().addListener((obs, oldValue, newValue) -> fillEmployeeInformation(newValue.getValue()));
     }
 
+    private void setListeners() {
+        searchInput.textProperty().addListener((observableValue, s, t1) ->
+                infoTable.setPredicate(employee -> employee.getValue().getName().getValue().contains(t1)));
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         ImageUtils.cropImage(employeeImage, 120, 120);
@@ -143,5 +154,7 @@ public class EmployeesController extends BaseController implements Initializable
             }
         };
         service.start();
+
+        setListeners();
     }
 }

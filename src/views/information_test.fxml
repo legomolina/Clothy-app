@@ -125,10 +125,7 @@
             <children>
                 <Pane prefHeight="40.0" styleClass="title-container">
                     <children>
-                        <JFXTextField layoutX="65.0" layoutY="13.0" prefHeight="50.0" prefWidth="452.0" promptText="Buscar" styleClass="search-input">
-                            <opaqueInsets>
-                                <Insets />
-                            </opaqueInsets>
+                        <JFXTextField layoutX="65.0" layoutY="13.0" prefHeight="50.0" prefWidth="452.0" promptText="Buscar" styleClass="search-input" fx:id="searchInput">
                         </JFXTextField>
                     </children>
                 </Pane>
