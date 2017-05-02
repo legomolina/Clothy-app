@@ -148,12 +148,19 @@ public class EmployeesController extends BaseController implements Initializable
         infoTable.setEditable(false);
         infoTable.setShowRoot(false);
         infoTable.getColumns().setAll(idColumn, nameColumn, surnameColumn, addressColumn, phoneColumn, emailColumn);
-        infoTable.getSelectionModel().selectedItemProperty().addListener((obs, oldValue, newValue) -> fillEmployeeInformation(newValue.getValue()));
+
+        infoTable.getSelectionModel().selectedItemProperty().addListener((obs, oldValue, newValue) -> {
+            if(newValue != null) //TODO Maybe investigate
+                fillEmployeeInformation(newValue.getValue());
+        });
+
     }
 
     private void setListeners() {
         searchInput.textProperty().addListener((observableValue, s, t1) ->
-                infoTable.setPredicate(employee -> employee.getValue().getName().getValue().contains(t1)));
+                infoTable.setPredicate(employee -> (employee.getValue().getName().getValue().contains(t1))
+                        || (employee.getValue().getSurname().getValue().contains(t1))
+                        || (employee.getValue().getEmail().getValue().contains(t1))));
     }
 
     @Override
