@@ -43,7 +43,7 @@
                             <children>
                                 <ImageView fx:id="employeeImage" fitHeight="150.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" styleClass="user-image">
                                     <image>
-                                        <Image url="@../resources/images/skull.jpg" />
+                                        <Image url="@../resources/images/employees_image/default.png" />
                                     </image>
                                 </ImageView>
                             </children>

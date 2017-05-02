@@ -20,10 +20,12 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.TreeItem;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import models.Employee;
 import utils.ImageUtils;
 
+import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.concurrent.CountDownLatch;
@@ -58,6 +60,44 @@ public class EmployeesController extends BaseController implements Initializable
         employeeAddress.setText(employee.getAddress().getValue());
         employeePhone.setText(employee.getPhone().getValue());
         employeeLoginName.setText(employee.getLoginName().getValue());
+
+        final Service<Void> service = new Service<Void>() {
+            @Override
+            protected Task<Void> createTask() {
+                return new Task<Void>() {
+                    @Override
+                    protected Void call() throws Exception {
+                        File imagesFolder = new File("../../resources/images/employees_image");
+                        File[] files = imagesFolder.listFiles();
+                        String fileName = "@../../resources/images/employees_image/default.png";
+
+                        CountDownLatch latch = new CountDownLatch(1);
+
+                        for (int i = 0; i < files.length; i ++) {
+                            int pos = files[i].getName().lastIndexOf(".");
+
+                            if(files[i].getName().substring(0, pos).equals(employee.getLoginName().getValue()))
+                                fileName = "@../../resources/images/employees_image/" + files[i].getName();
+                        }
+
+                        String finalFileName = fileName;
+                        Platform.runLater(() -> {
+                            try {
+                                employeeImage.setImage(new Image(finalFileName));
+                                ImageUtils.cropImage(employeeImage, 120, 120);
+                                ImageUtils.roundImage(employeeImage, 60);
+                            } finally {
+                                latch.countDown();
+                            }
+                        });
+                        latch.await();
+
+                        return null;
+                    }
+                };
+            }
+        };
+        service.start();
 
         switch (employee.getLoginType().getValue()) {
             case "TYPE_ADMIN":
