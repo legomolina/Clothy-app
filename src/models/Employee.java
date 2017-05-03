@@ -110,6 +110,6 @@ public class Employee {
 
     @Override
     public boolean equals(Object object) {
-        return object instanceof Employee && this.hashCode() == object.hashCode();
+        return object instanceof Employee && this.id.getValue() == ((Employee) object).getId().getValue();
     }
 }
