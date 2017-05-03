@@ -87,12 +87,17 @@ public class EmployeesController extends BaseController implements Initializable
 
     private void setEditMode(boolean set, Employee actualEmployee) {
         if (set) {
+            final double surnameX = 51;
+            final double surnameY = 62;
+
+            //Set inputs with current values from selected employee
             employeeNameInput.setText(actualEmployee.getName().getValue());
             employeeSurnameInput.setText(actualEmployee.getSurname().getValue());
             employeeEmailInput.setText(actualEmployee.getEmail().getValue());
             employeeAddressInput.setText(actualEmployee.getAddress().getValue());
             employeePhoneInput.setText(actualEmployee.getPhone().getValue());
             employeeLoginNameInput.setText(actualEmployee.getLoginName().getValue());
+            employeeStatusInput.setSelected(actualEmployee.getLoginActive().getValue());
 
             switch (actualEmployee.getLoginType().getValue()) {
                 case "TYPE_ADMIN":
@@ -107,36 +112,26 @@ public class EmployeesController extends BaseController implements Initializable
                     employeeLoginTypeInput.getSelectionModel().select(2);
             }
 
-            employeeStatusInput.setSelected(actualEmployee.getLoginActive().getValue());
+            //Workaround for surname input. When visible, it stays at the bottom of name input
+            employeeSurnameInput.setLayoutX(surnameX);
+            employeeSurnameInput.setLayoutY(surnameY);
 
-            employeeSurnameInput.setLayoutX(51);
-            employeeSurnameInput.setLayoutY(62);
-
-            employeeNameInput.setVisible(true);
-            employeeSurnameInput.setVisible(true);
-            employeeEmailInput.setVisible(true);
-            employeeAddressInput.setVisible(true);
-            employeePhoneInput.setVisible(true);
-            employeeLoginNameInput.setVisible(true);
-            employeeLoginTypeInput.setVisible(true);
-            employeeStatusInput.setVisible(true);
-
-            employeeName.setVisible(false);
-            employeeEmail.setVisible(false);
-            employeeAddress.setVisible(false);
-            employeePhone.setVisible(false);
-            employeeLoginName.setVisible(false);
-            employeeLoginType.setVisible(false);
-            employeeStatus.setVisible(false);
+            setVisibleInputs(true);
+            setVisibleLabels(false);
 
             editingEmployee = true;
         } else {
+            final double surnameX = 51;
+            final double surnameY = 1;
+
+            //Set Employee with new values
             actualEmployee.setName(employeeNameInput.getText());
             actualEmployee.setSurname(employeeSurnameInput.getText());
             actualEmployee.setEmail(employeeEmailInput.getText());
             actualEmployee.setAddress(employeeAddressInput.getText());
             actualEmployee.setPhone(employeePhoneInput.getText());
             actualEmployee.setLoginName(employeeLoginNameInput.getText());
+            actualEmployee.setLoginActive(employeeStatusInput.isSelected());
 
             switch (employeeLoginTypeInput.getSelectionModel().getSelectedItem().getText()) {
                 case ADMIN_ROLE_TEXT:
@@ -151,50 +146,17 @@ public class EmployeesController extends BaseController implements Initializable
                     actualEmployee.setLoginType("TYPE_GUEST");
             }
 
-            actualEmployee.setLoginActive(employeeStatusInput.isSelected());
+            //Fill Labels with new information
+            fillEmployeeInformation(actualEmployee);
 
-            employeeName.setText(actualEmployee.getName().getValue() + " " + actualEmployee.getSurname().getValue());
-            employeeEmail.setText(actualEmployee.getEmail().getValue());
-            employeeAddress.setText(actualEmployee.getAddress().getValue());
-            employeePhone.setText(actualEmployee.getPhone().getValue());
-            employeeLoginName.setText(actualEmployee.getLoginName().getValue());
+            //Workaround for surname input. When invisible it stays behind name input not to occupy room
+            employeeSurnameInput.setLayoutX(surnameX);
+            employeeSurnameInput.setLayoutY(surnameY);
 
-            switch (actualEmployee.getLoginType().getValue()) {
-                case "TYPE_ADMIN":
-                    employeeStatus.setText(ADMIN_ROLE_TEXT);
-                    break;
+            setVisibleInputs(false);
+            setVisibleLabels(true);
 
-                case "TYPE_USER":
-                    employeeStatus.setText(USER_ROLE_TEXT);
-                    break;
-
-                default:
-                    employeeStatus.setText(GUESTS_ROLE_TEXT);
-            }
-
-            employeeStatus.setText(actualEmployee.getLoginActive().getValue() ? ACTIVE_USER_TEXT : INACTIVE_USER_TEXT);
-            employeeStatus.setTextFill(actualEmployee.getLoginActive().getValue() ? Paint.valueOf("#35ba48") : Paint.valueOf("#ff5440"));
-
-            employeeNameInput.setVisible(false);
-            employeeSurnameInput.setVisible(false);
-            employeeEmailInput.setVisible(false);
-            employeeAddressInput.setVisible(false);
-            employeePhoneInput.setVisible(false);
-            employeeLoginNameInput.setVisible(false);
-            employeeLoginTypeInput.setVisible(false);
-            employeeStatusInput.setVisible(false);
-
-            employeeSurnameInput.setLayoutX(51);
-            employeeSurnameInput.setLayoutY(1);
-
-            employeeName.setVisible(true);
-            employeeEmail.setVisible(true);
-            employeeAddress.setVisible(true);
-            employeePhone.setVisible(true);
-            employeeLoginName.setVisible(true);
-            employeeLoginType.setVisible(true);
-            employeeStatus.setVisible(true);
-
+            //Updates employees with employee new data.
             employees.set(employees.indexOf(actualEmployee), actualEmployee);
 
             editingEmployee = false;
@@ -203,6 +165,27 @@ public class EmployeesController extends BaseController implements Initializable
 
     private boolean isEditMode() {
         return editingEmployee;
+    }
+
+    private void setVisibleInputs(boolean set) {
+        employeeNameInput.setVisible(set);
+        employeeSurnameInput.setVisible(set);
+        employeeEmailInput.setVisible(set);
+        employeeAddressInput.setVisible(set);
+        employeePhoneInput.setVisible(set);
+        employeeLoginNameInput.setVisible(set);
+        employeeLoginTypeInput.setVisible(set);
+        employeeStatusInput.setVisible(set);
+    }
+
+    private void setVisibleLabels(boolean set) {
+        employeeName.setVisible(set);
+        employeeEmail.setVisible(set);
+        employeeAddress.setVisible(set);
+        employeePhone.setVisible(set);
+        employeeLoginName.setVisible(set);
+        employeeLoginType.setVisible(set);
+        employeeStatus.setVisible(set);
     }
 
     private void setEmployeeLabelPlaceholder(boolean set) {
