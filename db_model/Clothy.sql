@@ -50,6 +50,7 @@ CREATE TABLE IF NOT EXISTS categories (
 
 CREATE TABLE IF NOT EXISTS articles (
 	article_id bigint(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+    article_code varchar(255) NOT NULL DEFAULT '',
     article_name varchar(255) NOT NULL,
     article_description text,
     article_price float(8,3) NOT NULL,

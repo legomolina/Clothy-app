@@ -11,8 +11,8 @@ public class Employees extends BaseView {
     public Employees(Stage previousStage) {
         super(previousStage, false);
 
-        Stage employeesStage = createStage("Gestión de empleados | Clothy App", "employees");
-        Scene employeesScene = loadScene(employeesStage, "../information_test.fxml", new EmployeesController());
+        Stage employeesStage = createStage("Empleados | Clothy App", "employees");
+        Scene employeesScene = loadScene(employeesStage, "employees.fxml", new EmployeesController());
 
         employeesStage.getIcons().add(new Image("resources/clothy_icon.png"));
         employeesStage.setScene(employeesScene);

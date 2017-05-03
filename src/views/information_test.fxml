@@ -123,20 +123,29 @@
         </ScrollPane>
         <GridPane>
             <children>
-                <Pane prefHeight="40.0" styleClass="title-container">
+                <Pane styleClass="title-container">
                     <children>
-                        <JFXTextField layoutX="65.0" layoutY="13.0" prefHeight="50.0" prefWidth="452.0" promptText="Buscar" styleClass="search-input" fx:id="searchInput">
+                        <JFXTextField fx:id="searchInput" focusColor="#ffd351" layoutX="14.0" layoutY="58.0" prefHeight="40.0" prefWidth="452.0" promptText="Buscar" styleClass="search-input">
                         </JFXTextField>
                     </children>
                 </Pane>
-                <JFXTreeTableView fx:id="infoTable" style="-fx-tree-table-color: #FFD35155;" GridPane.rowIndex="1" />
+                <TableView fx:id="infoTable" GridPane.rowIndex="1">
+                    <columns>
+                        <TableColumn fx:id="infoTableId" prefWidth="75.0" text="ID" />
+                        <TableColumn fx:id="infoTableName" prefWidth="123.0" text="Nombre" />
+                        <TableColumn fx:id="infoTableSurname" minWidth="0.0" prefWidth="211.0" text="Apellidos" />
+                        <TableColumn fx:id="infoTableAddress" prefWidth="365.0" text="Dirección" />
+                        <TableColumn fx:id="infoTablePhone" prefWidth="139.0" text="Teléfono" />
+                        <TableColumn fx:id="infoTableEmail" prefWidth="175.0" text="Email" />
+                    </columns>
+                </TableView>
             </children>
             <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
             </columnConstraints>
             <rowConstraints>
-                <RowConstraints maxHeight="80.0" minHeight="80.0" prefHeight="80.0" vgrow="SOMETIMES" />
-                <RowConstraints vgrow="ALWAYS" />
+                <RowConstraints maxHeight="115.0" minHeight="80.0" prefHeight="115.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="994.0" minHeight="965.0" prefHeight="965.0" vgrow="ALWAYS" />
             </rowConstraints>
         </GridPane>
     </children>
@@ -144,4 +153,7 @@
         <URL value="@../resources/stylesheets/style.css" />
         <URL value="@../resources/stylesheets/table_view.css" />
     </stylesheets>
+   <padding>
+      <Insets left="15.0" />
+   </padding>
 </GridPane>
