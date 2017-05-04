@@ -25,11 +25,13 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import models.Employee;
+import utils.DatabaseHandler;
 import utils.DialogBuilder;
 import utils.ImageUtils;
 
 import java.io.File;
 import java.net.URL;
+import java.sql.Connection;
 import java.util.ResourceBundle;
 import java.util.concurrent.CountDownLatch;
 
@@ -118,6 +120,20 @@ public class EmployeesController extends BaseController implements Initializable
 
         //Updates employees with employee new data.
         employees.set(employees.indexOf(selectedEmployee), selectedEmployee);
+
+        final Service<Void> service = new Service<Void>() {
+            @Override
+            protected Task<Void> createTask() {
+                return new Task<Void>() {
+                    @Override
+                    protected Void call() throws Exception {
+                        DatabaseMethods.updateEmployees(selectedEmployee);
+                        return null;
+                    }
+                };
+            }
+        };
+        service.start();
 
         setEditMode(false, selectedEmployee);
     }

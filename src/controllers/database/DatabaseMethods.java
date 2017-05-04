@@ -39,4 +39,31 @@ public class DatabaseMethods {
 
         return employees;
     }
+
+    public static void updateEmployees(Employee updateEmployee) {
+        String sqlQuery = "UPDATE employees SET employee_name = ?, employee_surname = ?, employee_address = ?," +
+                "employee_email = ?, employee_phone = ?, employee_login_name = ?, employee_login_type = ?," +
+                "employee_is_active = ? WHERE employee_id = ?";
+
+        try {
+            PreparedStatement statement = connection.prepareStatement(sqlQuery);
+            statement.setString(1, updateEmployee.getName().getValue());
+            statement.setString(2, updateEmployee.getSurname().getValue());
+            statement.setString(3, updateEmployee.getAddress().getValue());
+            statement.setString(4, updateEmployee.getEmail().getValue());
+            statement.setString(5, updateEmployee.getPhone().getValue());
+            statement.setString(6, updateEmployee.getLoginName().getValue());
+            statement.setString(7, updateEmployee.getLoginType().getValue());
+            statement.setInt(8, updateEmployee.getLoginActive().getValue() ? 1 : 0);
+            statement.setInt(9, updateEmployee.getId().getValue());
+
+            statement.executeUpdate();
+        } catch (NullPointerException e) {
+            System.out.println("An error occurred with Database connection");
+            e.printStackTrace();
+        } catch (SQLException e) {
+            System.out.println("An error occurred preparing the Query: " + sqlQuery);
+            e.printStackTrace();
+        }
+    }
 }
