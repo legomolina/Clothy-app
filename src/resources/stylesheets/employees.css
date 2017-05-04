@@ -1,0 +1,36 @@
+.save-button {
+    -fx-background-color: #2196f3;
+    -fx-text-fill: #FFFFFF;
+}
+
+.cancel-button {
+    -fx-text-fill: #ca3e32;
+    -fx-background-color: #ffffff;
+}
+
+.add-employee {
+    -fx-text-fill: #ffffff;
+    -fx-background-color: #2196f3;
+    -fx-background-radius: 30px;
+    -fx-pref-width: 50px;
+    -fx-pref-height: 50px;
+    -fx-font-size: 20px;
+}
+
+.dialog-accept-button {
+    -fx-background-color: #2196f3;
+    -fx-text-fill: #FFFFFF;
+}
+
+.dialog-cancel-button {
+    -fx-text-fill: #ca3e32;
+    -fx-background-color: #ffffff;
+}
+
+.employee-dialog .jfx-layout-actions {
+    -fx-hgap: 20px;
+}
+
+.employee-dialog .jfx-layout-body {
+    -fx-alignment: center-left;
+}

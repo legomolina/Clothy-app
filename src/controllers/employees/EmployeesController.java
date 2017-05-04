@@ -11,6 +11,8 @@ import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
@@ -20,8 +22,10 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Paint;
+import javafx.scene.layout.StackPane;
+import javafx.scene.text.Text;
 import models.Employee;
+import utils.DialogBuilder;
 import utils.ImageUtils;
 
 import java.io.File;
@@ -33,6 +37,7 @@ public class EmployeesController extends BaseController implements Initializable
 
     private ObservableList<Employee> employees;
     private FilteredList<Employee> filteredEmployees;
+    private Employee selectedEmployee = null;
     private boolean editingEmployee = false;
 
     private final static String ACTIVE_USER_TEXT = "activo";
@@ -61,6 +66,7 @@ public class EmployeesController extends BaseController implements Initializable
 
     @FXML private JFXRippler editButtonRipple;
     @FXML private Pane editButtonImage;
+    @FXML private Pane editButton;
 
     @FXML private TableView<Employee> infoTable;
     @FXML private TableColumn<Employee, Number> infoTableId;
@@ -72,6 +78,9 @@ public class EmployeesController extends BaseController implements Initializable
 
     @FXML private JFXTextField searchInput;
 
+    @FXML private Pane buttonsContainer;
+    @FXML private StackPane rootStackPane;
+
     @FXML
     private void clearSearch() {
         searchInput.setText("");
@@ -79,27 +88,75 @@ public class EmployeesController extends BaseController implements Initializable
 
     @FXML
     private void editEmployee() {
-        if (isEditMode())
-            setEditMode(false, infoTable.getSelectionModel().getSelectedItem());
-        else
-            setEditMode(true, infoTable.getSelectionModel().getSelectedItem());
+        if (selectedEmployee != null)
+            setEditMode(true, selectedEmployee);
     }
 
-    private void setEditMode(boolean set, Employee actualEmployee) {
+    @FXML
+    private void saveEmployee() {
+        //Set Employee with new values
+        selectedEmployee.setName(employeeNameInput.getText());
+        selectedEmployee.setSurname(employeeSurnameInput.getText());
+        selectedEmployee.setEmail(employeeEmailInput.getText());
+        selectedEmployee.setAddress(employeeAddressInput.getText());
+        selectedEmployee.setPhone(employeePhoneInput.getText());
+        selectedEmployee.setLoginName(employeeLoginNameInput.getText());
+        selectedEmployee.setLoginActive(employeeStatusInput.isSelected());
+
+        switch (employeeLoginTypeInput.getSelectionModel().getSelectedItem().getText()) {
+            case ADMIN_ROLE_TEXT:
+                selectedEmployee.setLoginType("TYPE_ADMIN");
+                break;
+
+            case USER_ROLE_TEXT:
+                selectedEmployee.setLoginType("TYPE_USER");
+                break;
+
+            default:
+                selectedEmployee.setLoginType("TYPE_GUEST");
+        }
+
+        //Updates employees with employee new data.
+        employees.set(employees.indexOf(selectedEmployee), selectedEmployee);
+
+        setEditMode(false, selectedEmployee);
+    }
+
+    @FXML
+    private void cancelEmployee() {
+        if (isEditMode())
+            setEditMode(false, selectedEmployee);
+
+        showDialog();
+    }
+
+    private void showDialog() {
+        DialogBuilder dialogBuilder = new DialogBuilder(rootStackPane, DialogBuilder.DialogType.CONFIRM, JFXDialog.DialogTransition.CENTER, "employee-dialog");
+
+        JFXDialog dialog = dialogBuilder.setContent(new Text("¿Seguro que quieres cancelar la edición?"))
+                .setCancelButton(actionEvent -> dialogBuilder.getDialog().close())
+                .setAcceptButton(actionEvent -> dialogBuilder.getDialog().close())
+                .setOverlayClose(true)
+                .build();
+
+        dialog.show();
+    }
+
+    private void setEditMode(boolean set, Employee selectedEmployee) {
         if (set) {
             final double surnameX = 51;
             final double surnameY = 62;
 
             //Set inputs with current values from selected employee
-            employeeNameInput.setText(actualEmployee.getName().getValue());
-            employeeSurnameInput.setText(actualEmployee.getSurname().getValue());
-            employeeEmailInput.setText(actualEmployee.getEmail().getValue());
-            employeeAddressInput.setText(actualEmployee.getAddress().getValue());
-            employeePhoneInput.setText(actualEmployee.getPhone().getValue());
-            employeeLoginNameInput.setText(actualEmployee.getLoginName().getValue());
-            employeeStatusInput.setSelected(actualEmployee.getLoginActive().getValue());
+            employeeNameInput.setText(selectedEmployee.getName().getValue());
+            employeeSurnameInput.setText(selectedEmployee.getSurname().getValue());
+            employeeEmailInput.setText(selectedEmployee.getEmail().getValue());
+            employeeAddressInput.setText(selectedEmployee.getAddress().getValue());
+            employeePhoneInput.setText(selectedEmployee.getPhone().getValue());
+            employeeLoginNameInput.setText(selectedEmployee.getLoginName().getValue());
+            employeeStatusInput.setSelected(selectedEmployee.getLoginActive().getValue());
 
-            switch (actualEmployee.getLoginType().getValue()) {
+            switch (selectedEmployee.getLoginType().getValue()) {
                 case "TYPE_ADMIN":
                     employeeLoginTypeInput.getSelectionModel().select(0);
                     break;
@@ -119,35 +176,16 @@ public class EmployeesController extends BaseController implements Initializable
             setVisibleInputs(true);
             setVisibleLabels(false);
 
+            buttonsContainer.setVisible(true);
+            editButtonImage.setVisible(false);
+
             editingEmployee = true;
         } else {
             final double surnameX = 51;
             final double surnameY = 1;
 
-            //Set Employee with new values
-            actualEmployee.setName(employeeNameInput.getText());
-            actualEmployee.setSurname(employeeSurnameInput.getText());
-            actualEmployee.setEmail(employeeEmailInput.getText());
-            actualEmployee.setAddress(employeeAddressInput.getText());
-            actualEmployee.setPhone(employeePhoneInput.getText());
-            actualEmployee.setLoginName(employeeLoginNameInput.getText());
-            actualEmployee.setLoginActive(employeeStatusInput.isSelected());
-
-            switch (employeeLoginTypeInput.getSelectionModel().getSelectedItem().getText()) {
-                case ADMIN_ROLE_TEXT:
-                    actualEmployee.setLoginType("TYPE_ADMIN");
-                    break;
-
-                case USER_ROLE_TEXT:
-                    actualEmployee.setLoginType("TYPE_USER");
-                    break;
-
-                default:
-                    actualEmployee.setLoginType("TYPE_GUEST");
-            }
-
             //Fill Labels with new information
-            fillEmployeeInformation(actualEmployee);
+            fillEmployeeInformation(selectedEmployee);
 
             //Workaround for surname input. When invisible it stays behind name input not to occupy room
             employeeSurnameInput.setLayoutX(surnameX);
@@ -156,8 +194,8 @@ public class EmployeesController extends BaseController implements Initializable
             setVisibleInputs(false);
             setVisibleLabels(true);
 
-            //Updates employees with employee new data.
-            employees.set(employees.indexOf(actualEmployee), actualEmployee);
+            buttonsContainer.setVisible(false);
+            editButtonImage.setVisible(true);
 
             editingEmployee = false;
         }
@@ -301,9 +339,11 @@ public class EmployeesController extends BaseController implements Initializable
         infoTableEmail.setCellValueFactory(param -> param.getValue().getEmail());
 
         infoTable.getSelectionModel().selectedItemProperty().addListener((obs, oldValue, newValue) -> {
+            selectedEmployee = newValue;
+
             //Check if selected employee exists (maybe it doesn't because of search)
             if (newValue != null)
-                fillEmployeeInformation(newValue);
+                fillEmployeeInformation(selectedEmployee);
             else {
                 //Default employee placeholder
                 setEmployeeLabelPlaceholder(true);
@@ -367,7 +407,10 @@ public class EmployeesController extends BaseController implements Initializable
         employeeLoginTypeInput.getItems().add(new Label(USER_ROLE_TEXT));
         employeeLoginTypeInput.getItems().add(new Label(GUESTS_ROLE_TEXT));
 
-        //employeeSurnameInput.managedProperty().bind(employeeSurnameInput.visibleProperty());
+        //Binds managed property to visible so when visible is true, it becomes managed as well
+        buttonsContainer.managedProperty().bind(buttonsContainer.visibleProperty());
+
+        editButton.visibleProperty().bind(editButtonImage.visibleProperty());
 
         final Service<Void> service = new Service<Void>() {
             @Override
