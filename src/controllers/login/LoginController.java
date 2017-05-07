@@ -25,7 +25,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
-public class LoginController extends BaseController implements Initializable {
+public class LoginController implements Initializable {
     @FXML private JFXTextField username;
     @FXML private JFXPasswordField password;
     @FXML private JFXButton submit;

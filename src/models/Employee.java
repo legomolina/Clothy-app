@@ -3,7 +3,7 @@ package models;
 
 import javafx.beans.property.*;
 
-public class Employee {
+public class Employee extends Model{
     private IntegerProperty id;
     private StringProperty name;
     private StringProperty surname;
@@ -17,12 +17,12 @@ public class Employee {
     private BooleanProperty checked;
 
     public Employee(int id) {
-        this.id = new SimpleIntegerProperty(id);
-        this.checked = new SimpleBooleanProperty(false);
+        super(id);
     }
 
     public Employee(int id, String name, String surname, String address, String email, String phone, String loginName, String loginPassword, String loginType, Boolean loginActive) {
-        this.id = new SimpleIntegerProperty(id);
+        super(id);
+
         this.name = new SimpleStringProperty(name);
         this.surname = new SimpleStringProperty(surname);
         this.address = new SimpleStringProperty(address);
@@ -32,7 +32,6 @@ public class Employee {
         this.loginPassword = new SimpleStringProperty(loginPassword);
         this.loginType = new SimpleStringProperty(loginType);
         this.loginActive = new SimpleBooleanProperty(loginActive);
-        this.checked = new SimpleBooleanProperty(false);
     }
 
     public int getId() {
@@ -165,10 +164,5 @@ public class Employee {
 
     public void setChecked(boolean checked) {
         this.checked.set(checked);
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        return object instanceof Employee && this.id.get() == ((Employee) object).getId();
     }
 }

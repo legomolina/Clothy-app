@@ -22,8 +22,6 @@ import java.util.ResourceBundle;
 
 public class MainMenuController extends BaseController implements Initializable {
 
-    private Employee loggedEmployee;
-
     @FXML private Label welcomeLabel;
     @FXML private Pane titleContainer;
     @FXML private Pane employeesButton;
@@ -45,11 +43,51 @@ public class MainMenuController extends BaseController implements Initializable 
         }
 
         if (!opened)
-            new Employees((Stage) employeesButton.getScene().getWindow());
+            new Employees((Stage) employeesButton.getScene().getWindow(), loggedEmployee);
+    }
+
+    @Override
+    protected void addListener() {
+
+    }
+
+    @Override
+    protected void editListener() {
+
+    }
+
+    @Override
+    protected void removeListener() {
+
+    }
+
+    @Override
+    protected void acceptChanges() {
+
+    }
+
+    @Override
+    protected void cancelChanges() {
+
     }
 
     public MainMenuController(Employee loggedEmployee) {
-        this.loggedEmployee = loggedEmployee;
+        super(loggedEmployee);
+    }
+
+    @Override
+    protected void showInformationLabels(boolean show) {
+
+    }
+
+    @Override
+    protected void showModificationInputs(boolean show) {
+
+    }
+
+    @Override
+    protected void setInformationLabelsPlaceholder(boolean set) {
+
     }
 
     private void setListeners() {

@@ -71,7 +71,7 @@
                                                 <Image url="@../../resources/images/icons/user.png" />
                                              </image>
                                           </ImageView>
-                                          <Label fx:id="employeeName" layoutX="51.0" layoutY="5.0" maxWidth="310.0" text="Nombre" />
+                                          <Label fx:id="employeeNameLabel" layoutX="51.0" layoutY="5.0" maxWidth="310.0" text="Nombre" />
                                           <JFXTextField fx:id="employeeNameInput" focusColor="#ffd351" labelFloat="true" layoutX="51.0" layoutY="1.0" prefWidth="300.0" promptText="Nombre" visible="false" />
                                           <JFXTextField fx:id="employeeSurnameInput" focusColor="#ffd351" labelFloat="true" layoutX="51.0" layoutY="1.0" prefWidth="300.0" promptText="Apellidos" visible="false" />
                                        </children>
@@ -83,7 +83,7 @@
                                                 <Image url="@../../resources/images/icons/mail.png" />
                                              </image>
                                           </ImageView>
-                                          <Label fx:id="employeeEmail" contentDisplay="CENTER" layoutX="51.0" layoutY="5.0" maxWidth="310.0" text="email@email.com" />
+                                          <Label fx:id="employeeEmailLabel" contentDisplay="CENTER" layoutX="51.0" layoutY="5.0" maxWidth="310.0" text="email@email.com" />
                                           <JFXTextField fx:id="employeeEmailInput" focusColor="#ffd351" labelFloat="true" layoutX="51.0" layoutY="1.0" prefWidth="300.0" promptText="Email" visible="false" />
                                        </children>
                                     </Pane>
@@ -94,7 +94,7 @@
                                                 <Image url="@../../resources/images/icons/phone.png" />
                                              </image>
                                           </ImageView>
-                                          <Label fx:id="employeePhone" layoutX="48.0" layoutY="5.0" maxWidth="310.0" text="+00 000000000" />
+                                          <Label fx:id="employeePhoneLabel" layoutX="48.0" layoutY="5.0" maxWidth="310.0" text="+00 000000000" />
                                           <JFXTextField fx:id="employeePhoneInput" focusColor="#ffd351" labelFloat="true" layoutX="48.0" layoutY="3.0" prefWidth="300.0" promptText="Teléfono" visible="false" />
                                        </children>
                                     </Pane>
@@ -105,7 +105,7 @@
                                                 <Image url="@../../resources/images/icons/address.png" />
                                              </image>
                                           </ImageView>
-                                          <Label fx:id="employeeAddress" contentDisplay="CENTER" layoutX="48.0" layoutY="5.0" maxWidth="310.0" text="Dirección" wrapText="true" />
+                                          <Label fx:id="employeeAddressLabel" contentDisplay="CENTER" layoutX="48.0" layoutY="5.0" maxWidth="310.0" text="Dirección" wrapText="true" />
                                           <JFXTextArea fx:id="employeeAddressInput" focusColor="#ffd351" labelFloat="true" layoutX="48.0" layoutY="5.0" maxHeight="50.0" prefHeight="20.0" prefRowCount="3" prefWidth="300.0" promptText="Dirección" visible="false" wrapText="true" />
                                        </children>
                                     </Pane>
@@ -116,7 +116,7 @@
                                                 <Image url="@../../resources/images/icons/clients.png" />
                                              </image>
                                           </ImageView>
-                                          <Label fx:id="employeeLoginName" layoutX="48.0" layoutY="5.0" maxWidth="310.0" text="Nombre de usuario" />
+                                          <Label fx:id="employeeLoginNameLabel" layoutX="48.0" layoutY="5.0" maxWidth="310.0" text="Nombre de usuario" />
                                           <JFXTextField fx:id="employeeLoginNameInput" focusColor="#ffd351" labelFloat="true" layoutX="48.0" layoutY="-1.0" prefWidth="300.0" promptText="Nombre de usuario" visible="false" />
                                        </children>
                                     </Pane>
@@ -127,7 +127,7 @@
                                                 <Image url="@../../resources/images/icons/lock.png" />
                                              </image>
                                           </ImageView>
-                                          <Label fx:id="employeeLoginType" layoutX="48.0" layoutY="5.0" maxWidth="310.0" text="Rol del empleado" />
+                                          <Label fx:id="employeeLoginTypeLabel" layoutX="48.0" layoutY="5.0" maxWidth="310.0" text="Rol del empleado" />
                                           <JFXComboBox fx:id="employeeLoginTypeInput" focusColor="#ffd351" labelFloat="true" layoutX="48.0" layoutY="-1.0" prefHeight="34.0" prefWidth="300.0" promptText="Rol del empleado" visible="false" />
                                        </children>
                                     </Pane>
@@ -135,13 +135,13 @@
                                        <children>
                                           <JFXToggleButton fx:id="employeeStatusInput" contentDisplay="GRAPHIC_ONLY" layoutX="59.0" layoutY="-11.0" text="Estado" toggleColor="#ffd351" toggleLineColor="#ffd351" visible="false" />
                                           <Label layoutY="8.0" maxWidth="310.0" text="Estado: " />
-                                          <Label fx:id="employeeStatus" layoutX="64.0" layoutY="8.0" maxWidth="310.0" text="estado" />
+                                          <Label fx:id="employeeStatusLabel" layoutX="64.0" layoutY="8.0" maxWidth="310.0" text="estado" />
                                        </children>
                                     </Pane>
                                     <Pane fx:id="buttonsContainer" prefWidth="370.0" visible="false">
                                        <children>
-                                          <JFXButton buttonType="RAISED" layoutX="160.0" onAction="#cancelEmployee" styleClass="cancel-button" text="Cancelar" />
-                                          <JFXButton buttonType="RAISED" layoutX="277.0" onAction="#saveEmployee" styleClass="save-button" text="Guardar" />
+                                          <JFXButton buttonType="RAISED" layoutX="160.0" onAction="#cancelChanges" styleClass="cancel-button" text="Cancelar" />
+                                          <JFXButton buttonType="RAISED" layoutX="277.0" onAction="#acceptChanges" styleClass="save-button" text="Guardar" />
                                        </children>
                                     </Pane>
                                  </children>
@@ -177,7 +177,7 @@
                         </TableView>
                         <AnchorPane prefHeight="200.0" prefWidth="200.0">
                            <children>
-                              <ImageView fx:id="clearSearch" fitHeight="38.0" fitWidth="26.0" layoutX="433.0" layoutY="67.0" onMouseClicked="#clearSearch" pickOnBounds="true" preserveRatio="true">
+                              <ImageView fx:id="clearSearchInput" fitHeight="38.0" fitWidth="26.0" layoutX="433.0" layoutY="67.0" onMouseClicked="#clearSearchInput" pickOnBounds="true" preserveRatio="true">
                                  <cursor>
                                     <Cursor fx:constant="HAND" />
                                  </cursor>
@@ -210,7 +210,7 @@
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                </rowConstraints>
             </GridPane>
-            <JFXButton fx:id="addButton" alignment="TOP_CENTER" buttonType="RAISED" contentDisplay="TEXT_ONLY" graphicTextGap="0.0" maxHeight="50.0" maxWidth="50.0" onAction="#addEmployee" prefHeight="50.0" prefWidth="50.0" styleClass="add-employee" text="+" textAlignment="CENTER" AnchorPane.bottomAnchor="50.0" AnchorPane.rightAnchor="500.0">
+            <JFXButton fx:id="addButton" alignment="TOP_CENTER" buttonType="RAISED" contentDisplay="TEXT_ONLY" graphicTextGap="0.0" maxHeight="50.0" maxWidth="50.0" onAction="#addListener" prefHeight="50.0" prefWidth="50.0" styleClass="add-employee" text="+" textAlignment="CENTER" AnchorPane.bottomAnchor="50.0" AnchorPane.rightAnchor="500.0">
                <padding>
                   <Insets top="11.0" />
                </padding></JFXButton>
