@@ -1,20 +1,27 @@
 .save-button {
     -fx-background-color: #2196f3;
     -fx-text-fill: #FFFFFF;
+    -fx-font-weight: bold;
 }
 
 .cancel-button {
     -fx-text-fill: #ca3e32;
     -fx-background-color: #ffffff;
+    -fx-font-weight: bold;
+}
+
+.remove-button {
+    -fx-text-fill: #ffffff;
+    -fx-background-color: #ca3e32;
+    -fx-font-weight: bold;
 }
 
 .add-employee {
     -fx-text-fill: #ffffff;
     -fx-background-color: #2196f3;
-    -fx-background-radius: 30px;
-    -fx-pref-width: 50px;
-    -fx-pref-height: 50px;
+    -fx-background-radius: 50px;
     -fx-font-size: 20px;
+    -fx-font-weight: bold;
 }
 
 .dialog-accept-button {

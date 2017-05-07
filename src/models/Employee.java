@@ -14,6 +14,12 @@ public class Employee {
     private StringProperty loginPassword;
     private StringProperty loginType;
     private BooleanProperty loginActive;
+    private BooleanProperty checked;
+
+    public Employee(int id) {
+        this.id = new SimpleIntegerProperty(id);
+        this.checked = new SimpleBooleanProperty(false);
+    }
 
     public Employee(int id, String name, String surname, String address, String email, String phone, String loginName, String loginPassword, String loginType, Boolean loginActive) {
         this.id = new SimpleIntegerProperty(id);
@@ -26,90 +32,143 @@ public class Employee {
         this.loginPassword = new SimpleStringProperty(loginPassword);
         this.loginType = new SimpleStringProperty(loginType);
         this.loginActive = new SimpleBooleanProperty(loginActive);
+        this.checked = new SimpleBooleanProperty(false);
     }
 
-    public IntegerProperty getId() {
+    public int getId() {
+        return id.get();
+    }
+
+    public IntegerProperty idProperty() {
         return id;
     }
 
     public void setId(int id) {
-        this.id = new SimpleIntegerProperty(id);
+        this.id.set(id);
     }
 
-    public StringProperty getName() {
+    public String getName() {
+        return name.get();
+    }
+
+    public StringProperty nameProperty() {
         return name;
     }
 
     public void setName(String name) {
-        this.name = new SimpleStringProperty(name);
+        this.name.set(name);
     }
 
-    public StringProperty getSurname() {
+    public String getSurname() {
+        return surname.get();
+    }
+
+    public StringProperty surnameProperty() {
         return surname;
     }
 
     public void setSurname(String surname) {
-        this.surname = new SimpleStringProperty(surname);
+        this.surname.set(surname);
     }
 
-    public StringProperty getAddress() {
+    public String getAddress() {
+        return address.get();
+    }
+
+    public StringProperty addressProperty() {
         return address;
     }
 
     public void setAddress(String address) {
-        this.address = new SimpleStringProperty(address);
+        this.address.set(address);
     }
 
-    public StringProperty getEmail() {
+    public String getEmail() {
+        return email.get();
+    }
+
+    public StringProperty emailProperty() {
         return email;
     }
 
     public void setEmail(String email) {
-        this.email = new SimpleStringProperty(email);
+        this.email.set(email);
     }
 
-    public StringProperty getPhone() {
+    public String getPhone() {
+        return phone.get();
+    }
+
+    public StringProperty phoneProperty() {
         return phone;
     }
 
     public void setPhone(String phone) {
-        this.phone = new SimpleStringProperty(phone);
+        this.phone.set(phone);
     }
 
-    public StringProperty getLoginName() {
+    public String getLoginName() {
+        return loginName.get();
+    }
+
+    public StringProperty loginNameProperty() {
         return loginName;
     }
 
     public void setLoginName(String loginName) {
-        this.loginName = new SimpleStringProperty(loginName);
+        this.loginName.set(loginName);
     }
 
-    public StringProperty getLoginPassword() {
+    public String getLoginPassword() {
+        return loginPassword.get();
+    }
+
+    public StringProperty loginPasswordProperty() {
         return loginPassword;
     }
 
     public void setLoginPassword(String loginPassword) {
-        this.loginPassword = new SimpleStringProperty(loginPassword);
+        this.loginPassword.set(loginPassword);
     }
 
-    public StringProperty getLoginType() {
+    public String getLoginType() {
+        return loginType.get();
+    }
+
+    public StringProperty loginTypeProperty() {
         return loginType;
     }
 
     public void setLoginType(String loginType) {
-        this.loginType = new SimpleStringProperty(loginType);
+        this.loginType.set(loginType);
     }
 
-    public BooleanProperty getLoginActive() {
+    public boolean isLoginActive() {
+        return loginActive.get();
+    }
+
+    public BooleanProperty loginActiveProperty() {
         return loginActive;
     }
 
     public void setLoginActive(boolean loginActive) {
-        this.loginActive = new SimpleBooleanProperty(loginActive);
+        this.loginActive.set(loginActive);
+    }
+
+    public boolean isChecked() {
+        return checked.get();
+    }
+
+    public BooleanProperty checkedProperty() {
+        return checked;
+    }
+
+    public void setChecked(boolean checked) {
+        this.checked.set(checked);
     }
 
     @Override
     public boolean equals(Object object) {
-        return object instanceof Employee && this.id.getValue() == ((Employee) object).getId().getValue();
+        return object instanceof Employee && this.id.get() == ((Employee) object).getId();
     }
 }

@@ -9,6 +9,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import models.Employee;
+import utils.DatabaseHandler;
 import views.BaseView;
 
 import java.util.Optional;
@@ -32,8 +33,10 @@ public class MainMenu extends BaseView {
             confirm.setContentText("¿Seguro que quieres cerrar Clothy?");
 
             Optional<ButtonType> result = confirm.showAndWait();
-            if (result.get() == ButtonType.OK)
+            if (result.get() == ButtonType.OK) {
+                DatabaseHandler.closeConnection();
                 Platform.exit();
+            }
             else
                 event.consume();
         });

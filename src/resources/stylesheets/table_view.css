@@ -1,6 +1,6 @@
 .info-container {
     -fx-background-color: #F6F6F6;
-    -fx-font: 16px "Open Sans", sans-serif;
+    -fx-font: 16px "Roboto", sans-serif;
 }
 
 .info-content {
@@ -11,7 +11,7 @@
 }
 
 .user-info-title {
-    -fx-font: 20px "Open Sans", sans-serif bold;
+    -fx-font: 20px "Roboto", sans-serif bold;
 }
 
 .edit-button {
@@ -23,14 +23,14 @@
 }
 
 .search-input {
-    -fx-font: 18px "Open Sans", sans-serif;
+    -fx-font: 18px "Roboto", sans-serif;
 }
 
 .table-view {
     -fx-tree-table-color: #ffd35155;
     -fx-background-color: #F6F6F6;
     -fx-table-cell-border-color: transparent;
-    -fx-font-family:"Open Sans", sans-serif;
+    -fx-font-family:"Roboto", sans-serif;
 }
 
 .table-view:focused {

@@ -4,6 +4,7 @@ package controllers.employees;
 import com.jfoenix.controls.*;
 import controllers.BaseController;
 import controllers.database.DatabaseMethods;
+import custom.MaterialCheckBoxCell;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -11,27 +12,26 @@ import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
+import javafx.util.Callback;
 import models.Employee;
-import utils.DatabaseHandler;
 import utils.DialogBuilder;
 import utils.ImageUtils;
+import utils.MaterialCheckBoxTableCell;
 
 import java.io.File;
 import java.net.URL;
-import java.sql.Connection;
+import java.util.HashSet;
 import java.util.ResourceBundle;
 import java.util.concurrent.CountDownLatch;
 
@@ -70,6 +70,12 @@ public class EmployeesController extends BaseController implements Initializable
     @FXML private Pane editButtonImage;
     @FXML private Pane editButton;
 
+    @FXML private JFXRippler removeButtonRipple;
+    @FXML private Pane removeButtonImage;
+    @FXML private Pane removeButton;
+
+    @FXML private JFXButton addButton;
+
     @FXML private TableView<Employee> infoTable;
     @FXML private TableColumn<Employee, Number> infoTableId;
     @FXML private TableColumn<Employee, String> infoTableName;
@@ -77,11 +83,25 @@ public class EmployeesController extends BaseController implements Initializable
     @FXML private TableColumn<Employee, String> infoTableAddress;
     @FXML private TableColumn<Employee, String> infoTableEmail;
     @FXML private TableColumn<Employee, String> infoTablePhone;
+    @FXML private TableColumn<Employee, Boolean> infoTableCheck;
+
+    @FXML private ScrollPane infoContainer;
 
     @FXML private JFXTextField searchInput;
 
     @FXML private Pane buttonsContainer;
     @FXML private StackPane rootStackPane;
+
+    @FXML
+    private void addEmployee() {
+        if (isEditMode())
+            setEditMode(false, selectedEmployee);
+
+        selectedEmployee = null;
+
+        setVisibleLabels(false);
+        setVisibleInputs(true);
+    }
 
     @FXML
     private void clearSearch() {
@@ -94,8 +114,31 @@ public class EmployeesController extends BaseController implements Initializable
             setEditMode(true, selectedEmployee);
     }
 
+    private void removeEmployee() {
+        if (isEditMode() || selectedEmployee == null)
+            return;
+
+        DialogBuilder dialogBuilder = new DialogBuilder(rootStackPane, DialogBuilder.DialogType.CONFIRM, JFXDialog.DialogTransition.CENTER, "employee-dialog");
+
+        JFXDialog dialog = dialogBuilder.setContent(new Text("¿Seguro que quieres borrar el usuario?\nEsta acción no puede deshacerse."))
+                .setCancelButton(actionEvent -> dialogBuilder.getDialog().close())
+                .setAcceptButton(actionEvent -> {
+                    DatabaseMethods.removeEmployees(selectedEmployee);
+                    employees.remove(employees.indexOf(selectedEmployee));
+
+                    dialogBuilder.getDialog().close();
+                })
+                .setOverlayClose(false)
+                .build();
+
+        dialog.show();
+    }
+
     @FXML
     private void saveEmployee() {
+        if (selectedEmployee == null)
+            selectedEmployee = new Employee(DatabaseMethods.getLastId("employees", "employee_id") + 1);
+
         //Set Employee with new values
         selectedEmployee.setName(employeeNameInput.getText());
         selectedEmployee.setSurname(employeeSurnameInput.getText());
@@ -119,21 +162,37 @@ public class EmployeesController extends BaseController implements Initializable
         }
 
         //Updates employees with employee new data.
-        employees.set(employees.indexOf(selectedEmployee), selectedEmployee);
-
-        final Service<Void> service = new Service<Void>() {
-            @Override
-            protected Task<Void> createTask() {
-                return new Task<Void>() {
-                    @Override
-                    protected Void call() throws Exception {
-                        DatabaseMethods.updateEmployees(selectedEmployee);
-                        return null;
-                    }
-                };
-            }
-        };
-        service.start();
+        if (employees.indexOf(selectedEmployee) > 0) {
+            employees.set(employees.indexOf(selectedEmployee), selectedEmployee);
+            final Service<Void> service = new Service<Void>() {
+                @Override
+                protected Task<Void> createTask() {
+                    return new Task<Void>() {
+                        @Override
+                        protected Void call() throws Exception {
+                            DatabaseMethods.updateEmployees(selectedEmployee);
+                            return null;
+                        }
+                    };
+                }
+            };
+            service.start();
+        } else {
+            employees.add(selectedEmployee);
+            final Service<Void> service = new Service<Void>() {
+                @Override
+                protected Task<Void> createTask() {
+                    return new Task<Void>() {
+                        @Override
+                        protected Void call() throws Exception {
+                            DatabaseMethods.addEmployees(selectedEmployee);
+                            return null;
+                        }
+                    };
+                }
+            };
+            service.start();
+        }
 
         setEditMode(false, selectedEmployee);
     }
@@ -160,19 +219,16 @@ public class EmployeesController extends BaseController implements Initializable
 
     private void setEditMode(boolean set, Employee selectedEmployee) {
         if (set) {
-            final double surnameX = 51;
-            final double surnameY = 62;
-
             //Set inputs with current values from selected employee
-            employeeNameInput.setText(selectedEmployee.getName().getValue());
-            employeeSurnameInput.setText(selectedEmployee.getSurname().getValue());
-            employeeEmailInput.setText(selectedEmployee.getEmail().getValue());
-            employeeAddressInput.setText(selectedEmployee.getAddress().getValue());
-            employeePhoneInput.setText(selectedEmployee.getPhone().getValue());
-            employeeLoginNameInput.setText(selectedEmployee.getLoginName().getValue());
-            employeeStatusInput.setSelected(selectedEmployee.getLoginActive().getValue());
+            employeeNameInput.setText(selectedEmployee.getName());
+            employeeSurnameInput.setText(selectedEmployee.getSurname());
+            employeeEmailInput.setText(selectedEmployee.getEmail());
+            employeeAddressInput.setText(selectedEmployee.getAddress());
+            employeePhoneInput.setText(selectedEmployee.getPhone());
+            employeeLoginNameInput.setText(selectedEmployee.getLoginName());
+            employeeStatusInput.setSelected(selectedEmployee.isLoginActive());
 
-            switch (selectedEmployee.getLoginType().getValue()) {
+            switch (selectedEmployee.getLoginType()) {
                 case "TYPE_ADMIN":
                     employeeLoginTypeInput.getSelectionModel().select(0);
                     break;
@@ -185,33 +241,16 @@ public class EmployeesController extends BaseController implements Initializable
                     employeeLoginTypeInput.getSelectionModel().select(2);
             }
 
-            //Workaround for surname input. When visible, it stays at the bottom of name input
-            employeeSurnameInput.setLayoutX(surnameX);
-            employeeSurnameInput.setLayoutY(surnameY);
-
             setVisibleInputs(true);
             setVisibleLabels(false);
 
-            buttonsContainer.setVisible(true);
-            editButtonImage.setVisible(false);
-
             editingEmployee = true;
         } else {
-            final double surnameX = 51;
-            final double surnameY = 1;
-
             //Fill Labels with new information
             fillEmployeeInformation(selectedEmployee);
 
-            //Workaround for surname input. When invisible it stays behind name input not to occupy room
-            employeeSurnameInput.setLayoutX(surnameX);
-            employeeSurnameInput.setLayoutY(surnameY);
-
             setVisibleInputs(false);
             setVisibleLabels(true);
-
-            buttonsContainer.setVisible(false);
-            editButtonImage.setVisible(true);
 
             editingEmployee = false;
         }
@@ -230,6 +269,13 @@ public class EmployeesController extends BaseController implements Initializable
         employeeLoginNameInput.setVisible(set);
         employeeLoginTypeInput.setVisible(set);
         employeeStatusInput.setVisible(set);
+
+        //Workaround for surname input. When visible, it stays at the bottom of name input
+        employeeSurnameInput.setLayoutX(51);
+        employeeSurnameInput.setLayoutY(set ? 62 : 1);
+
+        buttonsContainer.setVisible(set);
+        editButtonImage.setVisible(!set);
     }
 
     private void setVisibleLabels(boolean set) {
@@ -274,11 +320,11 @@ public class EmployeesController extends BaseController implements Initializable
     private void fillEmployeeInformation(Employee employee) {
         setEmployeeLabelPlaceholder(false);
 
-        employeeName.setText(employee.getName().getValue() + " " + employee.getSurname().getValue());
-        employeeEmail.setText(employee.getEmail().getValue());
-        employeeAddress.setText(employee.getAddress().getValue());
-        employeePhone.setText(employee.getPhone().getValue());
-        employeeLoginName.setText(employee.getLoginName().getValue());
+        employeeName.setText(employee.getName() + " " + employee.getSurname());
+        employeeEmail.setText(employee.getEmail());
+        employeeAddress.setText(employee.getAddress());
+        employeePhone.setText(employee.getPhone());
+        employeeLoginName.setText(employee.getLoginName());
 
         //TODO see .jar
         //Load user image from /resources/images/employees_image asynchronously
@@ -299,7 +345,7 @@ public class EmployeesController extends BaseController implements Initializable
                         for (int i = 0; i < files.length; i++) {
                             int pos = files[i].getName().lastIndexOf(".");
 
-                            if (files[i].getName().toLowerCase().substring(0, pos).equals(employee.getLoginName().getValue().toLowerCase())) {
+                            if (files[i].getName().toLowerCase().substring(0, pos).equals(employee.getLoginName().toLowerCase())) {
                                 fileName = "/resources/images/employees_image/" + files[i].getName();
                                 break;
                             }
@@ -324,7 +370,7 @@ public class EmployeesController extends BaseController implements Initializable
         };
         service.start();
 
-        switch (employee.getLoginType().getValue()) {
+        switch (employee.getLoginType()) {
             case "TYPE_ADMIN":
                 employeeLoginType.setText(ADMIN_ROLE_TEXT);
                 break;
@@ -337,7 +383,7 @@ public class EmployeesController extends BaseController implements Initializable
                 employeeLoginType.setText(GUESTS_ROLE_TEXT);
         }
 
-        if (employee.getLoginActive().getValue()) {
+        if (employee.isLoginActive()) {
             employeeStatus.setText(ACTIVE_USER_TEXT);
             employeeStatus.setStyle("-fx-text-fill: #35ba48;");
         } else {
@@ -347,12 +393,15 @@ public class EmployeesController extends BaseController implements Initializable
     }
 
     private void fillTable() {
-        infoTableId.setCellValueFactory(param -> param.getValue().getId());
-        infoTableName.setCellValueFactory(param -> param.getValue().getName());
-        infoTableSurname.setCellValueFactory(param -> param.getValue().getSurname());
-        infoTableAddress.setCellValueFactory(param -> param.getValue().getAddress());
-        infoTablePhone.setCellValueFactory(param -> param.getValue().getPhone());
-        infoTableEmail.setCellValueFactory(param -> param.getValue().getEmail());
+        infoTableId.setCellValueFactory(param -> param.getValue().idProperty());
+        infoTableName.setCellValueFactory(param -> param.getValue().nameProperty());
+        infoTableSurname.setCellValueFactory(param -> param.getValue().surnameProperty());
+        infoTableAddress.setCellValueFactory(param -> param.getValue().addressProperty());
+        infoTablePhone.setCellValueFactory(param -> param.getValue().phoneProperty());
+        infoTableEmail.setCellValueFactory(param -> param.getValue().emailProperty());
+
+        infoTableCheck.setCellValueFactory(param -> param.getValue().checkedProperty());
+        infoTableCheck.setCellFactory(param -> new MaterialCheckBoxCell<>());
 
         infoTable.getSelectionModel().selectedItemProperty().addListener((obs, oldValue, newValue) -> {
             selectedEmployee = newValue;
@@ -377,16 +426,16 @@ public class EmployeesController extends BaseController implements Initializable
                 String lowerCaseValue = newValue.toLowerCase();
 
                 //Checks for employee name
-                if (employee.getName().getValue().toLowerCase().contains(lowerCaseValue))
+                if (employee.getName().toLowerCase().contains(lowerCaseValue))
                     return true;
                     //Checks for employee surname
-                else if (employee.getSurname().getValue().toLowerCase().contains(lowerCaseValue))
+                else if (employee.getSurname().toLowerCase().contains(lowerCaseValue))
                     return true;
                     //Checks for employee phone
-                else if (employee.getPhone().getValue().toLowerCase().contains((lowerCaseValue)))
+                else if (employee.getPhone().toLowerCase().contains((lowerCaseValue)))
                     return true;
                     //Checks for employee email
-                else if (employee.getEmail().getValue().toLowerCase().contains(lowerCaseValue))
+                else if (employee.getEmail().toLowerCase().contains(lowerCaseValue))
                     return true;
 
                 //If there are not coincidences
@@ -405,6 +454,14 @@ public class EmployeesController extends BaseController implements Initializable
             editEmployee();
             event.consume();
         });
+
+        removeButtonImage.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
+            removeEmployee();
+            event.consume();
+        });
+
+        infoTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        infoTableCheck.setGraphic(new JFXCheckBox());
     }
 
     @Override
@@ -415,8 +472,9 @@ public class EmployeesController extends BaseController implements Initializable
         //Default employee placeholder
         setEmployeeLabelPlaceholder(true);
 
-        //Set ripple effect for edit button
+        //Set ripple effect for edit and remove button
         editButtonRipple.setControl(editButtonImage);
+        removeButtonRipple.setControl(removeButtonImage);
 
         //Adds employee role into ComboBox
         employeeLoginTypeInput.getItems().add(new Label(ADMIN_ROLE_TEXT));

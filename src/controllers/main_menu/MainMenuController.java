@@ -83,7 +83,7 @@ public class MainMenuController extends BaseController implements Initializable 
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        welcomeLabel.setText("Bienvenido " + loggedEmployee.getName().getValue());
+        welcomeLabel.setText("Bienvenido " + loggedEmployee.getName());
         setListeners();
     }
 }
