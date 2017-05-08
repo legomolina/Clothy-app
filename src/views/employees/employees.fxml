@@ -161,18 +161,18 @@
                   </ScrollPane>
                   <GridPane>
                      <children>
-                        <TableView fx:id="infoTable" editable="true" GridPane.hgrow="SOMETIMES" GridPane.rowIndex="1" GridPane.vgrow="SOMETIMES">
+                        <TableView fx:id="employeeTable" editable="true" GridPane.hgrow="SOMETIMES" GridPane.rowIndex="1" GridPane.vgrow="SOMETIMES">
                            <columnResizePolicy>
                               <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                            </columnResizePolicy>
                            <columns>
-                              <TableColumn fx:id="infoTableCheck" maxWidth="50.0" minWidth="50.0" prefWidth="50.0" sortable="false" />
-                              <TableColumn fx:id="infoTableId" maxWidth="60.0" minWidth="60.0" prefWidth="60.0" text="ID" />
-                              <TableColumn fx:id="infoTableName" prefWidth="187.4444580078125" text="Nombre" />
-                              <TableColumn fx:id="infoTableSurname" minWidth="0.0" prefWidth="342.3148193359375" text="Apellidos" />
-                              <TableColumn fx:id="infoTableAddress" prefWidth="408.3760986328125" text="Dirección" />
-                              <TableColumn fx:id="infoTablePhone" prefWidth="185.31787109375" text="Teléfono" />
-                              <TableColumn fx:id="infoTableEmail" prefWidth="203.0" text="Email" />
+                              <TableColumn fx:id="employeeTableCheckColumn" maxWidth="50.0" minWidth="50.0" prefWidth="50.0" sortable="false" />
+                              <TableColumn fx:id="employeeTableIdColumn" maxWidth="60.0" minWidth="60.0" prefWidth="60.0" text="ID" />
+                              <TableColumn fx:id="employeeTableNameColumn" prefWidth="187.4444580078125" text="Nombre" />
+                              <TableColumn fx:id="employeeTableSurnameColumn" minWidth="0.0" prefWidth="342.3148193359375" text="Apellidos" />
+                              <TableColumn fx:id="employeeTableAddressColumn" prefWidth="408.3760986328125" text="Dirección" />
+                              <TableColumn fx:id="employeeTablePhoneColumn" prefWidth="185.31787109375" text="Teléfono" />
+                              <TableColumn fx:id="employeeTableEmailColumn" prefWidth="203.0" text="Email" />
                            </columns>
                         </TableView>
                         <AnchorPane prefHeight="200.0" prefWidth="200.0">

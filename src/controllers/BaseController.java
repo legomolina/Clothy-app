@@ -44,7 +44,7 @@ public abstract class BaseController implements Initializable {
 
     protected abstract void showModificationInputs(boolean show);
 
-    protected abstract void setInformationLabelsPlaceholder(boolean set);
+    protected abstract void setInformationLabelsPlaceholder();
 
     public abstract void initialize(URL url, ResourceBundle resourceBundle);
 }

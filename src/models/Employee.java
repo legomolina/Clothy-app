@@ -3,7 +3,7 @@ package models;
 
 import javafx.beans.property.*;
 
-public class Employee extends Model{
+public class Employee {
     private IntegerProperty id;
     private StringProperty name;
     private StringProperty surname;
@@ -17,11 +17,13 @@ public class Employee extends Model{
     private BooleanProperty checked;
 
     public Employee(int id) {
-        super(id);
+        this.id = new SimpleIntegerProperty(id);
+        this.checked = new SimpleBooleanProperty(false);
     }
 
     public Employee(int id, String name, String surname, String address, String email, String phone, String loginName, String loginPassword, String loginType, Boolean loginActive) {
-        super(id);
+        this.id = new SimpleIntegerProperty(id);
+        this.checked = new SimpleBooleanProperty(false);
 
         this.name = new SimpleStringProperty(name);
         this.surname = new SimpleStringProperty(surname);
