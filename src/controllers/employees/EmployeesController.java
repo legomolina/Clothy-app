@@ -86,6 +86,8 @@ public class EmployeesController extends BaseController {
     @FXML private Pane editButton;
     @FXML private JFXRippler editButtonRippler;
 
+    @FXML private Pane formButtonsContainer;
+
     public EmployeesController(Employee loggedEmployee) {
         super(loggedEmployee);
 
@@ -98,7 +100,13 @@ public class EmployeesController extends BaseController {
 
     @Override
     protected void addListener() {
-        System.out.println("addListener()");
+        if(actualStatus != ActionStatus.STATUS_NONE && actualStatus != ActionStatus.STATUS_VIEWING)
+            return;
+
+        actualStatus = ActionStatus.STATUS_ADDING;
+
+        showInformationLabels(false);
+        showModificationInputs(true);
     }
 
     @Override
@@ -140,7 +148,26 @@ public class EmployeesController extends BaseController {
 
     @Override
     protected void cancelChanges() {
+        DialogBuilder dialogBuilder = new DialogBuilder(rootStackPane, DialogBuilder.DialogType.CONFIRM, JFXDialog.DialogTransition.CENTER, "employee-dialog");
+        JFXDialog dialog = dialogBuilder.setContent(new Text("¿Seguro que quieres cancelar la edición?"))
+                .setOverlayClose(true)
+                .setAcceptButton(actionEvent -> {
+                    if(actualStatus == ActionStatus.STATUS_EDITING) {
+                        setEmployeeInformation(selectedEmployee);
+                        actualStatus = ActionStatus.STATUS_VIEWING;
+                    } else if(actualStatus == ActionStatus.STATUS_ADDING) {
+                        setInformationLabelsPlaceholder();
+                        actualStatus = ActionStatus.STATUS_NONE;
+                    }
 
+                    showInformationLabels(true);
+                    showModificationInputs(false);
+                    dialogBuilder.getDialog().close();
+                })
+                .setCancelButton(actionEvent -> dialogBuilder.getDialog().close())
+                .build();
+
+        dialog.show();
     }
 
     @Override
@@ -168,6 +195,8 @@ public class EmployeesController extends BaseController {
         //Workaround for surname input. When visible, it stays at the bottom of name input
         employeeSurnameInput.setLayoutX(51);
         employeeSurnameInput.setLayoutY(show ? 62 : 1);
+
+        formButtonsContainer.setVisible(show);
     }
 
     @Override
@@ -293,15 +322,17 @@ public class EmployeesController extends BaseController {
         employeesTableCheckColumn.setCellFactory(param -> new MaterialCheckBoxCell<>());
 
         employeesTable.getSelectionModel().selectedItemProperty().addListener((obs, oldValue, newValue) -> {
-            selectedEmployee = newValue;
-            actualStatus = ActionStatus.STATUS_VIEWING;
+            if(actualStatus == ActionStatus.STATUS_NONE || actualStatus == ActionStatus.STATUS_VIEWING) {
+                selectedEmployee = newValue;
+                actualStatus = ActionStatus.STATUS_VIEWING;
 
-            //Check if selected employee exists (maybe it doesn't because of search)
-            if (newValue != null)
-                setEmployeeInformation(newValue);
-            else {
-                //Default employee placeholder
-                setInformationLabelsPlaceholder();
+                //Check if selected employee exists (maybe it doesn't because of search)
+                if (newValue != null)
+                    setEmployeeInformation(newValue);
+                else {
+                    //Default employee placeholder
+                    setInformationLabelsPlaceholder();
+                }
             }
         });
 
@@ -336,6 +367,9 @@ public class EmployeesController extends BaseController {
         //Set ripple effect for edit and remove button
         editButtonRippler.setControl(editButton);
         removeButtonRippler.setControl(removeButton);
+
+        //Binds managed property to visible so when visible is true, it becomes managed as well
+        formButtonsContainer.managedProperty().bind(formButtonsContainer.visibleProperty());
 
         //Fill employee role comboBox
         employeeLoginTypeInput.getItems().add(new Label(ADMIN_ROLE_TEXT));

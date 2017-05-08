@@ -138,7 +138,7 @@
                                           <Label fx:id="employeeStatusLabel" layoutX="64.0" layoutY="8.0" maxWidth="310.0" text="estado" />
                                        </children>
                                     </Pane>
-                                    <Pane fx:id="buttonsContainer" prefWidth="370.0" visible="false">
+                                    <Pane fx:id="formButtonsContainer" prefWidth="370.0" visible="false">
                                        <children>
                                           <JFXButton buttonType="RAISED" layoutX="160.0" onAction="#cancelChanges" styleClass="cancel-button" text="Cancelar" />
                                           <JFXButton buttonType="RAISED" layoutX="277.0" onAction="#acceptChanges" styleClass="save-button" text="Guardar" />
