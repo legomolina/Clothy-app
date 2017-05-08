@@ -9,6 +9,8 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
+import javafx.scene.control.Label;
 import javafx.scene.control.SelectionModel;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableRow;
@@ -23,15 +25,19 @@ public class MaterialCheckBoxCell<S, T> extends TableCell<S, T> {
         setAlignment(Pos.CENTER);
         setPadding(new Insets(50));
 
+        setGraphic((Node) null);
+
         checkbox = new JFXCheckBox();
         checkbox.setAlignment(Pos.TOP_LEFT);
         selectedStateCallback = new SimpleObjectProperty(this, "selectedStateCallback");
+        this.setSelectedStateCallback(null);
     }
 
     @Override
     public void updateItem(T item, boolean empty) {
         super.updateItem(item, empty);
 
+        //If watching item is gone, set cell as empty text
         if (!empty) {
             setGraphic(checkbox);
 
@@ -39,7 +45,7 @@ public class MaterialCheckBoxCell<S, T> extends TableCell<S, T> {
                 checkbox.selectedProperty().unbindBidirectional((BooleanProperty) booleanProperty);
 
             ObservableValue<?> value = getSelectedProperty();
-            if(value instanceof BooleanProperty) {
+            if (value instanceof BooleanProperty) {
                 booleanProperty = (BooleanProperty) value;
                 checkbox.selectedProperty().bindBidirectional((BooleanProperty) booleanProperty);
             }
@@ -58,6 +64,10 @@ public class MaterialCheckBoxCell<S, T> extends TableCell<S, T> {
                     selectionModel.clearSelection(rowIndex);
             }
         }
+        else {
+            //this throws exception
+            this.setGraphic((Node) null);
+        }
     }
 
     private ObservableValue<?> getSelectedProperty() {
@@ -65,10 +75,14 @@ public class MaterialCheckBoxCell<S, T> extends TableCell<S, T> {
     }
 
     private Callback getSelectedStateCallback() {
-        return (Callback) this.selectedStateCallbackProperty().get();
+        return this.selectedStateCallbackProperty().get();
     }
 
     private ObjectProperty<Callback<Integer, ObservableValue<Boolean>>> selectedStateCallbackProperty() {
         return this.selectedStateCallback;
+    }
+
+    public final void setSelectedStateCallback(Callback<Integer, ObservableValue<Boolean>> value) {
+        this.selectedStateCallbackProperty().set(value);
     }
 }

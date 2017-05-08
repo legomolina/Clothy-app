@@ -36,6 +36,10 @@ public class Employee {
         this.loginActive = new SimpleBooleanProperty(loginActive);
     }
 
+    public String getCompleteName() {
+        return this.getName() + " " + this.getSurname();
+    }
+
     public int getId() {
         return id.get();
     }

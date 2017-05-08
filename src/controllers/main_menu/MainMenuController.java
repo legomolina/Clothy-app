@@ -47,19 +47,13 @@ public class MainMenuController extends BaseController implements Initializable 
     }
 
     @Override
-    protected void addListener() {
-
-    }
+    protected void addListener() {}
 
     @Override
-    protected void editListener() {
-
-    }
+    protected void editListener() {}
 
     @Override
-    protected void removeListener() {
-
-    }
+    protected void removeListener() {}
 
     @Override
     protected void acceptChanges() {
@@ -86,7 +80,7 @@ public class MainMenuController extends BaseController implements Initializable 
     }
 
     @Override
-    protected void setInformationLabelsPlaceholder(boolean set) {
+    protected void setInformationLabelsPlaceholder() {
 
     }
 
