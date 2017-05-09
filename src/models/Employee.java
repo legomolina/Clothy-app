@@ -17,8 +17,7 @@ public class Employee {
     private BooleanProperty checked;
 
     public Employee(int id) {
-        this.id = new SimpleIntegerProperty(id);
-        this.checked = new SimpleBooleanProperty(false);
+        this(id, "", "", "", "", "", "", "", "", false);
     }
 
     public Employee(int id, String name, String surname, String address, String email, String phone, String loginName, String loginPassword, String loginType, Boolean loginActive) {

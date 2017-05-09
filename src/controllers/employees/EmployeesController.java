@@ -39,7 +39,8 @@ public class EmployeesController extends BaseController {
         STATUS_NONE,
         STATUS_VIEWING,
         STATUS_ADDING,
-        STATUS_EDITING
+        STATUS_EDITING,
+        STATUS_SEARCHING
     }
 
     private ObservableList<Employee> employees;
@@ -107,6 +108,7 @@ public class EmployeesController extends BaseController {
 
         showInformationLabels(false);
         showModificationInputs(true);
+        setModificationInputsText(new Employee(DatabaseMethods.getLastId("employees", "employee_id")));
     }
 
     @Override
@@ -279,6 +281,8 @@ public class EmployeesController extends BaseController {
 
     private void searchListener() {
         searchInput.textProperty().addListener((observableValue, oldValue, newValue) -> filteredEmployees.setPredicate(employee -> {
+            actualStatus = ActionStatus.STATUS_NONE;
+
             //If text field is not empty
             if (newValue == null || newValue.isEmpty())
                 return true;
