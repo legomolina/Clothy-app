@@ -5,6 +5,7 @@ import com.jfoenix.controls.JFXMasonryPane;
 import com.jfoenix.controls.JFXRippler;
 import com.sun.javafx.stage.StageHelper;
 import controllers.BaseController;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
@@ -56,7 +57,7 @@ public class MainMenuController extends BaseController implements Initializable 
     protected void removeListener() {}
 
     @Override
-    protected void acceptChanges() {
+    protected void acceptChanges(ActionEvent event) {
 
     }
 

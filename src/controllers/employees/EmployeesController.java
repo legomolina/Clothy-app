@@ -1,29 +1,41 @@
 package controllers.employees;
 
 import com.jfoenix.controls.*;
-import com.sun.org.apache.xpath.internal.operations.Bool;
+import com.jfoenix.validation.RequiredFieldValidator;
 import controllers.BaseController;
 import controllers.database.DatabaseMethods;
+import custom.CustomRequiredFieldValidator;
+import custom.EmailFieldValidator;
 import custom.MaterialCheckBoxCell;
+import custom.PhoneFieldValidator;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
-import javafx.scene.control.cell.CheckBoxTableCell;
+import javafx.scene.control.Label;
+import javafx.scene.control.SelectionMode;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import models.Employee;
+import utils.AnimationHandler;
 import utils.DialogBuilder;
 import utils.ImageUtils;
 
-import javax.xml.ws.Action;
+import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.concurrent.CountDownLatch;
@@ -33,20 +45,31 @@ public class EmployeesController extends BaseController {
     private static class Style {
         static final String LIGHT_GREY = "#CCCCCC";
         static final String BLACK = "#000000";
+        static final String GREEN = "#35BA48";
+        static final String RED = "#FF5440";
     }
 
     private enum ActionStatus {
         STATUS_NONE,
         STATUS_VIEWING,
         STATUS_ADDING,
-        STATUS_EDITING,
-        STATUS_SEARCHING
+        STATUS_EDITING
     }
 
     private ObservableList<Employee> employees;
     private FilteredList<Employee> filteredEmployees;
     private Employee selectedEmployee;
-    private ActionStatus actualStatus;
+
+    private ActionStatus currentStatus;
+    private int selectedEmployeesCount;
+
+    private ChangeListener<Boolean> selectedEmployeeListener = new ChangeListener<Boolean>() {
+        @Override
+        public void changed(ObservableValue<? extends Boolean> observableValue, Boolean oldValue, Boolean newValue) {
+            selectedEmployeesCount += (newValue) ? 1 : -1;
+            deleteSelected.setVisible(selectedEmployeesCount > 0);
+        }
+    };
 
     private final static String ACTIVE_USER_TEXT = "activo";
     private final static String INACTIVE_USER_TEXT = "inactivo";
@@ -72,6 +95,8 @@ public class EmployeesController extends BaseController {
     @FXML private JFXComboBox<Label> employeeLoginTypeInput;
     @FXML private JFXToggleButton employeeStatusInput;
 
+    @FXML private JFXButton acceptChanges;
+
     @FXML private TableView<Employee> employeesTable;
     @FXML private TableColumn<Employee, Boolean> employeesTableCheckColumn;
     @FXML private TableColumn<Employee, Number> employeesTableIdColumn;
@@ -88,6 +113,9 @@ public class EmployeesController extends BaseController {
     @FXML private JFXRippler editButtonRippler;
 
     @FXML private Pane formButtonsContainer;
+    @FXML private AnchorPane loaderContainer;
+
+    @FXML private JFXButton deleteSelected;
 
     public EmployeesController(Employee loggedEmployee) {
         super(loggedEmployee);
@@ -96,27 +124,35 @@ public class EmployeesController extends BaseController {
         selectedEmployee = null;
 
         //Set actual status as none, there is no action in course
-        actualStatus = ActionStatus.STATUS_NONE;
+        currentStatus = ActionStatus.STATUS_NONE;
+
+        //There's no selected employee
+        selectedEmployeesCount = 0;
     }
 
     @Override
     protected void addListener() {
-        if(actualStatus != ActionStatus.STATUS_NONE && actualStatus != ActionStatus.STATUS_VIEWING)
+        //If there is no edition or addition in course
+        if (currentStatus != ActionStatus.STATUS_NONE && currentStatus != ActionStatus.STATUS_VIEWING)
             return;
 
-        actualStatus = ActionStatus.STATUS_ADDING;
+        currentStatus = ActionStatus.STATUS_ADDING;
+        selectedEmployee = new Employee(DatabaseMethods.getLastId("employees", "employee_id") + 1);
+
+        selectedEmployee.checkedProperty().addListener(selectedEmployeeListener);
 
         showInformationLabels(false);
         showModificationInputs(true);
-        setModificationInputsText(new Employee(DatabaseMethods.getLastId("employees", "employee_id")));
+
+        setModificationInputsText(selectedEmployee);
     }
 
     @Override
     protected void editListener() {
-        if(actualStatus != ActionStatus.STATUS_VIEWING)
+        if (currentStatus != ActionStatus.STATUS_VIEWING)
             return;
 
-        actualStatus = ActionStatus.STATUS_EDITING;
+        currentStatus = ActionStatus.STATUS_EDITING;
 
         showInformationLabels(false);
         showModificationInputs(true);
@@ -126,7 +162,7 @@ public class EmployeesController extends BaseController {
 
     @Override
     protected void removeListener() {
-        if(actualStatus != ActionStatus.STATUS_VIEWING)
+        if (currentStatus != ActionStatus.STATUS_VIEWING)
             return;
 
         DialogBuilder dialogBuilder = new DialogBuilder(rootStackPane, DialogBuilder.DialogType.CONFIRM, JFXDialog.DialogTransition.CENTER, "employee-dialog");
@@ -143,9 +179,106 @@ public class EmployeesController extends BaseController {
         dialog.show();
     }
 
-    @Override
-    protected void acceptChanges() {
+    @FXML
+    private void removeSelectedListener() {
+        if (currentStatus != ActionStatus.STATUS_NONE && currentStatus != ActionStatus.STATUS_VIEWING)
+            return;
 
+        DialogBuilder dialogBuilder = new DialogBuilder(rootStackPane, DialogBuilder.DialogType.CONFIRM, JFXDialog.DialogTransition.CENTER, "employee-dialog");
+        JFXDialog dialog = dialogBuilder.setContent(new Text("¿Seguro que quieres eliminar a los usuarios seleccionados?"))
+                .setOverlayClose(false)
+                .setAcceptButton(actionEvent -> {
+                    for (Employee e : employeesTable.getSelectionModel().getSelectedItems())
+                        System.out.println(e.getId());
+
+                    DatabaseMethods.removeEmployees(employeesTable.getSelectionModel().getSelectedItems());
+                    employees.removeAll(employeesTable.getSelectionModel().getSelectedItems());
+
+                    deleteSelected.setVisible(false);
+
+                    dialogBuilder.getDialog().close();
+                })
+                .setCancelButton(actionEvent -> dialogBuilder.getDialog().close())
+                .build();
+
+        dialog.show();
+    }
+
+    @Override
+    protected void acceptChanges(ActionEvent event) {
+        //Validate inputs before sending data
+        if(!employeeNameInput.validate()) return;
+        if(!employeeSurnameInput.validate()) return;
+        if(!employeeEmailInput.validate()) return;
+        if(!employeePhoneInput.validate()) return;
+        if(!employeeAddressInput.validate()) return;
+        if(!employeeLoginNameInput.validate()) return;
+
+        loaderContainer.setVisible(true);
+        AnimationHandler.fadeIn(loaderContainer, 500, 0.6).execute();
+
+        selectedEmployee.setName(employeeNameInput.getText());
+        selectedEmployee.setSurname(employeeSurnameInput.getText());
+        selectedEmployee.setEmail(employeeEmailInput.getText());
+        selectedEmployee.setPhone(employeePhoneInput.getText());
+        selectedEmployee.setAddress(employeeAddressInput.getText());
+        selectedEmployee.setLoginName(employeeLoginNameInput.getText());
+
+        switch (employeeLoginTypeInput.getSelectionModel().getSelectedItem().getText()) {
+            case ADMIN_ROLE_TEXT:
+                selectedEmployee.setLoginType("TYPE_ADMIN");
+                break;
+
+            case USER_ROLE_TEXT:
+                selectedEmployee.setLoginType("TYPE_USER");
+                break;
+
+            default:
+                selectedEmployee.setLoginType("TYPE_GUEST");
+        }
+
+        selectedEmployee.setLoginActive(employeeStatusInput.isSelected());
+
+        final Service<Void> service = new Service<Void>() {
+            @Override
+            protected Task<Void> createTask() {
+                return new Task<Void>() {
+                    @Override
+                    protected Void call() throws Exception {
+                        CountDownLatch latch = new CountDownLatch(1);
+
+                        if (currentStatus == ActionStatus.STATUS_ADDING) {
+                            DatabaseMethods.addEmployees(selectedEmployee);
+
+                            employees.add(selectedEmployee);
+                        } else if (currentStatus == ActionStatus.STATUS_EDITING) {
+                            DatabaseMethods.updateEmployees(selectedEmployee);
+
+                            employees.set(employees.indexOf(selectedEmployee), selectedEmployee);
+                        }
+
+                        Platform.runLater(() -> {
+                            try {
+                                currentStatus = ActionStatus.STATUS_VIEWING;
+
+                                showInformationLabels(true);
+                                showModificationInputs(false);
+
+                                setEmployeeInformation(selectedEmployee);
+
+                                AnimationHandler.fadeOut(loaderContainer, 500).execute(finishedEvent -> loaderContainer.setVisible(false));
+                            } finally {
+                                latch.countDown();
+                            }
+                        });
+                        latch.await();
+
+                        return null;
+                    }
+                };
+            }
+        };
+        service.start();
     }
 
     @Override
@@ -154,12 +287,12 @@ public class EmployeesController extends BaseController {
         JFXDialog dialog = dialogBuilder.setContent(new Text("¿Seguro que quieres cancelar la edición?"))
                 .setOverlayClose(true)
                 .setAcceptButton(actionEvent -> {
-                    if(actualStatus == ActionStatus.STATUS_EDITING) {
+                    if (currentStatus == ActionStatus.STATUS_EDITING) {
                         setEmployeeInformation(selectedEmployee);
-                        actualStatus = ActionStatus.STATUS_VIEWING;
-                    } else if(actualStatus == ActionStatus.STATUS_ADDING) {
+                        currentStatus = ActionStatus.STATUS_VIEWING;
+                    } else if (currentStatus == ActionStatus.STATUS_ADDING) {
                         setInformationLabelsPlaceholder();
-                        actualStatus = ActionStatus.STATUS_NONE;
+                        currentStatus = ActionStatus.STATUS_NONE;
                     }
 
                     showInformationLabels(true);
@@ -196,7 +329,7 @@ public class EmployeesController extends BaseController {
 
         //Workaround for surname input. When visible, it stays at the bottom of name input
         employeeSurnameInput.setLayoutX(51);
-        employeeSurnameInput.setLayoutY(show ? 62 : 1);
+        employeeSurnameInput.setLayoutY(show ? 70 : 1);
 
         formButtonsContainer.setVisible(show);
     }
@@ -267,6 +400,57 @@ public class EmployeesController extends BaseController {
         }
 
         employeeStatusLabel.setText(employee.isLoginActive() ? ACTIVE_USER_TEXT : INACTIVE_USER_TEXT);
+        employeeStatusLabel.setStyle(employee.isLoginActive() ? ("-fx-text-fill: " + Style.GREEN) : ("-fx-text-fill: " + Style.RED));
+
+        setEmployeeImage(employee.getLoginName());
+    }
+
+    private void setEmployeeImage(String employeeUsername) {
+        //TODO see .jar
+        //Load user image from /resources/images/employees_image asynchronously
+        final Service<Void> service = new Service<Void>() {
+            @Override
+            protected Task<Void> createTask() {
+                return new Task<Void>() {
+                    @Override
+                    protected Void call() throws Exception {
+                        //Store all files (user images) from employee images directory
+                        File imagesFolder = new File(getClass().getResource("/resources/images/employees_image").toURI());
+                        File[] files = imagesFolder.listFiles();
+                        String fileName = "/resources/images/employees_image/default.png";
+
+                        CountDownLatch latch = new CountDownLatch(1);
+
+                        if (files != null) {
+                            //If user has custom image, set it
+                            for (File file : files) {
+                                int pos = file.getName().lastIndexOf(".");
+
+                                if (file.getName().toLowerCase().substring(0, pos).equals(employeeUsername.toLowerCase())) {
+                                    fileName = "/resources/images/employees_image/" + file.getName();
+                                    break;
+                                }
+                            }
+                        }
+
+                        String finalFileName = fileName;
+                        Platform.runLater(() -> {
+                            try {
+                                employeeImage.setImage(new Image(finalFileName));
+                                ImageUtils.cropImage(employeeImage, 120, 120);
+                                ImageUtils.roundImage(employeeImage, 60);
+                            } finally {
+                                latch.countDown();
+                            }
+                        });
+                        latch.await();
+
+                        return null;
+                    }
+                };
+            }
+        };
+        service.start();
     }
 
     private void setEmployeesLabelsStyle(String style) {
@@ -281,7 +465,7 @@ public class EmployeesController extends BaseController {
 
     private void searchListener() {
         searchInput.textProperty().addListener((observableValue, oldValue, newValue) -> filteredEmployees.setPredicate(employee -> {
-            actualStatus = ActionStatus.STATUS_NONE;
+            currentStatus = ActionStatus.STATUS_NONE;
 
             //If text field is not empty
             if (newValue == null || newValue.isEmpty())
@@ -326,9 +510,9 @@ public class EmployeesController extends BaseController {
         employeesTableCheckColumn.setCellFactory(param -> new MaterialCheckBoxCell<>());
 
         employeesTable.getSelectionModel().selectedItemProperty().addListener((obs, oldValue, newValue) -> {
-            if(actualStatus == ActionStatus.STATUS_NONE || actualStatus == ActionStatus.STATUS_VIEWING) {
+            if (currentStatus == ActionStatus.STATUS_NONE || currentStatus == ActionStatus.STATUS_VIEWING) {
                 selectedEmployee = newValue;
-                actualStatus = ActionStatus.STATUS_VIEWING;
+                currentStatus = ActionStatus.STATUS_VIEWING;
 
                 //Check if selected employee exists (maybe it doesn't because of search)
                 if (newValue != null)
@@ -344,16 +528,21 @@ public class EmployeesController extends BaseController {
 
         JFXCheckBox selectAllCheckbox = new JFXCheckBox();
         selectAllCheckbox.selectedProperty().addListener((observableValue, oldValue, newValue) -> {
-            if(newValue) {
-                for(Employee e : employees)
-                    e.setChecked(true);
-            }
-            else {
-                for(Employee e : employees)
-                    e.setChecked(false);
-            }
+            for (Employee e : employees)
+                e.setChecked(newValue);
         });
         employeesTableCheckColumn.setGraphic(selectAllCheckbox);
+    }
+
+    private void setInputValidator() {
+        employeeNameInput.getValidators().add(new CustomRequiredFieldValidator("El campo no puede estar vacío"));
+        employeeSurnameInput.getValidators().add(new CustomRequiredFieldValidator("El campo no puede estar vacío"));
+        employeeEmailInput.getValidators().add(new CustomRequiredFieldValidator("El campo no puede estar vacío"));
+        employeeEmailInput.getValidators().add(new EmailFieldValidator("El email no corresponde a un email válido"));
+        employeeAddressInput.getValidators().add(new CustomRequiredFieldValidator("El campo no puede estar vacío"));
+        employeePhoneInput.getValidators().add(new CustomRequiredFieldValidator("El campo no puede estar vacío"));
+        employeePhoneInput.getValidators().add(new PhoneFieldValidator("El campo no es un teléfono válido"));
+        employeeLoginNameInput.getValidators().add(new CustomRequiredFieldValidator("El campo no puede estar vacío"));
     }
 
     @Override
@@ -374,11 +563,14 @@ public class EmployeesController extends BaseController {
 
         //Binds managed property to visible so when visible is true, it becomes managed as well
         formButtonsContainer.managedProperty().bind(formButtonsContainer.visibleProperty());
+        loaderContainer.managedProperty().bind(loaderContainer.visibleProperty());
 
         //Fill employee role comboBox
         employeeLoginTypeInput.getItems().add(new Label(ADMIN_ROLE_TEXT));
         employeeLoginTypeInput.getItems().add(new Label(USER_ROLE_TEXT));
         employeeLoginTypeInput.getItems().add(new Label(GUESTS_ROLE_TEXT));
+
+        setInputValidator();
 
         final Service<Void> service = new Service<Void>() {
             @Override
@@ -397,6 +589,10 @@ public class EmployeesController extends BaseController {
  *                          ============================================================
  *                          Run here all methods that use employees or filteredEmployees
  */
+                                for (Employee e : employees) {
+                                    e.checkedProperty().addListener(selectedEmployeeListener);
+                                }
+
                                 searchListener();
                             } finally {
                                 latch.countDown();

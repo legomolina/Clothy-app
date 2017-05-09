@@ -9,6 +9,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class DatabaseMethods {
     private final static Connection connection = DatabaseHandler.getConnection();
@@ -19,9 +20,8 @@ public class DatabaseMethods {
         try {
             PreparedStatement statement = connection.prepareStatement(sqlQuery);
             ResultSet result = statement.executeQuery();
-            result.first();
 
-            return result.getInt(columnName);
+            return (!result.first()) ? 0 : result.getInt(columnName);
 
         } catch (NullPointerException e) {
             System.out.println("An error occurred with Database connection");
@@ -62,23 +62,24 @@ public class DatabaseMethods {
     }
 
     public static void addEmployees(Employee... addEmployee){
-        String sqlQuery = "INSERT INTO employees (employee_name, employee_surname, employee_address, employee_email, " +
+        String sqlQuery = "INSERT INTO employees (employee_id, employee_name, employee_surname, employee_address, employee_email, " +
                 "employee_phone, employee_login_name, employee_login_password, employee_login_type, " +
-                "employee_is_active) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                "employee_is_active) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try {
             PreparedStatement statement = connection.prepareStatement(sqlQuery);
 
             for(Employee e : addEmployee) {
-                statement.setString(1, e.getName());
-                statement.setString(2, e.getSurname());
-                statement.setString(3, e.getAddress());
-                statement.setString(4, e.getEmail());
-                statement.setString(5, e.getPhone());
-                statement.setString(6, e.getLoginName());
-                statement.setString(7, "asd");
-                statement.setString(8, e.getLoginType());
-                statement.setInt(9, e.isLoginActive() ? 1 : 0);
+                statement.setInt(1, e.getId());
+                statement.setString(2, e.getName());
+                statement.setString(3, e.getSurname());
+                statement.setString(4, e.getAddress());
+                statement.setString(5, e.getEmail());
+                statement.setString(6, e.getPhone());
+                statement.setString(7, e.getLoginName());
+                statement.setString(8, "asd");
+                statement.setString(9, e.getLoginType());
+                statement.setInt(10, e.isLoginActive() ? 1 : 0);
 
                 statement.executeUpdate();
             }
@@ -119,6 +120,10 @@ public class DatabaseMethods {
             System.out.println("An error occurred preparing the Query: " + sqlQuery);
             e.printStackTrace();
         }
+    }
+
+    public static void removeEmployees(List<Employee> removeEmployees) {
+        removeEmployees(removeEmployees.toArray(new Employee[removeEmployees.size()]));
     }
 
     public static void removeEmployees(Employee... removeEmployees) {

@@ -23,6 +23,7 @@ public class MainMenu extends BaseView {
 
         mainMenuStage.getIcons().add(new Image("resources/clothy_icon.png"));
         mainMenuStage.setScene(mainMenuScene);
+        mainMenuStage.setResizable(false);
         mainMenuStage.show();
 
         //Closing main menu exists application

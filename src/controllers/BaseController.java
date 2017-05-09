@@ -2,11 +2,13 @@ package controllers;
 
 
 import com.jfoenix.controls.JFXTextField;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.layout.StackPane;
 import models.Employee;
 
+import java.beans.EventHandler;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -26,7 +28,7 @@ public abstract class BaseController implements Initializable {
     protected abstract void removeListener();
 
     @FXML
-    protected abstract void acceptChanges();
+    protected abstract void acceptChanges(ActionEvent event);
 
     @FXML
     protected abstract void cancelChanges();

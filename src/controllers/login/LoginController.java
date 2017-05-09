@@ -3,7 +3,6 @@ package controllers.login;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
-import controllers.BaseController;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -56,7 +55,6 @@ public class LoginController implements Initializable {
 
                 while (result.next()) {
                     if (BCrypt.checkpw(password.getText(), result.getString("employee_login_password")) && result.getInt("employee_is_active") > 0) {
-
 
                         activeEmployee = new Employee(result.getInt("employee_id"), result.getString("employee_name"),
                                 result.getString("employee_surname"), result.getString("employee_address"),
