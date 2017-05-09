@@ -1,3 +1,9 @@
+@font-face {
+    font-family: 'Birds of Paradise  Personal use', sans-serif;
+    font-weight: normal;
+    src: url('../fonts/birds_of_paradise.ttf');
+}
+
 /* Open Sans Font */
 
 @font-face {
