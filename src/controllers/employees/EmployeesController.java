@@ -313,6 +313,7 @@ public class EmployeesController extends BaseController {
         employeeSurnameInput.setLayoutX(51);
         employeeSurnameInput.setLayoutY(show ? 70 : 1);
 
+        setEmployeeImage("default");
         formButtonsContainer.setVisible(show);
     }
 
