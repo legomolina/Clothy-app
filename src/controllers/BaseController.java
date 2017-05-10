@@ -13,6 +13,22 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public abstract class BaseController implements Initializable {
+    protected static class Style {
+        public static final String LIGHT_GREY = "#CCCCCC";
+        public static final String BLACK = "#000000";
+        public static final String GREEN = "#35BA48";
+        public static final String RED = "#FF5440";
+    }
+
+    protected enum ActionStatus {
+        STATUS_NONE,
+        STATUS_VIEWING,
+        STATUS_ADDING,
+        STATUS_EDITING
+    }
+
+    protected ActionStatus currentStatus;
+
     protected final Employee loggedEmployee;
 
     @FXML protected StackPane rootStackPane;
@@ -35,6 +51,9 @@ public abstract class BaseController implements Initializable {
 
     public BaseController(Employee loggedEmployee) {
         this.loggedEmployee = loggedEmployee;
+
+        //Set actual status as none, there is no action in course
+        currentStatus = ActionStatus.STATUS_NONE;
     }
 
     @FXML

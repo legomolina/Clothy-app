@@ -41,26 +41,10 @@ import java.util.ResourceBundle;
 import java.util.concurrent.CountDownLatch;
 
 public class EmployeesController extends BaseController {
-
-    private static class Style {
-        static final String LIGHT_GREY = "#CCCCCC";
-        static final String BLACK = "#000000";
-        static final String GREEN = "#35BA48";
-        static final String RED = "#FF5440";
-    }
-
-    private enum ActionStatus {
-        STATUS_NONE,
-        STATUS_VIEWING,
-        STATUS_ADDING,
-        STATUS_EDITING
-    }
-
     private ObservableList<Employee> employees;
     private FilteredList<Employee> filteredEmployees;
     private Employee selectedEmployee;
 
-    private ActionStatus currentStatus;
     private int selectedEmployeesCount;
 
     private ChangeListener<Boolean> selectedEmployeeListener = new ChangeListener<Boolean>() {
@@ -123,9 +107,6 @@ public class EmployeesController extends BaseController {
         //Set selectedEmployee as null to avoid problems
         selectedEmployee = null;
 
-        //Set actual status as none, there is no action in course
-        currentStatus = ActionStatus.STATUS_NONE;
-
         //There's no selected employee
         selectedEmployeesCount = 0;
     }
@@ -170,6 +151,7 @@ public class EmployeesController extends BaseController {
                 .setOverlayClose(false)
                 .setAcceptButton(actionEvent -> {
                     DatabaseMethods.removeEmployees(selectedEmployee);
+                    selectedEmployee.setChecked(false);
                     employees.remove(selectedEmployee);
                     dialogBuilder.getDialog().close();
                 })
