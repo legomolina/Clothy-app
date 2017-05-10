@@ -24,24 +24,6 @@
     -fx-font-weight: bold;
 }
 
-.dialog-accept-button {
-    -fx-background-color: #2196f3;
-    -fx-text-fill: #FFFFFF;
-}
-
-.dialog-cancel-button {
-    -fx-text-fill: #ca3e32;
-    -fx-background-color: #ffffff;
-}
-
-.employee-dialog .jfx-layout-actions {
-    -fx-hgap: 20px;
-}
-
-.employee-dialog .jfx-layout-body {
-    -fx-alignment: center-left;
-}
-
 .loader-container {
     -fx-background-radius: 2;
     -fx-opacity: 0;

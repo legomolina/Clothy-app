@@ -1,7 +1,6 @@
 package controllers.employees;
 
 import com.jfoenix.controls.*;
-import com.jfoenix.validation.RequiredFieldValidator;
 import controllers.BaseController;
 import controllers.database.DatabaseMethods;
 import custom.CustomRequiredFieldValidator;
@@ -18,7 +17,6 @@ import javafx.collections.transformation.SortedList;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.SelectionMode;
@@ -26,10 +24,10 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 import models.Employee;
 import utils.AnimationHandler;
 import utils.DialogBuilder;
@@ -101,8 +99,8 @@ public class EmployeesController extends BaseController {
 
     @FXML private JFXButton deleteSelected;
 
-    public EmployeesController(Employee loggedEmployee) {
-        super(loggedEmployee);
+    public EmployeesController(Employee loggedEmployee, Stage currentStage) {
+        super(loggedEmployee, currentStage);
 
         //Set selectedEmployee as null to avoid problems
         selectedEmployee = null;
@@ -146,16 +144,16 @@ public class EmployeesController extends BaseController {
         if (currentStatus != ActionStatus.STATUS_VIEWING)
             return;
 
-        DialogBuilder dialogBuilder = new DialogBuilder(rootStackPane, DialogBuilder.DialogType.CONFIRM, JFXDialog.DialogTransition.CENTER, "employee-dialog");
+        DialogBuilder dialogBuilder = new DialogBuilder(rootStackPane, DialogBuilder.DialogType.CONFIRM, JFXDialog.DialogTransition.CENTER, "custom-dialog");
         JFXDialog dialog = dialogBuilder.setContent(new Text("¿Seguro que quieres eliminar al usuario " + selectedEmployee.getName() + "?"))
                 .setOverlayClose(false)
+                .setCancelButton(actionEvent -> dialogBuilder.getDialog().close())
                 .setAcceptButton(actionEvent -> {
                     DatabaseMethods.removeEmployees(selectedEmployee);
                     selectedEmployee.setChecked(false);
                     employees.remove(selectedEmployee);
                     dialogBuilder.getDialog().close();
                 })
-                .setCancelButton(actionEvent -> dialogBuilder.getDialog().close())
                 .build();
 
         dialog.show();
@@ -166,9 +164,10 @@ public class EmployeesController extends BaseController {
         if (currentStatus != ActionStatus.STATUS_NONE && currentStatus != ActionStatus.STATUS_VIEWING)
             return;
 
-        DialogBuilder dialogBuilder = new DialogBuilder(rootStackPane, DialogBuilder.DialogType.CONFIRM, JFXDialog.DialogTransition.CENTER, "employee-dialog");
+        DialogBuilder dialogBuilder = new DialogBuilder(rootStackPane, DialogBuilder.DialogType.CONFIRM, JFXDialog.DialogTransition.CENTER, "custom-dialog");
         JFXDialog dialog = dialogBuilder.setContent(new Text("¿Seguro que quieres eliminar a los usuarios seleccionados?"))
                 .setOverlayClose(false)
+                .setCancelButton(actionEvent -> dialogBuilder.getDialog().close())
                 .setAcceptButton(actionEvent -> {
                     for (Employee e : employeesTable.getSelectionModel().getSelectedItems())
                         System.out.println(e.getId());
@@ -180,7 +179,6 @@ public class EmployeesController extends BaseController {
 
                     dialogBuilder.getDialog().close();
                 })
-                .setCancelButton(actionEvent -> dialogBuilder.getDialog().close())
                 .build();
 
         dialog.show();
@@ -189,12 +187,12 @@ public class EmployeesController extends BaseController {
     @Override
     protected void acceptChanges(ActionEvent event) {
         //Validate inputs before sending data
-        if(!employeeNameInput.validate()) return;
-        if(!employeeSurnameInput.validate()) return;
-        if(!employeeEmailInput.validate()) return;
-        if(!employeePhoneInput.validate()) return;
-        if(!employeeAddressInput.validate()) return;
-        if(!employeeLoginNameInput.validate()) return;
+        if (!employeeNameInput.validate()) return;
+        if (!employeeSurnameInput.validate()) return;
+        if (!employeeEmailInput.validate()) return;
+        if (!employeePhoneInput.validate()) return;
+        if (!employeeAddressInput.validate()) return;
+        if (!employeeLoginNameInput.validate()) return;
 
         loaderContainer.setVisible(true);
         AnimationHandler.fadeIn(loaderContainer, 500, 0.6).execute();
@@ -265,9 +263,10 @@ public class EmployeesController extends BaseController {
 
     @Override
     protected void cancelChanges() {
-        DialogBuilder dialogBuilder = new DialogBuilder(rootStackPane, DialogBuilder.DialogType.CONFIRM, JFXDialog.DialogTransition.CENTER, "employee-dialog");
+        DialogBuilder dialogBuilder = new DialogBuilder(rootStackPane, DialogBuilder.DialogType.CONFIRM, JFXDialog.DialogTransition.CENTER, "custom-dialog");
         JFXDialog dialog = dialogBuilder.setContent(new Text("¿Seguro que quieres cancelar la edición?"))
                 .setOverlayClose(true)
+                .setCancelButton(actionEvent -> dialogBuilder.getDialog().close())
                 .setAcceptButton(actionEvent -> {
                     if (currentStatus == ActionStatus.STATUS_EDITING) {
                         setEmployeeInformation(selectedEmployee);
@@ -281,7 +280,6 @@ public class EmployeesController extends BaseController {
                     showModificationInputs(false);
                     dialogBuilder.getDialog().close();
                 })
-                .setCancelButton(actionEvent -> dialogBuilder.getDialog().close())
                 .build();
 
         dialog.show();

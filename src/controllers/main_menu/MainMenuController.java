@@ -66,8 +66,8 @@ public class MainMenuController extends BaseController implements Initializable 
 
     }
 
-    public MainMenuController(Employee loggedEmployee) {
-        super(loggedEmployee);
+    public MainMenuController(Employee loggedEmployee, Stage currentStage) {
+        super(loggedEmployee, currentStage);
     }
 
     @Override

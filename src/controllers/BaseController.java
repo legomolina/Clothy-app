@@ -1,12 +1,16 @@
 package controllers;
 
 
+import com.jfoenix.controls.JFXDialog;
 import com.jfoenix.controls.JFXTextField;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.layout.StackPane;
+import javafx.scene.text.Text;
+import javafx.stage.Stage;
 import models.Employee;
+import utils.DialogBuilder;
 
 import java.beans.EventHandler;
 import java.net.URL;
@@ -30,6 +34,7 @@ public abstract class BaseController implements Initializable {
     protected ActionStatus currentStatus;
 
     protected final Employee loggedEmployee;
+    private final Stage currentStage;
 
     @FXML protected StackPane rootStackPane;
     @FXML protected JFXTextField searchInput;
@@ -49,11 +54,30 @@ public abstract class BaseController implements Initializable {
     @FXML
     protected abstract void cancelChanges();
 
-    public BaseController(Employee loggedEmployee) {
+    public BaseController(Employee loggedEmployee, Stage currentStage) {
         this.loggedEmployee = loggedEmployee;
+        this.currentStage = currentStage;
 
         //Set actual status as none, there is no action in course
         currentStatus = ActionStatus.STATUS_NONE;
+
+        //Ask for confirmation on close window
+        this.setStageCloseListener();
+    }
+
+    private void setStageCloseListener() {
+        currentStage.setOnCloseRequest(windowEvent -> {
+            if (currentStatus != ActionStatus.STATUS_NONE && currentStatus != ActionStatus.STATUS_VIEWING) {
+                windowEvent.consume();
+
+                DialogBuilder dialogBuilder = new DialogBuilder(rootStackPane, DialogBuilder.DialogType.CONFIRM, JFXDialog.DialogTransition.CENTER, "custom-dialog");
+                dialogBuilder.setContent(new Text("¿Seguro que quieres cerrar y cancelar la edición?\n\nPerderás los datos no guardados."))
+                        .setOverlayClose(false)
+                        .setCancelButton(actionEvent -> dialogBuilder.getDialog().close())
+                        .setAcceptButton(actionEvent -> currentStage.close())
+                        .build().show();
+            }
+        });
     }
 
     @FXML

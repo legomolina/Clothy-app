@@ -19,7 +19,7 @@ public class MainMenu extends BaseView {
         super(previousStage, true);
 
         Stage mainMenuStage = createStage("Clothy App", "main_menu");
-        Scene mainMenuScene = loadScene(mainMenuStage, "main_menu.fxml", new MainMenuController(loggedEmployee));
+        Scene mainMenuScene = loadScene(mainMenuStage, "main_menu.fxml", new MainMenuController(loggedEmployee, mainMenuStage));
 
         mainMenuStage.getIcons().add(new Image("resources/clothy_icon.png"));
         mainMenuStage.setScene(mainMenuScene);
