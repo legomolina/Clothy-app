@@ -6,10 +6,10 @@ import javafx.scene.control.TextInputControl;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class PhoneFieldValidator extends CustomRequiredFieldValidator {
-    private static final Pattern PHONE_REGEX = Pattern.compile("^(\\+[1-9]{1,3}\\s)?[0-9]{9,14}$", Pattern.MULTILINE);
+public class NifFieldValidator extends CustomRequiredFieldValidator {
+    private static final Pattern NIF_REGEX = Pattern.compile("^\\d{8}-?[A-z]{1}$", Pattern.MULTILINE);
 
-    public PhoneFieldValidator(String message) {
+    public NifFieldValidator(String message) {
         super(message);
     }
 
@@ -24,15 +24,15 @@ public class PhoneFieldValidator extends CustomRequiredFieldValidator {
         if(textField.getText().isEmpty() || textField.getText().equals(""))
             this.hasErrors.set(false);
         else {
-            if (validatePhone(textField.getText()))
+            if (validateNif(textField.getText()))
                 this.hasErrors.set(false);
             else
                 this.hasErrors.set(true);
         }
     }
 
-    private boolean validatePhone(String phoneStr) {
-        Matcher matcher = PHONE_REGEX.matcher(phoneStr);
+    private boolean validateNif(String nifStr) {
+        Matcher matcher = NIF_REGEX.matcher(nifStr);
         return matcher.find();
     }
 }

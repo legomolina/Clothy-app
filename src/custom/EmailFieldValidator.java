@@ -21,10 +21,14 @@ public class EmailFieldValidator extends CustomRequiredFieldValidator {
     private void evalTextInputField() {
         TextInputControl textField = (TextInputControl) this.srcControl.get();
 
-        if (validateEmail(textField.getText()))
+        if(textField.getText().isEmpty() || textField.getText().equals(""))
             this.hasErrors.set(false);
-        else
-            this.hasErrors.set(true);
+        else {
+            if (validateEmail(textField.getText()))
+                this.hasErrors.set(false);
+            else
+                this.hasErrors.set(true);
+        }
     }
 
     private boolean validateEmail(String emailStr) {

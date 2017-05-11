@@ -3,6 +3,7 @@ package controllers.employees;
 import com.jfoenix.controls.*;
 import controllers.BaseController;
 import controllers.database.DatabaseMethods;
+import controllers.database.EmployeesMethods;
 import custom.CustomRequiredFieldValidator;
 import custom.EmailFieldValidator;
 import custom.MaterialCheckBoxCell;
@@ -149,7 +150,7 @@ public class EmployeesController extends BaseController {
                 .setOverlayClose(false)
                 .setCancelButton(actionEvent -> dialogBuilder.getDialog().close())
                 .setAcceptButton(actionEvent -> {
-                    DatabaseMethods.removeEmployees(selectedEmployee);
+                    EmployeesMethods.removeEmployees(selectedEmployee);
                     selectedEmployee.setChecked(false);
                     employees.remove(selectedEmployee);
                     dialogBuilder.getDialog().close();
@@ -169,10 +170,7 @@ public class EmployeesController extends BaseController {
                 .setOverlayClose(false)
                 .setCancelButton(actionEvent -> dialogBuilder.getDialog().close())
                 .setAcceptButton(actionEvent -> {
-                    for (Employee e : employeesTable.getSelectionModel().getSelectedItems())
-                        System.out.println(e.getId());
-
-                    DatabaseMethods.removeEmployees(employeesTable.getSelectionModel().getSelectedItems());
+                    EmployeesMethods.removeEmployees(employeesTable.getSelectionModel().getSelectedItems());
                     employees.removeAll(employeesTable.getSelectionModel().getSelectedItems());
 
                     deleteSelected.setVisible(false);
@@ -228,11 +226,11 @@ public class EmployeesController extends BaseController {
                         CountDownLatch latch = new CountDownLatch(1);
 
                         if (currentStatus == ActionStatus.STATUS_ADDING) {
-                            DatabaseMethods.addEmployees(selectedEmployee);
+                            EmployeesMethods.addEmployees(selectedEmployee);
 
                             employees.add(selectedEmployee);
                         } else if (currentStatus == ActionStatus.STATUS_EDITING) {
-                            DatabaseMethods.updateEmployees(selectedEmployee);
+                            EmployeesMethods.updateEmployees(selectedEmployee);
 
                             employees.set(employees.indexOf(selectedEmployee), selectedEmployee);
                         }
@@ -472,7 +470,7 @@ public class EmployeesController extends BaseController {
         }));
 
         //As FilterList is immutable, copy the filtered employees to a SortedList and bind it to the TableView
-        SortedList<Employee> sortedData = new SortedList<Employee>(filteredEmployees);
+        SortedList<Employee> sortedData = new SortedList<>(filteredEmployees);
         sortedData.comparatorProperty().bind(employeesTable.comparatorProperty());
 
         //Add sortedItems to the TableView
@@ -506,6 +504,7 @@ public class EmployeesController extends BaseController {
         });
 
         employeesTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        employeesTable.setPlaceholder(new Label("No hay empleados registrados"));
 
         JFXCheckBox selectAllCheckbox = new JFXCheckBox();
         selectAllCheckbox.selectedProperty().addListener((observableValue, oldValue, newValue) -> {
@@ -559,7 +558,7 @@ public class EmployeesController extends BaseController {
                 return new Task<Void>() {
                     @Override
                     protected Void call() throws Exception {
-                        employees = FXCollections.observableList(DatabaseMethods.getAllEmployees());
+                        employees = FXCollections.observableList(EmployeesMethods.getAllEmployees());
                         filteredEmployees = new FilteredList<>(employees, p -> true);
 
                         CountDownLatch latch = new CountDownLatch(1);

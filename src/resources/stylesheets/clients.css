@@ -44,6 +44,6 @@
     -fx-text-fill: #ca3e32;
 }
 
-.employee-table {
-    -fx-tree-table-color: #ffd35155;
+.client-table {
+    -fx-tree-table-color: #00c8ff55;
 }

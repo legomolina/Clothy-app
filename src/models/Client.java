@@ -3,36 +3,30 @@ package models;
 
 import javafx.beans.property.*;
 
-public class Employee {
+public class Client {
     private IntegerProperty id;
+    private StringProperty nif;
     private StringProperty name;
     private StringProperty surname;
     private StringProperty address;
     private StringProperty email;
     private StringProperty phone;
-    private StringProperty loginName;
-    private StringProperty loginPassword;
-    private StringProperty loginType;
-    private BooleanProperty loginActive;
     private BooleanProperty checked;
 
-    public Employee(int id) {
-        this(id, "", "", "", "", "", "", "", "", false);
+    public Client(int id) {
+        this(id, "", "", "", "", "", "");
     }
 
-    public Employee(int id, String name, String surname, String address, String email, String phone, String loginName, String loginPassword, String loginType, Boolean loginActive) {
+    public Client(int id, String nif, String name, String surname, String address, String email, String phone) {
         this.id = new SimpleIntegerProperty(id);
         this.checked = new SimpleBooleanProperty(false);
 
+        this.nif = new SimpleStringProperty(nif);
         this.name = new SimpleStringProperty(name);
         this.surname = new SimpleStringProperty(surname);
         this.address = new SimpleStringProperty(address);
         this.email = new SimpleStringProperty(email);
         this.phone = new SimpleStringProperty(phone);
-        this.loginName = new SimpleStringProperty(loginName);
-        this.loginPassword = new SimpleStringProperty(loginPassword);
-        this.loginType = new SimpleStringProperty(loginType);
-        this.loginActive = new SimpleBooleanProperty(loginActive);
     }
 
     public String getCompleteName() {
@@ -49,6 +43,18 @@ public class Employee {
 
     public void setId(int id) {
         this.id.set(id);
+    }
+
+    public String getNif() {
+        return nif.get();
+    }
+
+    public StringProperty nifProperty() {
+        return nif;
+    }
+
+    public void setNif(String nif) {
+        this.nif.set(nif);
     }
 
     public String getName() {
@@ -111,54 +117,6 @@ public class Employee {
         this.phone.set(phone);
     }
 
-    public String getLoginName() {
-        return loginName.get();
-    }
-
-    public StringProperty loginNameProperty() {
-        return loginName;
-    }
-
-    public void setLoginName(String loginName) {
-        this.loginName.set(loginName);
-    }
-
-    public String getLoginPassword() {
-        return loginPassword.get();
-    }
-
-    public StringProperty loginPasswordProperty() {
-        return loginPassword;
-    }
-
-    public void setLoginPassword(String loginPassword) {
-        this.loginPassword.set(loginPassword);
-    }
-
-    public String getLoginType() {
-        return loginType.get();
-    }
-
-    public StringProperty loginTypeProperty() {
-        return loginType;
-    }
-
-    public void setLoginType(String loginType) {
-        this.loginType.set(loginType);
-    }
-
-    public boolean isLoginActive() {
-        return loginActive.get();
-    }
-
-    public BooleanProperty loginActiveProperty() {
-        return loginActive;
-    }
-
-    public void setLoginActive(boolean loginActive) {
-        this.loginActive.set(loginActive);
-    }
-
     public boolean isChecked() {
         return checked.get();
     }
@@ -173,6 +131,6 @@ public class Employee {
 
     @Override
     public boolean equals(Object object) {
-        return object instanceof Employee && this.id.get() == ((Employee) object).getId();
+        return object instanceof Client && this.id.get() == ((Client) object).getId();
     }
 }

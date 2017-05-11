@@ -16,12 +16,13 @@ import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 import models.Employee;
 import views.BaseStage;
+import views.clients.Clients;
 import views.employees.Employees;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class MainMenuController extends BaseController implements Initializable {
+public class MainMenuController extends BaseController {
 
     @FXML private Label welcomeLabel;
     @FXML private Pane titleContainer;
@@ -47,14 +48,32 @@ public class MainMenuController extends BaseController implements Initializable 
             new Employees((Stage) employeesButton.getScene().getWindow(), loggedEmployee);
     }
 
-    @Override
-    protected void addListener() {}
+    @FXML
+    private void openClientsManagement() {
+        boolean opened = false;
+
+        for (Stage s : StageHelper.getStages()) {
+            if (((BaseStage) s).getStageIdentification().equals("clients")) {
+                opened = true;
+                break;
+            }
+        }
+
+        if (!opened)
+            new Clients((Stage) clientsButton.getScene().getWindow(), loggedEmployee);
+    }
 
     @Override
-    protected void editListener() {}
+    protected void addListener() {
+    }
 
     @Override
-    protected void removeListener() {}
+    protected void editListener() {
+    }
+
+    @Override
+    protected void removeListener() {
+    }
 
     @Override
     protected void acceptChanges(ActionEvent event) {

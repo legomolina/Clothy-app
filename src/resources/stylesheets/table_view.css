@@ -27,7 +27,6 @@
 }
 
 .table-view {
-    -fx-tree-table-color: #ffd35155;
     -fx-background-color: #F6F6F6;
     -fx-table-cell-border-color: transparent;
     -fx-font-family:"Roboto", sans-serif;
