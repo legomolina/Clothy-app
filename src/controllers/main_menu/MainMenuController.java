@@ -14,6 +14,7 @@ import models.Employee;
 import views.BaseStage;
 import views.clients.Clients;
 import views.employees.Employees;
+import views.sizes.Sizes;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -54,6 +55,21 @@ public class MainMenuController extends BaseController {
             new Clients((Stage) menuButtons.getScene().getWindow(), loggedEmployee);
     }
 
+    @FXML
+    private void openSizesManagement() {
+        boolean opened = false;
+
+        for (Stage s : StageHelper.getStages()) {
+            if (((BaseStage) s).getStageIdentification().equals("sizes")) {
+                opened = true;
+                break;
+            }
+        }
+
+        if (!opened)
+            new Sizes((Stage) menuButtons.getScene().getWindow(), loggedEmployee);
+    }
+
     @Override
     protected void addListener() {
     }
@@ -68,7 +84,6 @@ public class MainMenuController extends BaseController {
 
     @Override
     protected void acceptChanges(ActionEvent event) {
-
     }
 
     @Override

@@ -1,11 +1,12 @@
-package controllers.clients;
+package controllers.sizes;
 
 
 import com.jfoenix.controls.*;
 import controllers.BaseController;
-import controllers.database.ClientsMethods;
 import controllers.database.DatabaseMethods;
-import custom.*;
+import controllers.database.SizesMethods;
+import custom.CustomRequiredFieldValidator;
+import custom.MaterialCheckBoxCell;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -25,8 +26,8 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import models.Client;
 import models.Employee;
+import models.Size;
 import utils.AnimationHandler;
 import utils.DialogBuilder;
 
@@ -34,44 +35,31 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.concurrent.CountDownLatch;
 
-public class ClientsController extends BaseController {
-    private ObservableList<Client> clients;
-    private FilteredList<Client> filteredClients;
-    private Client selectedClient;
+public class SizesController extends BaseController {
 
-    private int selectedClientsCount;
+    private ObservableList<Size> sizes;
+    private FilteredList<Size> filteredSizes;
+    private Size selectedSize;
 
-    private ChangeListener<Boolean> selectedClientListener = new ChangeListener<Boolean>() {
+    private int selectedSizesCount;
+
+    private ChangeListener<Boolean> selectedSizeListener = new ChangeListener<Boolean>() {
         @Override
         public void changed(ObservableValue<? extends Boolean> observableValue, Boolean oldValue, Boolean newValue) {
-            selectedClientsCount += (newValue) ? 1 : -1;
-            deleteSelected.setVisible(selectedClientsCount > 0);
+            selectedSizesCount += (newValue) ? 1 : -1;
+            deleteSelected.setVisible(selectedSizesCount > 0);
         }
     };
 
-    @FXML private Label clientNameLabel;
-    @FXML private Label clientNifLabel;
-    @FXML private Label clientEmailLabel;
-    @FXML private Label clientAddressLabel;
-    @FXML private Label clientPhoneLabel;
+    @FXML private Label sizeSizeLabel;
+    @FXML private JFXTextField sizeSizeInput;
 
-    @FXML private JFXTextField clientNameInput;
-    @FXML private JFXTextField clientSurnameInput;
-    @FXML private JFXTextField clientNifInput;
-    @FXML private JFXTextField clientEmailInput;
-    @FXML private JFXTextArea clientAddressInput;
-    @FXML private JFXTextField clientPhoneInput;
+    @FXML private TableView<Size> sizesTable;
+    @FXML private TableColumn<Size, Boolean> sizesTableCheckColumn;
+    @FXML private TableColumn<Size, Number> sizesTableIdColumn;
+    @FXML private TableColumn<Size, String> sizesTableSizeColumn;
 
     @FXML private JFXButton acceptChanges;
-
-    @FXML private TableView<Client> clientsTable;
-    @FXML private TableColumn<Client, Boolean> clientsTableCheckColumn;
-    @FXML private TableColumn<Client, Number> clientsTableIdColumn;
-    @FXML private TableColumn<Client, String> clientsTableNameColumn;
-    @FXML private TableColumn<Client, String> clientsTableSurnameColumn;
-    @FXML private TableColumn<Client, String> clientsTableAddressColumn;
-    @FXML private TableColumn<Client, String> clientsTablePhoneColumn;
-    @FXML private TableColumn<Client, String> clientsTableEmailColumn;
 
     @FXML private Pane removeButton;
     @FXML private JFXRippler removeButtonRippler;
@@ -84,13 +72,13 @@ public class ClientsController extends BaseController {
 
     @FXML private JFXButton deleteSelected;
 
-    public ClientsController(Employee loggedEmployee, Stage currentStage) {
+    public SizesController(Employee loggedEmployee, Stage currentStage) {
         super(loggedEmployee, currentStage);
 
-        selectedClient = null;
+        selectedSize = null;
 
-        //There's no selected client
-        selectedClientsCount = 0;
+        //There's no selected size
+        selectedSizesCount = 0;
     }
 
     @Override
@@ -100,14 +88,14 @@ public class ClientsController extends BaseController {
             return;
 
         currentStatus = ActionStatus.STATUS_ADDING;
-        selectedClient = new Client(DatabaseMethods.getLastId("clients", "client_id") + 1);
+        selectedSize = new Size(DatabaseMethods.getLastId("sizes", "size_id") + 1);
 
-        selectedClient.checkedProperty().addListener(selectedClientListener);
+        selectedSize.checkedProperty().addListener(selectedSizeListener);
 
         showInformationLabels(false);
         showModificationInputs(true);
 
-        setModificationInputsText(selectedClient);
+        setModificationInputsText(selectedSize);
     }
 
     @Override
@@ -120,7 +108,7 @@ public class ClientsController extends BaseController {
         showInformationLabels(false);
         showModificationInputs(true);
 
-        setModificationInputsText(selectedClient);
+        setModificationInputsText(selectedSize);
     }
 
     @Override
@@ -129,13 +117,13 @@ public class ClientsController extends BaseController {
             return;
 
         DialogBuilder dialogBuilder = new DialogBuilder(rootStackPane, DialogBuilder.DialogType.CONFIRM, JFXDialog.DialogTransition.CENTER, "custom-dialog");
-        JFXDialog dialog = dialogBuilder.setContent(new Text("¿Seguro que quieres eliminar al cliente " + selectedClient.getName() + "?"))
+        JFXDialog dialog = dialogBuilder.setContent(new Text("¿Seguro que quieres eliminar la talla " + selectedSize.getSize() + "?"))
                 .setOverlayClose(false)
                 .setCancelButton(actionEvent -> dialogBuilder.getDialog().close())
                 .setAcceptButton(actionEvent -> {
-                    ClientsMethods.removeClients(selectedClient);
-                    selectedClient.setChecked(false);
-                    clients.remove(selectedClient);
+                    SizesMethods.removeSizes(selectedSize);
+                    selectedSize.setChecked(false);
+                    sizes.remove(selectedSize);
                     dialogBuilder.getDialog().close();
                 })
                 .build();
@@ -153,8 +141,8 @@ public class ClientsController extends BaseController {
                 .setOverlayClose(false)
                 .setCancelButton(actionEvent -> dialogBuilder.getDialog().close())
                 .setAcceptButton(actionEvent -> {
-                    ClientsMethods.removeClients(clientsTable.getSelectionModel().getSelectedItems());
-                    clients.removeAll(clientsTable.getSelectionModel().getSelectedItems());
+                    SizesMethods.removeSizes(sizesTable.getSelectionModel().getSelectedItems());
+                    sizes.removeAll(sizesTable.getSelectionModel().getSelectedItems());
 
                     deleteSelected.setVisible(false);
 
@@ -167,23 +155,13 @@ public class ClientsController extends BaseController {
 
     @Override
     protected void acceptChanges(ActionEvent event) {
-        //Validate inputs before sending data
-        if (!clientNameInput.validate()) return;
-        if (!clientSurnameInput.validate()) return;
-        if (!clientNifInput.validate()) return;
-        if (!clientEmailInput.validate()) return;
-        if (!clientPhoneInput.validate()) return;
-        if (!clientAddressInput.validate()) return;
+//Validate inputs before sending data
+        if (!sizeSizeInput.validate()) return;
 
         loaderContainer.setVisible(true);
         AnimationHandler.fadeIn(loaderContainer, 500, 0.6).execute();
 
-        selectedClient.setName(clientNameInput.getText());
-        selectedClient.setSurname(clientSurnameInput.getText());
-        selectedClient.setNif(clientNifInput.getText());
-        selectedClient.setEmail(clientEmailInput.getText());
-        selectedClient.setPhone(clientPhoneInput.getText());
-        selectedClient.setAddress(clientAddressInput.getText());
+        selectedSize.setSize(sizeSizeInput.getText());
 
         final Service<Void> service = new Service<Void>() {
             @Override
@@ -194,13 +172,13 @@ public class ClientsController extends BaseController {
                         CountDownLatch latch = new CountDownLatch(1);
 
                         if (currentStatus == ActionStatus.STATUS_ADDING) {
-                            ClientsMethods.addClients(selectedClient);
+                            SizesMethods.addSizes(selectedSize);
 
-                            clients.add(selectedClient);
+                            sizes.add(selectedSize);
                         } else if (currentStatus == ActionStatus.STATUS_EDITING) {
-                            ClientsMethods.updateClients(selectedClient);
+                            SizesMethods.updateSizes(selectedSize);
 
-                            clients.set(clients.indexOf(selectedClient), selectedClient);
+                            sizes.set(sizes.indexOf(selectedSize), selectedSize);
                         }
 
                         Platform.runLater(() -> {
@@ -210,7 +188,7 @@ public class ClientsController extends BaseController {
                                 showInformationLabels(true);
                                 showModificationInputs(false);
 
-                                setClientInformation(selectedClient);
+                                setSizeInformation(selectedSize);
 
                                 AnimationHandler.fadeOut(loaderContainer, 500).execute(finishedEvent -> loaderContainer.setVisible(false));
                             } finally {
@@ -235,7 +213,7 @@ public class ClientsController extends BaseController {
                 .setCancelButton(actionEvent -> dialogBuilder.getDialog().close())
                 .setAcceptButton(actionEvent -> {
                     if (currentStatus == ActionStatus.STATUS_EDITING) {
-                        setClientInformation(selectedClient);
+                        setSizeInformation(selectedSize);
                         currentStatus = ActionStatus.STATUS_VIEWING;
                     } else if (currentStatus == ActionStatus.STATUS_ADDING) {
                         setInformationLabelsPlaceholder();
@@ -253,25 +231,12 @@ public class ClientsController extends BaseController {
 
     @Override
     protected void showInformationLabels(boolean show) {
-        clientNameLabel.setVisible(show);
-        clientNifLabel.setVisible(show);
-        clientEmailLabel.setVisible(show);
-        clientAddressLabel.setVisible(show);
-        clientPhoneLabel.setVisible(show);
+        sizeSizeLabel.setVisible(show);
     }
 
     @Override
     protected void showModificationInputs(boolean show) {
-        clientNameInput.setVisible(show);
-        clientSurnameInput.setVisible(show);
-        clientNifInput.setVisible(show);
-        clientEmailInput.setVisible(show);
-        clientAddressInput.setVisible(show);
-        clientPhoneInput.setVisible(show);
-
-        //Workaround for surname input. When visible, it stays at the bottom of name input
-        clientSurnameInput.setLayoutX(51);
-        clientSurnameInput.setLayoutY(show ? 70 : 1);
+        sizeSizeInput.setVisible(show);
 
         formButtonsContainer.setVisible(show);
     }
@@ -279,45 +244,28 @@ public class ClientsController extends BaseController {
     @Override
     protected void setInformationLabelsPlaceholder() {
         //Set label default name
-        clientNameLabel.setText("Nombre");
-        clientNifLabel.setText("00000000-A");
-        clientEmailLabel.setText("email@email.com");
-        clientAddressLabel.setText("Dirección");
-        clientPhoneLabel.setText("+00 000000000");
+        sizeSizeLabel.setText("Talla");
 
-        setClientsLabelsStyle("-fx-text-fill: " + Style.LIGHT_GREY);
+        setSizesLabelsStyle("-fx-text-fill: " + Style.LIGHT_GREY);
     }
 
-    private void setModificationInputsText(Client client) {
-        clientNameInput.setText(client.getName());
-        clientSurnameInput.setText(client.getSurname());
-        clientNifInput.setText(client.getNif());
-        clientEmailInput.setText(client.getEmail());
-        clientAddressInput.setText(client.getAddress());
-        clientPhoneInput.setText(client.getPhone());
+    private void setModificationInputsText(Size size) {
+        sizeSizeInput.setText(size.getSize());
     }
 
-    private void setClientInformation(Client client) {
-        setClientsLabelsStyle("-fx-text-fill: " + Style.BLACK);
+    private void setSizeInformation(Size size) {
+        setSizesLabelsStyle("-fx-text-fill: " + Style.BLACK);
 
         //Set label text with employee information
-        clientNameLabel.setText(client.getCompleteName());
-        clientNifLabel.setText(client.getNif());
-        clientEmailLabel.setText(client.getEmail());
-        clientAddressLabel.setText(client.getAddress());
-        clientPhoneLabel.setText(client.getPhone());
+        sizeSizeLabel.setText(size.getSize());
     }
 
-    private void setClientsLabelsStyle(String style) {
-        clientNameLabel.setStyle(style);
-        clientNifLabel.setStyle(style);
-        clientEmailLabel.setStyle(style);
-        clientAddressLabel.setStyle(style);
-        clientPhoneLabel.setStyle(style);
+    private void setSizesLabelsStyle(String style) {
+        sizeSizeLabel.setStyle(style);
     }
 
     private void searchListener() {
-        searchInput.textProperty().addListener((observableValue, oldValue, newValue) -> filteredClients.setPredicate(client -> {
+        searchInput.textProperty().addListener((observableValue, oldValue, newValue) -> filteredSizes.setPredicate(size -> {
             currentStatus = ActionStatus.STATUS_NONE;
 
             //If text field is not empty
@@ -327,16 +275,7 @@ public class ClientsController extends BaseController {
             String lowerCaseValue = newValue.toLowerCase();
 
             //Checks for employee name
-            if (client.getName().toLowerCase().contains(lowerCaseValue))
-                return true;
-                //Checks for employee surname
-            else if (client.getSurname().toLowerCase().contains(lowerCaseValue))
-                return true;
-                //Checks for employee phone
-            else if (client.getPhone().toLowerCase().contains((lowerCaseValue)))
-                return true;
-                //Checks for employee email
-            else if (client.getEmail().toLowerCase().contains(lowerCaseValue))
+            if (size.getSize().toLowerCase().contains(lowerCaseValue))
                 return true;
 
             //If there are not coincidences
@@ -344,32 +283,28 @@ public class ClientsController extends BaseController {
         }));
 
         //As FilterList is immutable, copy the filtered employees to a SortedList and bind it to the TableView
-        SortedList<Client> sortedData = new SortedList<>(filteredClients);
-        sortedData.comparatorProperty().bind(clientsTable.comparatorProperty());
+        SortedList<Size> sortedData = new SortedList<>(filteredSizes);
+        sortedData.comparatorProperty().bind(sizesTable.comparatorProperty());
 
         //Add sortedItems to the TableView
-        clientsTable.setItems(sortedData);
+        sizesTable.setItems(sortedData);
     }
 
     private void createTable() {
-        clientsTableIdColumn.setCellValueFactory(param -> param.getValue().idProperty());
-        clientsTableNameColumn.setCellValueFactory(param -> param.getValue().nameProperty());
-        clientsTableSurnameColumn.setCellValueFactory(param -> param.getValue().surnameProperty());
-        clientsTableAddressColumn.setCellValueFactory(param -> param.getValue().addressProperty());
-        clientsTablePhoneColumn.setCellValueFactory(param -> param.getValue().phoneProperty());
-        clientsTableEmailColumn.setCellValueFactory(param -> param.getValue().emailProperty());
+        sizesTableIdColumn.setCellValueFactory(param -> param.getValue().idProperty());
+        sizesTableSizeColumn.setCellValueFactory(param -> param.getValue().sizeProperty());
 
-        clientsTableCheckColumn.setCellValueFactory(param -> param.getValue().checkedProperty());
-        clientsTableCheckColumn.setCellFactory(param -> new MaterialCheckBoxCell<>());
+        sizesTableCheckColumn.setCellValueFactory(param -> param.getValue().checkedProperty());
+        sizesTableCheckColumn.setCellFactory(param -> new MaterialCheckBoxCell<>());
 
-        clientsTable.getSelectionModel().selectedItemProperty().addListener((obs, oldValue, newValue) -> {
+        sizesTable.getSelectionModel().selectedItemProperty().addListener((obs, oldValue, newValue) -> {
             if (currentStatus == ActionStatus.STATUS_NONE || currentStatus == ActionStatus.STATUS_VIEWING) {
-                selectedClient = newValue;
+                selectedSize = newValue;
                 currentStatus = ActionStatus.STATUS_VIEWING;
 
                 //Check if selected employee exists (maybe it doesn't because of search)
                 if (newValue != null)
-                    setClientInformation(newValue);
+                    setSizeInformation(newValue);
                 else {
                     //Default employee placeholder
                     setInformationLabelsPlaceholder();
@@ -377,23 +312,19 @@ public class ClientsController extends BaseController {
             }
         });
 
-        clientsTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-        clientsTable.setPlaceholder(new Label("No hay clientes registrados"));
+        sizesTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        sizesTable.setPlaceholder(new Label("No hay tallas registradas"));
 
         JFXCheckBox selectAllCheckbox = new JFXCheckBox();
         selectAllCheckbox.selectedProperty().addListener((observableValue, oldValue, newValue) -> {
-            for (Client c : clients)
-                c.setChecked(newValue);
+            for (Size s : sizes)
+                s.setChecked(newValue);
         });
-        clientsTableCheckColumn.setGraphic(selectAllCheckbox);
+        sizesTableCheckColumn.setGraphic(selectAllCheckbox);
     }
 
     private void setInputValidator() {
-        clientNameInput.getValidators().add(new CustomRequiredFieldValidator("El campo no puede estar vacío"));
-        clientNifInput.getValidators().add(new CustomRequiredFieldValidator("El campo no puede estar vacío"));
-        clientNifInput.getValidators().add(new NifFieldValidator("El DNI no corresponde a un DNI válido"));
-        clientEmailInput.getValidators().add(new EmailFieldValidator("El email no corresponde a un email válido"));
-        clientPhoneInput.getValidators().add(new PhoneFieldValidator("El campo no es un teléfono válido"));
+        sizeSizeInput.getValidators().add(new CustomRequiredFieldValidator("El campo no puede estar vacío"));
     }
 
     @Override
@@ -420,8 +351,8 @@ public class ClientsController extends BaseController {
                 return new Task<Void>() {
                     @Override
                     protected Void call() throws Exception {
-                        clients = FXCollections.observableList(ClientsMethods.getAllClients());
-                        filteredClients = new FilteredList<>(clients, p -> true);
+                        sizes = FXCollections.observableList(SizesMethods.getAllSizes());
+                        filteredSizes = new FilteredList<>(sizes, p -> true);
 
                         CountDownLatch latch = new CountDownLatch(1);
 
@@ -429,10 +360,10 @@ public class ClientsController extends BaseController {
                             try {
 /*                                                    NOTE
  *                          ============================================================
- *                          Run here all methods that use clients or filteredClients
+ *                          Run here all methods that use sizes or filteredSizes
  */
-                                for (Client c : clients) {
-                                    c.checkedProperty().addListener(selectedClientListener);
+                                for (Size s : sizes) {
+                                    s.checkedProperty().addListener(selectedSizeListener);
                                 }
 
                                 searchListener();

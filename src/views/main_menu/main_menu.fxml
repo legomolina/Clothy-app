@@ -74,16 +74,16 @@
                            <graphic>
                                  <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                                      <image>
-                                         <Image url="@../../resources/images/icons/sizes_white.png" />
+                                         <Image url="@../../resources/images/icons/brand_white.png" />
                                      </image>
                                  </ImageView>
                            </graphic>
                         </JFXButton>
-                        <JFXButton contentDisplay="TOP" prefWidth="150.0" ripplerFill="#000cff" style="-fx-background-color: #000cff44; -fx-background-radius: 4px;" text="Tallas" textAlignment="CENTER" textFill="WHITE">
+                        <JFXButton contentDisplay="TOP" onAction="#openSizesManagement" prefWidth="150.0" ripplerFill="#000cff" style="-fx-background-color: #000cff44; -fx-background-radius: 4px;" text="Tallas" textAlignment="CENTER" textFill="WHITE">
                            <graphic>
                                  <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                                      <image>
-                                         <Image url="@../../resources/images/icons/brand_white.png" />
+                                         <Image url="@../../resources/images/icons/sizes_white.png" />
                                      </image>
                                  </ImageView>
                            </graphic>
