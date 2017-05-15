@@ -17,9 +17,4 @@ public class BaseStage extends Stage {
     public void setStageIdentification(String stageIdentification) {
         this.stageIdentification = stageIdentification;
     }
-
-    @Override
-    public String toString() {
-        return "hola, baseStage";
-    }
 }

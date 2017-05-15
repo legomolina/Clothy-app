@@ -140,6 +140,7 @@ public class EmployeesController extends BaseController {
         setModificationInputsText(selectedEmployee);
     }
 
+    //TODO Watch for logged employee. Prevent removing itself
     @Override
     protected void removeListener() {
         if (currentStatus != ActionStatus.STATUS_VIEWING)
