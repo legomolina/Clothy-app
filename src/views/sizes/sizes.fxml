@@ -155,7 +155,8 @@
     </children>
     <stylesheets>
         <URL value="@../../resources/stylesheets/style.css" />
-        <URL value="@../../resources/stylesheets/table_view.css" />
-        <URL value="@../../resources/stylesheets/sizes.css" />
+        <URL value="@../../resources/stylesheets/base_style/base_information.css" />
+        <URL value="@../../resources/stylesheets/base_style/base_tableview.css" />
+        <URL value="@../../resources/stylesheets/tabs/sizes.css" />
     </stylesheets>
 </StackPane>

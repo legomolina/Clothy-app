@@ -223,7 +223,7 @@
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                 </GridPane>
-                <JFXButton fx:id="addButton" alignment="TOP_CENTER" buttonType="RAISED" contentDisplay="TEXT_ONLY" graphicTextGap="0.0" maxHeight="50.0" maxWidth="50.0" onAction="#addListener" prefHeight="50.0" prefWidth="50.0" styleClass="add-employee" text="+" textAlignment="CENTER" AnchorPane.bottomAnchor="50.0" AnchorPane.rightAnchor="500.0">
+                <JFXButton fx:id="addButton" alignment="TOP_CENTER" buttonType="RAISED" contentDisplay="TEXT_ONLY" graphicTextGap="0.0" maxHeight="50.0" maxWidth="50.0" onAction="#addListener" prefHeight="50.0" prefWidth="50.0" styleClass="add-button" text="+" textAlignment="CENTER" AnchorPane.bottomAnchor="50.0" AnchorPane.rightAnchor="500.0">
                     <padding>
                         <Insets top="11.0" />
                     </padding>
@@ -233,7 +233,8 @@
     </children>
     <stylesheets>
         <URL value="@../../resources/stylesheets/style.css" />
-        <URL value="@../../resources/stylesheets/table_view.css" />
-        <URL value="@../../resources/stylesheets/employees.css" />
+        <URL value="@../../resources/stylesheets/base_style/base_tableview.css" />
+        <URL value="@../../resources/stylesheets/base_style/base_information.css" />
+        <URL value="@../../resources/stylesheets/tabs/employees.css" />
     </stylesheets>
 </StackPane>
