@@ -1,4 +1,5 @@
-package controllers.brands;
+package controllers.categories;
+
 
 import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXDialog;
@@ -6,6 +7,7 @@ import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
 import controllers.BaseController;
 import controllers.database.BrandsMethods;
+import controllers.database.CategoriesMethods;
 import controllers.database.DatabaseMethods;
 import custom.CustomRequiredFieldValidator;
 import custom.EmailFieldValidator;
@@ -29,6 +31,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import models.Brand;
+import models.Category;
 import models.Employee;
 import utils.AnimationHandler;
 import utils.DialogBuilder;
@@ -37,46 +40,41 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.concurrent.CountDownLatch;
 
-public class BrandsController extends BaseController {
-    private ObservableList<Brand> brands;
-    private FilteredList<Brand> filteredBrands;
-    private Brand selectedBrand;
+public class CategoriesController extends BaseController {
+    private ObservableList<Category> categories;
+    private FilteredList<Category> filteredCategories;
+    private Category selectedCategory;
 
-    private int selectedBrandsCount;
+    private int selectedCategoriesCount;
 
-    private ChangeListener<Boolean> selectedBrandListener = new ChangeListener<Boolean>() {
+    private ChangeListener<Boolean> selectedCategoriesListener = new ChangeListener<Boolean>() {
         @Override
         public void changed(ObservableValue<? extends Boolean> observableValue, Boolean oldValue, Boolean newValue) {
-            selectedBrandsCount += (newValue) ? 1 : -1;
-            deleteSelected.setVisible(selectedBrandsCount > 0);
+            selectedCategoriesCount += (newValue) ? 1 : -1;
+            deleteSelected.setVisible(selectedCategoriesCount > 0);
         }
     };
 
-    @FXML private Label brandNameLabel;
-    @FXML private Label brandEmailLabel;
-    @FXML private Label brandAddressLabel;
-    @FXML private Label brandPhoneLabel;
+    @FXML private Label categoryNameLabel;
+    @FXML private Label categoryDescriptionLabel;
 
-    @FXML private JFXTextField brandNameInput;
-    @FXML private JFXTextField brandEmailInput;
-    @FXML private JFXTextArea brandAddressInput;
-    @FXML private JFXTextField brandPhoneInput;
+    @FXML private JFXTextField categoryNameInput;
+    @FXML private JFXTextField categoryDescriptionInput;
 
-    @FXML private TableView<Brand> brandsTable;
-    @FXML private TableColumn<Brand, Boolean> brandsTableCheckColumn;
-    @FXML private TableColumn<Brand, Number> brandsTableIdColumn;
-    @FXML private TableColumn<Brand, String> brandsTableNameColumn;
-    @FXML private TableColumn<Brand, String> brandsTableAddressColumn;
-    @FXML private TableColumn<Brand, String> brandsTablePhoneColumn;
-    @FXML private TableColumn<Brand, String> brandsTableEmailColumn;
+    @FXML private TableView<Category> categoriesTable;
+    @FXML private TableColumn<Category, Boolean> categoriesTableCheckColumn;
+    @FXML private TableColumn<Category, Number> categoriesTableIdColumn;
+    @FXML private TableColumn<Category, String> categoriesTableNameColumn;
+    @FXML private TableColumn<Category, String> categoriesTableAddressColumn;
+    @FXML private TableColumn<Category, String> categoriesTableDescriptionColumn;
 
-    public BrandsController(Employee loggedEmployee, Stage currentStage) {
+    public CategoriesController(Employee loggedEmployee, Stage currentStage) {
         super(loggedEmployee, currentStage);
 
-        selectedBrand = null;
+        selectedCategory = null;
 
         //There's no selected brands
-        selectedBrandsCount = 0;
+        selectedCategoriesCount = 0;
     }
 
     @Override
@@ -86,14 +84,14 @@ public class BrandsController extends BaseController {
             return;
 
         currentStatus = ActionStatus.STATUS_ADDING;
-        selectedBrand = new Brand(DatabaseMethods.getLastId("brands", "brand_id") + 1);
+        selectedCategory = new Category(DatabaseMethods.getLastId("categories", "category_id") + 1);
 
-        selectedBrand.checkedProperty().addListener(selectedBrandListener);
+        selectedCategory.checkedProperty().addListener(selectedCategoriesListener);
 
         showInformationLabels(false);
         showModificationInputs(true);
 
-        setModificationInputsText(selectedBrand);
+        setModificationInputsText(selectedCategory);
     }
 
     @Override
@@ -106,7 +104,7 @@ public class BrandsController extends BaseController {
         showInformationLabels(false);
         showModificationInputs(true);
 
-        setModificationInputsText(selectedBrand);
+        setModificationInputsText(selectedCategory);
     }
 
     @Override
@@ -115,13 +113,13 @@ public class BrandsController extends BaseController {
             return;
 
         DialogBuilder dialogBuilder = new DialogBuilder(rootStackPane, DialogBuilder.DialogType.CONFIRM, JFXDialog.DialogTransition.CENTER, "custom-dialog");
-        JFXDialog dialog = dialogBuilder.setContent(new Text("¿Seguro que quieres eliminar la marca " + selectedBrand.getName() + "?"))
+        JFXDialog dialog = dialogBuilder.setContent(new Text("¿Seguro que quieres eliminar la categoría " + selectedCategory.getName() + "?"))
                 .setOverlayClose(false)
                 .setCancelButton(actionEvent -> dialogBuilder.getDialog().close())
                 .setAcceptButton(actionEvent -> {
-                    BrandsMethods.removeBrands(selectedBrand);
-                    selectedBrand.setChecked(false);
-                    brands.remove(selectedBrand);
+                    CategoriesMethods.removeCategories(selectedCategory);
+                    selectedCategory.setChecked(false);
+                    categories.remove(selectedCategory);
                     dialogBuilder.getDialog().close();
                 })
                 .build();
@@ -135,12 +133,12 @@ public class BrandsController extends BaseController {
             return;
 
         DialogBuilder dialogBuilder = new DialogBuilder(rootStackPane, DialogBuilder.DialogType.CONFIRM, JFXDialog.DialogTransition.CENTER, "custom-dialog");
-        JFXDialog dialog = dialogBuilder.setContent(new Text("¿Seguro que quieres eliminar las marcas seleccionados?"))
+        JFXDialog dialog = dialogBuilder.setContent(new Text("¿Seguro que quieres eliminar las categorías seleccionados?"))
                 .setOverlayClose(false)
                 .setCancelButton(actionEvent -> dialogBuilder.getDialog().close())
                 .setAcceptButton(actionEvent -> {
-                    BrandsMethods.removeBrands(brandsTable.getSelectionModel().getSelectedItems());
-                    brands.removeAll(brandsTable.getSelectionModel().getSelectedItems());
+                    CategoriesMethods.removeCategories(categoriesTable.getSelectionModel().getSelectedItems());
+                    categories.removeAll(categoriesTable.getSelectionModel().getSelectedItems());
 
                     deleteSelected.setVisible(false);
 
@@ -153,19 +151,14 @@ public class BrandsController extends BaseController {
 
     @Override
     protected void acceptChanges(ActionEvent event) {
-        //Validate inputs before sending data
-        if (!brandNameInput.validate()) return;
-        if (!brandEmailInput.validate()) return;
-        if (!brandPhoneInput.validate()) return;
-        if (!brandAddressInput.validate()) return;
+//Validate inputs before sending data
+        if (!categoryNameInput.validate()) return;
 
         loaderContainer.setVisible(true);
         AnimationHandler.fadeIn(loaderContainer, 500, 0.6).execute();
 
-        selectedBrand.setName(brandNameInput.getText());
-        selectedBrand.setEmail(brandEmailInput.getText());
-        selectedBrand.setPhone(brandPhoneInput.getText());
-        selectedBrand.setAddress(brandAddressInput.getText());
+        selectedCategory.setName(categoryNameInput.getText());
+        selectedCategory.setDescription(categoryDescriptionInput.getText());
 
         final Service<Void> service = new Service<Void>() {
             @Override
@@ -176,13 +169,13 @@ public class BrandsController extends BaseController {
                         CountDownLatch latch = new CountDownLatch(1);
 
                         if (currentStatus == ActionStatus.STATUS_ADDING) {
-                            BrandsMethods.addBrands(selectedBrand);
+                            CategoriesMethods.addCategories(selectedCategory);
 
-                            brands.add(selectedBrand);
+                            categories.add(selectedCategory);
                         } else if (currentStatus == ActionStatus.STATUS_EDITING) {
-                            BrandsMethods.updateBrands(selectedBrand);
+                            CategoriesMethods.updateCategories(selectedCategory);
 
-                            brands.set(brands.indexOf(selectedBrand), selectedBrand);
+                            categories.set(categories.indexOf(selectedCategory), selectedCategory);
                         }
 
                         Platform.runLater(() -> {
@@ -192,7 +185,7 @@ public class BrandsController extends BaseController {
                                 showInformationLabels(true);
                                 showModificationInputs(false);
 
-                                setBrandInformation(selectedBrand);
+                                setCategoryInformation(selectedCategory);
 
                                 AnimationHandler.fadeOut(loaderContainer, 500).execute(finishedEvent -> loaderContainer.setVisible(false));
                             } finally {
@@ -217,7 +210,7 @@ public class BrandsController extends BaseController {
                 .setCancelButton(actionEvent -> dialogBuilder.getDialog().close())
                 .setAcceptButton(actionEvent -> {
                     if (currentStatus == ActionStatus.STATUS_EDITING) {
-                        setBrandInformation(selectedBrand);
+                        setCategoryInformation(selectedCategory);
                         currentStatus = ActionStatus.STATUS_VIEWING;
                     } else if (currentStatus == ActionStatus.STATUS_ADDING) {
                         setInformationLabelsPlaceholder();
@@ -235,18 +228,14 @@ public class BrandsController extends BaseController {
 
     @Override
     protected void showInformationLabels(boolean show) {
-        brandNameLabel.setVisible(show);
-        brandEmailLabel.setVisible(show);
-        brandAddressLabel.setVisible(show);
-        brandPhoneLabel.setVisible(show);
+        categoryNameLabel.setVisible(show);
+        categoryDescriptionLabel.setVisible(show);
     }
 
     @Override
     protected void showModificationInputs(boolean show) {
-        brandNameInput.setVisible(show);
-        brandEmailInput.setVisible(show);
-        brandAddressInput.setVisible(show);
-        brandPhoneInput.setVisible(show);
+        categoryNameInput.setVisible(show);
+        categoryDescriptionInput.setVisible(show);
 
         formButtonsContainer.setVisible(show);
     }
@@ -254,39 +243,32 @@ public class BrandsController extends BaseController {
     @Override
     protected void setInformationLabelsPlaceholder() {
         //Set label default name
-        brandNameLabel.setText("Nombre");
-        brandEmailLabel.setText("email@email.com");
-        brandAddressLabel.setText("Dirección");
-        brandPhoneLabel.setText("+00 000000000");
+        categoryNameLabel.setText("Nombre");
+        categoryDescriptionLabel.setText("Description");
 
-        setBrandsLabelsStyle("-fx-text-fill: " + Style.LIGHT_GREY);
+        setCategoryLabelsStyle("-fx-text-fill: " + Style.LIGHT_GREY);
     }
 
-    private void setModificationInputsText(Brand brand) {
-        brandNameInput.setText(brand.getName());
-        brandEmailInput.setText(brand.getEmail());
-        brandAddressInput.setText(brand.getAddress());
-        brandPhoneInput.setText(brand.getPhone());
+    private void setModificationInputsText(Category category) {
+        categoryNameInput.setText(category.getName());
+        categoryDescriptionInput.setText(category.getDescription());
     }
 
-    private void setBrandInformation(Brand brand) {
-        setBrandsLabelsStyle("-fx-text-fill: " + Style.BLACK);
+    private void setCategoryInformation(Category category) {
+        setCategoryLabelsStyle("-fx-text-fill: " + Style.BLACK);
 
         //Set label text with employee information
-        brandEmailLabel.setText(brand.getEmail());
-        brandAddressLabel.setText(brand.getAddress());
-        brandPhoneLabel.setText(brand.getPhone());
+        categoryNameLabel.setText(category.getName());
+        categoryDescriptionLabel.setText(category.getDescription());
     }
 
-    private void setBrandsLabelsStyle(String style) {
-        brandNameLabel.setStyle(style);
-        brandEmailLabel.setStyle(style);
-        brandAddressLabel.setStyle(style);
-        brandPhoneLabel.setStyle(style);
+    private void setCategoryLabelsStyle(String style) {
+        categoryNameLabel.setStyle(style);
+        categoryDescriptionLabel.setStyle(style);
     }
 
     private void searchListener() {
-        searchInput.textProperty().addListener((observableValue, oldValue, newValue) -> filteredBrands.setPredicate(brand -> {
+        searchInput.textProperty().addListener((observableValue, oldValue, newValue) -> filteredCategories.setPredicate(category -> {
             currentStatus = ActionStatus.STATUS_NONE;
 
             //If text field is not empty
@@ -296,13 +278,7 @@ public class BrandsController extends BaseController {
             String lowerCaseValue = newValue.toLowerCase();
 
             //Checks for employee name
-            if (brand.getName().toLowerCase().contains(lowerCaseValue))
-                return true;
-                //Checks for employee phone
-            else if (brand.getPhone().toLowerCase().contains((lowerCaseValue)))
-                return true;
-                //Checks for employee email
-            else if (brand.getEmail().toLowerCase().contains(lowerCaseValue))
+            if (category.getName().toLowerCase().contains(lowerCaseValue))
                 return true;
 
             //If there are not coincidences
@@ -310,31 +286,29 @@ public class BrandsController extends BaseController {
         }));
 
         //As FilterList is immutable, copy the filtered employees to a SortedList and bind it to the TableView
-        SortedList<Brand> sortedData = new SortedList<>(filteredBrands);
-        sortedData.comparatorProperty().bind(brandsTable.comparatorProperty());
+        SortedList<Category> sortedData = new SortedList<>(filteredCategories);
+        sortedData.comparatorProperty().bind(categoriesTable.comparatorProperty());
 
         //Add sortedItems to the TableView
-        brandsTable.setItems(sortedData);
+        categoriesTable.setItems(sortedData);
     }
 
     private void createTable() {
-        brandsTableIdColumn.setCellValueFactory(param -> param.getValue().idProperty());
-        brandsTableNameColumn.setCellValueFactory(param -> param.getValue().nameProperty());
-        brandsTableAddressColumn.setCellValueFactory(param -> param.getValue().addressProperty());
-        brandsTablePhoneColumn.setCellValueFactory(param -> param.getValue().phoneProperty());
-        brandsTableEmailColumn.setCellValueFactory(param -> param.getValue().emailProperty());
+        categoriesTableIdColumn.setCellValueFactory(param -> param.getValue().idProperty());
+        categoriesTableNameColumn.setCellValueFactory(param -> param.getValue().nameProperty());
+        categoriesTableDescriptionColumn.setCellValueFactory(param -> param.getValue().descriptionProperty());
 
-        brandsTableCheckColumn.setCellValueFactory(param -> param.getValue().checkedProperty());
-        brandsTableCheckColumn.setCellFactory(param -> new MaterialCheckBoxCell<>());
+        categoriesTableCheckColumn.setCellValueFactory(param -> param.getValue().checkedProperty());
+        categoriesTableCheckColumn.setCellFactory(param -> new MaterialCheckBoxCell<>());
 
-        brandsTable.getSelectionModel().selectedItemProperty().addListener((obs, oldValue, newValue) -> {
+        categoriesTable.getSelectionModel().selectedItemProperty().addListener((obs, oldValue, newValue) -> {
             if (currentStatus == ActionStatus.STATUS_NONE || currentStatus == ActionStatus.STATUS_VIEWING) {
-                selectedBrand = newValue;
+                selectedCategory = newValue;
                 currentStatus = ActionStatus.STATUS_VIEWING;
 
                 //Check if selected employee exists (maybe it doesn't because of search)
                 if (newValue != null)
-                    setBrandInformation(newValue);
+                    setCategoryInformation(newValue);
                 else {
                     //Default employee placeholder
                     setInformationLabelsPlaceholder();
@@ -342,23 +316,19 @@ public class BrandsController extends BaseController {
             }
         });
 
-        brandsTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-        brandsTable.setPlaceholder(new Label("No hay marcas registrados"));
+        categoriesTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        categoriesTable.setPlaceholder(new Label("No hay categorías registrados"));
 
         JFXCheckBox selectAllCheckbox = new JFXCheckBox();
         selectAllCheckbox.selectedProperty().addListener((observableValue, oldValue, newValue) -> {
-            for (Brand b : brands)
-                b.setChecked(newValue);
+            for (Category c : categories)
+                c.setChecked(newValue);
         });
-        brandsTableCheckColumn.setGraphic(selectAllCheckbox);
+        categoriesTableCheckColumn.setGraphic(selectAllCheckbox);
     }
 
     private void setInputValidator() {
-        brandNameInput.getValidators().add(new CustomRequiredFieldValidator("El campo no puede estar vacío"));
-        brandEmailInput.getValidators().add(new CustomRequiredFieldValidator("El campo no puede estar vacío"));
-        brandEmailInput.getValidators().add(new EmailFieldValidator("El email no corresponde a un email válido"));
-        brandPhoneInput.getValidators().add(new CustomRequiredFieldValidator("El campo no puede estar vacío"));
-        brandPhoneInput.getValidators().add(new PhoneFieldValidator("El campo no es un teléfono válido"));
+        categoryNameInput.getValidators().add(new CustomRequiredFieldValidator("El campo no puede estar vacío"));
     }
 
     @Override
@@ -385,8 +355,8 @@ public class BrandsController extends BaseController {
                 return new Task<Void>() {
                     @Override
                     protected Void call() throws Exception {
-                        brands = FXCollections.observableList(BrandsMethods.getAllBrands());
-                        filteredBrands = new FilteredList<>(brands, p -> true);
+                        categories = FXCollections.observableList(CategoriesMethods.getAllCategories());
+                        filteredCategories = new FilteredList<>(categories, p -> true);
 
                         CountDownLatch latch = new CountDownLatch(1);
 
@@ -396,8 +366,8 @@ public class BrandsController extends BaseController {
  *                          ============================================================
  *                          Run here all methods that use clients or filteredClients
  */
-                                for (Brand b : brands) {
-                                    b.checkedProperty().addListener(selectedBrandListener);
+                                for (Category c : categories) {
+                                    c.checkedProperty().addListener(selectedCategoriesListener);
                                 }
 
                                 searchListener();
