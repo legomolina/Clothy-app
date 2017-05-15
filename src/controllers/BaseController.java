@@ -1,11 +1,15 @@
 package controllers;
 
 
+import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDialog;
+import com.jfoenix.controls.JFXRippler;
 import com.jfoenix.controls.JFXTextField;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -38,6 +42,19 @@ public abstract class BaseController implements Initializable {
 
     @FXML protected StackPane rootStackPane;
     @FXML protected JFXTextField searchInput;
+
+    @FXML protected Pane removeButton;
+    @FXML protected JFXRippler removeButtonRippler;
+
+    @FXML protected Pane editButton;
+    @FXML protected JFXRippler editButtonRippler;
+
+    @FXML protected Pane formButtonsContainer;
+    @FXML protected AnchorPane loaderContainer;
+
+    @FXML protected JFXButton deleteSelected;
+
+    @FXML protected JFXButton acceptChanges;
 
     @FXML
     protected abstract void addListener();

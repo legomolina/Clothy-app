@@ -62,8 +62,6 @@ public class ClientsController extends BaseController {
     @FXML private JFXTextArea clientAddressInput;
     @FXML private JFXTextField clientPhoneInput;
 
-    @FXML private JFXButton acceptChanges;
-
     @FXML private TableView<Client> clientsTable;
     @FXML private TableColumn<Client, Boolean> clientsTableCheckColumn;
     @FXML private TableColumn<Client, Number> clientsTableIdColumn;
@@ -72,17 +70,6 @@ public class ClientsController extends BaseController {
     @FXML private TableColumn<Client, String> clientsTableAddressColumn;
     @FXML private TableColumn<Client, String> clientsTablePhoneColumn;
     @FXML private TableColumn<Client, String> clientsTableEmailColumn;
-
-    @FXML private Pane removeButton;
-    @FXML private JFXRippler removeButtonRippler;
-
-    @FXML private Pane editButton;
-    @FXML private JFXRippler editButtonRippler;
-
-    @FXML private Pane formButtonsContainer;
-    @FXML private AnchorPane loaderContainer;
-
-    @FXML private JFXButton deleteSelected;
 
     public ClientsController(Employee loggedEmployee, Stage currentStage) {
         super(loggedEmployee, currentStage);
