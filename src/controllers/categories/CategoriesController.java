@@ -59,14 +59,12 @@ public class CategoriesController extends BaseController {
     @FXML private Label categoryDescriptionLabel;
 
     @FXML private JFXTextField categoryNameInput;
-    @FXML private JFXTextField categoryDescriptionInput;
+    @FXML private JFXTextArea categoryDescriptionInput;
 
     @FXML private TableView<Category> categoriesTable;
     @FXML private TableColumn<Category, Boolean> categoriesTableCheckColumn;
     @FXML private TableColumn<Category, Number> categoriesTableIdColumn;
     @FXML private TableColumn<Category, String> categoriesTableNameColumn;
-    @FXML private TableColumn<Category, String> categoriesTableAddressColumn;
-    @FXML private TableColumn<Category, String> categoriesTableDescriptionColumn;
 
     public CategoriesController(Employee loggedEmployee, Stage currentStage) {
         super(loggedEmployee, currentStage);
@@ -244,7 +242,7 @@ public class CategoriesController extends BaseController {
     protected void setInformationLabelsPlaceholder() {
         //Set label default name
         categoryNameLabel.setText("Nombre");
-        categoryDescriptionLabel.setText("Description");
+        categoryDescriptionLabel.setText("Descripción");
 
         setCategoryLabelsStyle("-fx-text-fill: " + Style.LIGHT_GREY);
     }
@@ -296,7 +294,6 @@ public class CategoriesController extends BaseController {
     private void createTable() {
         categoriesTableIdColumn.setCellValueFactory(param -> param.getValue().idProperty());
         categoriesTableNameColumn.setCellValueFactory(param -> param.getValue().nameProperty());
-        categoriesTableDescriptionColumn.setCellValueFactory(param -> param.getValue().descriptionProperty());
 
         categoriesTableCheckColumn.setCellValueFactory(param -> param.getValue().checkedProperty());
         categoriesTableCheckColumn.setCellFactory(param -> new MaterialCheckBoxCell<>());

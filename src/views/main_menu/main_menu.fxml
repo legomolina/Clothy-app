@@ -70,20 +70,29 @@
                               </ImageView>
                            </graphic>
                         </JFXButton>
-                        <JFXButton contentDisplay="TOP" onAction="#openBrandsManagement" prefHeight="70.0" prefWidth="150.0" ripplerFill="#4d4d4d" style="-fx-background-color: #969696; -fx-background-radius: 4px;" text="Marcas" textAlignment="CENTER" textFill="WHITE">
-                           <graphic>
-                                 <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
-                                     <image>
-                                         <Image url="@../../resources/images/icons/brand_white.png" />
-                                     </image>
-                                 </ImageView>
-                           </graphic>
-                        </JFXButton>
                         <JFXButton contentDisplay="TOP" onAction="#openSizesManagement" prefWidth="150.0" ripplerFill="#000cff" style="-fx-background-color: #000cff44; -fx-background-radius: 4px;" text="Tallas" textAlignment="CENTER" textFill="WHITE">
                            <graphic>
                                  <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                                      <image>
                                          <Image url="@../../resources/images/icons/sizes_white.png" />
+                                     </image>
+                                 </ImageView>
+                           </graphic>
+                        </JFXButton>
+                        <JFXButton contentDisplay="TOP" onAction="#openCategoriesManagement" prefWidth="150.0" ripplerFill="#ff2626" style="-fx-background-color: #ff262670; -fx-background-radius: 4px;" text="Categorías" textAlignment="CENTER">
+                           <graphic>
+                              <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../../resources/images/icons/categories.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </JFXButton>
+                        <JFXButton contentDisplay="TOP" onAction="#openBrandsManagement" prefHeight="150.0" prefWidth="150.0" ripplerFill="#4d4d4d" style="-fx-background-color: #969696; -fx-background-radius: 4px;" text="Marcas" textAlignment="CENTER" textFill="WHITE">
+                           <graphic>
+                                 <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
+                                     <image>
+                                         <Image url="@../../resources/images/icons/brand_white.png" />
                                      </image>
                                  </ImageView>
                            </graphic>

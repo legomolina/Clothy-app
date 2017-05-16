@@ -13,6 +13,7 @@ import javafx.stage.Stage;
 import models.Employee;
 import views.BaseStage;
 import views.brands.Brands;
+import views.categories.Categories;
 import views.clients.Clients;
 import views.employees.Employees;
 import views.sizes.Sizes;
@@ -84,6 +85,21 @@ public class MainMenuController extends BaseController {
 
         if (!opened)
             new Brands((Stage) menuButtons.getScene().getWindow(), loggedEmployee);
+    }
+
+    @FXML
+    private void openCategoriesManagement() {
+        boolean opened = false;
+
+        for (Stage s : StageHelper.getStages()) {
+            if (((BaseStage) s).getStageIdentification().equals("categories")) {
+                opened = true;
+                break;
+            }
+        }
+
+        if (!opened)
+            new Categories((Stage) menuButtons.getScene().getWindow(), loggedEmployee);
     }
 
     @Override
