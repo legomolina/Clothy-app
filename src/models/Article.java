@@ -4,32 +4,29 @@ package models;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class Article {
     private IntegerProperty id;
     private StringProperty code;
     private StringProperty name;
     private StringProperty description;
-    private ObservableList<Category> categories;
-    private ObservableList<Size> sizes;
     private Brand brand;
     private FloatProperty price;
     private BooleanProperty checked;
 
     public Article(int id) {
-        this(id, "", "", "", null, null, null, 0.0f);
+        this(id, "", "", "", null, 0.0f);
     }
 
-    public Article(int id, String code, String name, String description, List<Category> categories, List<Size> sizes, Brand brand, float price) {
+    public Article(int id, String code, String name, String description, Brand brand, float price) {
         this.id = new SimpleIntegerProperty(id);
         this.code = new SimpleStringProperty(code);
         this.name = new SimpleStringProperty(name);
         this.description = new SimpleStringProperty(description);
-        this.categories = FXCollections.observableArrayList(categories);
-        this.sizes = FXCollections.observableArrayList(sizes);
         this.brand = brand;
         this.price = new SimpleFloatProperty(price);
         this.checked = new SimpleBooleanProperty(false);
@@ -81,22 +78,6 @@ public class Article {
 
     public void setDescription(String description) {
         this.description.set(description);
-    }
-
-    public ObservableList<Category> getCategories() {
-        return categories;
-    }
-
-    public void setCategories(ObservableList<Category> categories) {
-        this.categories = categories;
-    }
-
-    public ObservableList<Size> getSizes() {
-        return sizes;
-    }
-
-    public void setSizes(ObservableList<Size> sizes) {
-        this.sizes = sizes;
     }
 
     public Brand getBrand() {

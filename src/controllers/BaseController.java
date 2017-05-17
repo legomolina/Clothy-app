@@ -108,5 +108,16 @@ public abstract class BaseController implements Initializable {
 
     protected abstract void setInformationLabelsPlaceholder();
 
-    public abstract void initialize(URL url, ResourceBundle resourceBundle);
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        //Default information placeholder
+        setInformationLabelsPlaceholder();
+
+        //Set ripple effect for edit and remove button
+        editButtonRippler.setControl(editButton);
+        removeButtonRippler.setControl(removeButton);
+
+        //Binds managed property to visible so when visible is true, it becomes managed as well
+        formButtonsContainer.managedProperty().bind(formButtonsContainer.visibleProperty());
+        loaderContainer.managedProperty().bind(loaderContainer.visibleProperty());
+    }
 }

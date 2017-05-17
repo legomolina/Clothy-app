@@ -528,23 +528,11 @@ public class EmployeesController extends BaseController {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        super.initialize(url, resourceBundle);
+
         //Apply crop and round effects to employee image
         ImageUtils.cropImage(employeeImage, 120, 120);
         ImageUtils.roundImage(employeeImage, 60);
-
-        //Default employee placeholder
-        setInformationLabelsPlaceholder();
-
-        //Create table. Adds checkboxes, selection mode, and listener when select row
-        createTable();
-
-        //Set ripple effect for edit and remove button
-        editButtonRippler.setControl(editButton);
-        removeButtonRippler.setControl(removeButton);
-
-        //Binds managed property to visible so when visible is true, it becomes managed as well
-        formButtonsContainer.managedProperty().bind(formButtonsContainer.visibleProperty());
-        loaderContainer.managedProperty().bind(loaderContainer.visibleProperty());
 
         //Fill employee role comboBox
         employeeLoginTypeInput.getItems().add(new Label(ADMIN_ROLE_TEXT));

@@ -168,7 +168,7 @@
                         </ScrollPane>
                         <GridPane>
                             <children>
-                        <TreeTableView editable="true" styleClass="articles-table" GridPane.hgrow="SOMETIMES" GridPane.rowIndex="1" GridPane.vgrow="SOMETIMES">
+                        <TreeTableView fx:id="articlesTable" editable="true" styleClass="articles-table" GridPane.hgrow="SOMETIMES" GridPane.rowIndex="1" GridPane.vgrow="SOMETIMES">
                            <columns>
                               <TreeTableColumn fx:id="articlesTableCheckColumn" maxWidth="50.0" minWidth="50.0" prefWidth="50.0" sortable="false" />
                               <TreeTableColumn fx:id="articlesTableIdColumn" maxWidth="60.0" minWidth="60.0" prefWidth="60.0" text="ID" />

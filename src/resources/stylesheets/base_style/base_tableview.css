@@ -1,19 +1,19 @@
-.table-view {
+.table-view, .tree-table-view {
     -fx-background-color: #F6F6F6;
     -fx-table-cell-border-color: transparent;
     -fx-font-family:"Roboto", sans-serif;
 }
 
-.table-view:focused {
+.table-view:focused .tree-table-view:focused {
     -fx-background-color: transparent;
 }
 
-.table-view:focused .table-row-cell:selected {
+.table-view:focused .table-row-cell:selected, .tree-table-view:focused .tree-table-view:selected {
     -fx-background-color: -fx-tree-table-color;
     -fx-table-cell-border-color: -fx-tree-table-color;
 }
 
-.table-view .table-row {
+.table-view .table-row, .tree-table-view .tree-table-row {
     -fx-table-cell-border-color: transparent;
 }
 
@@ -22,22 +22,25 @@
     -fx-table-cell-border-color: transparent;
 }
 
-.table-view .table-row-cell {
+.table-view .table-row-cell, .tree-table-view .tree-table-cell {
     -fx-background-color: #F6F6F6;
     -fx-table-cell-border-color: transparent;
 }
 
-.table-cell {
+.table-cell, .tree-table-cell {
     -fx-padding: 20px;
 }
 
 .table-view .column-header ,
 .table-view .column-header-background,
-.table-view .column-header-background .filler{
+.table-view .column-header-background .filler,
+.tree-table-view .column-header,
+.tree-table-view .column-header-background,
+.tree-table-view .column-header-background .filler{
     -fx-background-color: -fx-tree-table-color;
 }
 
-.table-view .column-header .label {
+.table-view .column-header .label, .tree-table-view .column-header .label {
     -fx-text-fill : #222222;
     -fx-padding : 16 0 16 0 ;
 }

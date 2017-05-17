@@ -13,7 +13,7 @@ public class SizesMethods extends DatabaseMethods {
     private static final String REMOVE_SIZE_VALUE = "Sin talla";
 
     public static ArrayList<Size> getAllSizes() {
-        ArrayList<Size> clients = new ArrayList<>();
+        ArrayList<Size> sizes = new ArrayList<>();
 
         String sqlQuery = "SELECT * FROM sizes WHERE size_value <> '" + REMOVE_SIZE_VALUE + "'";
         try {
@@ -21,7 +21,7 @@ public class SizesMethods extends DatabaseMethods {
             ResultSet result = statement.executeQuery();
 
             while (result.next()) {
-                clients.add(new Size(result.getInt("size_id"), result.getString("size_value")));
+                sizes.add(new Size(result.getInt("size_id"), result.getString("size_value")));
             }
 
         } catch (NullPointerException e) {
@@ -32,7 +32,30 @@ public class SizesMethods extends DatabaseMethods {
             e.printStackTrace();
         }
 
-        return clients;
+        return sizes;
+    }
+
+    public static Size getSize(int id) {
+        Size size = null;
+
+        String sqlQuery = "SELECT * FROM sizes WHERE size_id = ?";
+        try {
+            PreparedStatement statement = connection.prepareStatement(sqlQuery);
+            statement.setInt(1, id);
+            ResultSet result = statement.executeQuery();
+
+            result.first();
+            size = new Size(result.getInt("size_id"), result.getString("size_value"));
+
+        } catch (NullPointerException e) {
+            System.out.println("An error occurred with Database connection");
+            e.printStackTrace();
+        } catch (SQLException e) {
+            System.out.println("An error occurred preparing the Query: " + sqlQuery);
+            e.printStackTrace();
+        }
+
+        return size;
     }
 
     public static void addSizes(Size... addSizes){
