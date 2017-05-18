@@ -37,7 +37,7 @@ public class ArticlesMethods extends DatabaseMethods {
                 currentArticle.setName(result.getString("article_name"));
                 currentArticle.setBrand(new Brand(result.getInt("brand_id"), result.getString("brand_name"),
                         result.getString("brand_address"), result.getString("brand_email"), result.getString("brand_phone")));
-
+/*
                 //For categories
                 String categoriesQuery = "SELECT categories.* FROM categories, articles, categories_articles_map" +
                         " WHERE articles.article_id = categories_articles_map.article_id AND categories_articles_map.category_id = categories.category_id" +
@@ -54,7 +54,7 @@ public class ArticlesMethods extends DatabaseMethods {
                     categories.add(new Category(categoriesResult.getInt("category_id"), categoriesResult.getString("category_description"), categoriesResult.getString("category_name")));
 
                 //Set categories in the article
-                currentArticle.setCategories(FXCollections.observableArrayList(categories));
+                currentArticle.setCategories(FXCollections.observableArrayList(categories));*/
 
                 //Add current article to the list
                 articles.add(currentArticle);

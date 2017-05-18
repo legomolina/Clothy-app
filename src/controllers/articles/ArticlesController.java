@@ -3,10 +3,12 @@ package controllers.articles;
 
 import controllers.BaseController;
 import controllers.database.ArticleStockInfo;
+import controllers.database.ArticlesMethods;
 import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
@@ -14,18 +16,20 @@ import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.TreeTableColumn;
-import javafx.scene.control.TreeTableView;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 import models.Article;
 import models.Employee;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 import java.util.concurrent.CountDownLatch;
 
 public class ArticlesController extends BaseController {
     private ObservableList<Article> articles;
+    private ObservableList<ArticleStockInfo> stock;
+    private FilteredList<ArticleStockInfo> filteredStock;
     private FilteredList<Article> filteredArticles;
     private Article selectedArticle;
 
@@ -39,13 +43,13 @@ public class ArticlesController extends BaseController {
         }
     };
 
-    @FXML private TreeTableView<Article> articlesTable;
-    @FXML private TreeTableColumn<Article, Number> articlesTableIdColumn;
-    @FXML private TreeTableColumn<Article, String> articlesTableNameColumn;
-    @FXML private TreeTableColumn<Article, String> articlesTableCodeColumn;
-    @FXML private TreeTableColumn<ArticleStockInfo, String> articlesTableSizesColumn;
-    @FXML private TreeTableColumn<ArticleStockInfo, Number> articlesTableStockColumn;
-    @FXML private TreeTableColumn<Article, String> articlesTableCategoriesColumn;
+    @FXML private TableView<ArticleStockInfo> articlesTable;
+    @FXML private TableColumn<ArticleStockInfo, Number> articlesTableIdColumn;
+    @FXML private TableColumn<ArticleStockInfo, String> articlesTableNameColumn;
+    @FXML private TableColumn<ArticleStockInfo, String> articlesTableCodeColumn;
+    @FXML private TableColumn<ArticleStockInfo, String> articlesTableSizesColumn;
+    @FXML private TableColumn<ArticleStockInfo, Number> articlesTableStockColumn;
+    @FXML private TableColumn<ArticleStockInfo, String> articlesTableCategoriesColumn;
 
     public ArticlesController(Employee loggedEmployee, Stage currentStage) {
         super(loggedEmployee, currentStage);
@@ -70,6 +74,9 @@ public class ArticlesController extends BaseController {
     protected void removeListener() {
 
     }
+
+    @FXML
+    private void removeSelectedListener() {}
 
     @Override
     protected void acceptChanges(ActionEvent event) {
@@ -96,7 +103,7 @@ public class ArticlesController extends BaseController {
 
     }
 
-    /*private void searchListener() {
+    private void searchListener() {
         searchInput.textProperty().addListener((observableValue, oldValue, newValue) -> filteredArticles.setPredicate(article -> {
             currentStatus = ActionStatus.STATUS_NONE;
 
@@ -106,8 +113,10 @@ public class ArticlesController extends BaseController {
 
             String lowerCaseValue = newValue.toLowerCase();
 
-            //Checks for employee name
+            //Checks for article name
             if (article.getName().toLowerCase().contains(lowerCaseValue))
+                return true;
+            else if(article.getCode().toLowerCase().contains(lowerCaseValue))
                 return true;
 
             //check for sizes and categories (array => for)
@@ -117,19 +126,20 @@ public class ArticlesController extends BaseController {
         }));
 
         //As FilterList is immutable, copy the filtered employees to a SortedList and bind it to the TableView
-        SortedList<Article> sortedData = new SortedList<>(filteredArticles);
+        SortedList<ArticleStockInfo> sortedData = new SortedList<>(filteredStock);
         sortedData.comparatorProperty().bind(articlesTable.comparatorProperty());
 
         //Add sortedItems to the TableView
+
         articlesTable.setItems(sortedData);
-    }*/
+    }
 
     private void createTable() {
-        articlesTableIdColumn.setCellValueFactory(param -> param.getValue().getValue().idProperty());
-        articlesTableNameColumn.setCellValueFactory(param -> param.getValue().getValue().nameProperty());
-        articlesTableCodeColumn.setCellValueFactory(param -> param.getValue().getValue().codeProperty());
-        articlesTableSizesColumn.setCellValueFactory(param -> param.getValue().getValue());
-        articlesTableStockColumn.setCellValueFactory(param -> param.getValue().getValue().getCategories());
+        articlesTableIdColumn.setCellValueFactory(param -> param.getValue().getArticle().idProperty());
+        articlesTableNameColumn.setCellValueFactory(param -> param.getValue().getArticle().nameProperty());
+        articlesTableCodeColumn.setCellValueFactory(param -> param.getValue().getArticle().codeProperty());
+        articlesTableSizesColumn.setCellValueFactory(param -> param.getValue().getSize().sizeProperty());
+        articlesTableStockColumn.setCellValueFactory(param -> param.getValue().stockProperty());
     }
 
     @Override
@@ -142,6 +152,12 @@ public class ArticlesController extends BaseController {
                 return new Task<Void>() {
                     @Override
                     protected Void call() throws Exception {
+                        articles = FXCollections.observableArrayList(ArticlesMethods.getAllArticles());
+                        articles.forEach(article -> {
+                            stock.addAll(ArticlesMethods.getStock(article));
+                        });
+                        filteredStock = new FilteredList<>(stock);
+                        filteredArticles = new FilteredList<>(articles);
 
                         CountDownLatch latch = new CountDownLatch(1);
 
@@ -154,6 +170,8 @@ public class ArticlesController extends BaseController {
                                 for (Article a : articles) {
                                     a.checkedProperty().addListener(selectedArticlesListener);
                                 }
+
+                                createTable();
 
                                 //searchListener();
                             } finally {

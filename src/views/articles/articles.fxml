@@ -168,20 +168,17 @@
                         </ScrollPane>
                         <GridPane>
                             <children>
-                        <TreeTableView editable="true" styleClass="articles-table" GridPane.hgrow="SOMETIMES" GridPane.rowIndex="1" GridPane.vgrow="SOMETIMES">
+                        <TableView editable="true" styleClass="articles-table" GridPane.hgrow="SOMETIMES" GridPane.rowIndex="1" GridPane.vgrow="SOMETIMES">
                            <columns>
-                              <TreeTableColumn fx:id="articlesTableCheckColumn" maxWidth="50.0" minWidth="50.0" prefWidth="50.0" sortable="false" />
-                              <TreeTableColumn fx:id="articlesTableIdColumn" maxWidth="60.0" minWidth="60.0" prefWidth="60.0" text="ID" />
-                              <TreeTableColumn fx:id="articlesTableNameColumn" maxWidth="130.0" minWidth="130.0" prefWidth="130.0" text="Nombre" />
-                              <TreeTableColumn fx:id="articlesTableCodeColumn" maxWidth="220.0" minWidth="220.0" prefWidth="220.0" text="Código" />
-                              <TreeTableColumn fx:id="articlesTableSizeColumn" maxWidth="80.0" minWidth="80.0" text="Talla" />
-                              <TreeTableColumn fx:id="articlesTableStockColumn" maxWidth="100.0" minWidth="100.0" prefWidth="100.0" text="Stock" />
-                              <TreeTableColumn fx:id="articlesTableCategoriesColumn" prefWidth="-1.0" text="Categorías" />
+                              <TableColumn fx:id="articlesTableCheckColumn" maxWidth="50.0" minWidth="50.0" prefWidth="50.0" sortable="false" />
+                              <TableColumn fx:id="articlesTableIdColumn" maxWidth="60.0" minWidth="60.0" prefWidth="60.0" text="ID" />
+                              <TableColumn fx:id="articlesTableNameColumn" maxWidth="130.0" minWidth="130.0" prefWidth="130.0" text="Nombre" />
+                              <TableColumn fx:id="articlesTableCodeColumn" maxWidth="220.0" minWidth="220.0" prefWidth="220.0" text="Código" />
+                              <TableColumn fx:id="articlesTableSizeColumn" maxWidth="80.0" minWidth="80.0" text="Talla" />
+                              <TableColumn fx:id="articlesTableStockColumn" maxWidth="100.0" minWidth="100.0" prefWidth="100.0" text="Stock" />
+                              <TableColumn fx:id="articlesTableCategoriesColumn" prefWidth="-1.0" text="Categorías" />
                            </columns>
-                           <columnResizePolicy>
-                              <TreeTableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                           </columnResizePolicy>
-                        </TreeTableView>
+                        </TableView>
                                 <AnchorPane prefHeight="200.0" prefWidth="200.0">
                                     <children>
                                         <JFXTextField fx:id="searchInput" focusColor="#e24848" layoutX="14.0" layoutY="60.0" prefHeight="40.0" prefWidth="452.0" promptText="Buscar" styleClass="search-input" />
