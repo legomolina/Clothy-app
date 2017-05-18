@@ -17,7 +17,7 @@ import java.util.Map;
 public class ArticlesMethods extends DatabaseMethods {
     public static ArrayList<Article> getAllArticles() {
         ArrayList<Article> articles = new ArrayList<>();
-        //ArrayList<Category> categories;
+        ArrayList<Category> categories;
 
         String sqlQuery = "SELECT articles.*, brands.* FROM articles, brands WHERE articles.article_brand = brands.brand_id";
         try {
@@ -37,7 +37,7 @@ public class ArticlesMethods extends DatabaseMethods {
                 currentArticle.setName(result.getString("article_name"));
                 currentArticle.setBrand(new Brand(result.getInt("brand_id"), result.getString("brand_name"),
                         result.getString("brand_address"), result.getString("brand_email"), result.getString("brand_phone")));
-/*
+
                 //For categories
                 String categoriesQuery = "SELECT categories.* FROM categories, articles, categories_articles_map" +
                         " WHERE articles.article_id = categories_articles_map.article_id AND categories_articles_map.category_id = categories.category_id" +
@@ -46,15 +46,15 @@ public class ArticlesMethods extends DatabaseMethods {
                 PreparedStatement categoriesStatement = connection.prepareStatement(categoriesQuery);
                 categoriesStatement.setInt(1, articleId);
 
-                ResultSet categoriesResult = statement.executeQuery();
+                ResultSet categoriesResult = categoriesStatement.executeQuery();
                 categories = new ArrayList<>();
 
                 //Put every category
                 while (categoriesResult.next())
-                    categories.add(new Category(categoriesResult.getInt("category_id"), categoriesResult.getString("category_description"), categoriesResult.getString("category_name")));
+                    categories.add(new Category(categoriesResult.getInt("category_id"), categoriesResult.getString("category_name"), categoriesResult.getString("category_description")));
 
                 //Set categories in the article
-                currentArticle.setCategories(FXCollections.observableArrayList(categories));*/
+                currentArticle.setCategories(categories);
 
                 //Add current article to the list
                 articles.add(currentArticle);

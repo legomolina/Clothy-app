@@ -528,7 +528,16 @@ public class EmployeesController extends BaseController {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        super.initialize(url, resourceBundle);
+        //Default information placeholder
+        setInformationLabelsPlaceholder();
+
+        //Set ripple effect for edit and remove button
+        editButtonRippler.setControl(editButton);
+        removeButtonRippler.setControl(removeButton);
+
+        //Binds managed property to visible so when visible is true, it becomes managed as well
+        formButtonsContainer.managedProperty().bind(formButtonsContainer.visibleProperty());
+        loaderContainer.managedProperty().bind(loaderContainer.visibleProperty());
 
         //Apply crop and round effects to employee image
         ImageUtils.cropImage(employeeImage, 120, 120);
@@ -540,6 +549,8 @@ public class EmployeesController extends BaseController {
         employeeLoginTypeInput.getItems().add(new Label(GUESTS_ROLE_TEXT));
 
         setInputValidator();
+
+        createTable();
 
         final Service<Void> service = new Service<Void>() {
             @Override

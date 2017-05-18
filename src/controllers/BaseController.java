@@ -16,7 +16,6 @@ import javafx.stage.Stage;
 import models.Employee;
 import utils.DialogBuilder;
 
-import java.beans.EventHandler;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -108,16 +107,5 @@ public abstract class BaseController implements Initializable {
 
     protected abstract void setInformationLabelsPlaceholder();
 
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        //Default information placeholder
-        setInformationLabelsPlaceholder();
-
-        //Set ripple effect for edit and remove button
-        editButtonRippler.setControl(editButton);
-        removeButtonRippler.setControl(removeButton);
-
-        //Binds managed property to visible so when visible is true, it becomes managed as well
-        formButtonsContainer.managedProperty().bind(formButtonsContainer.visibleProperty());
-        loaderContainer.managedProperty().bind(loaderContainer.visibleProperty());
-    }
+    public abstract void initialize(URL url, ResourceBundle resourceBundle);
 }

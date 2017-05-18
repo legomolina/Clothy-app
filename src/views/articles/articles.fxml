@@ -168,15 +168,16 @@
                         </ScrollPane>
                         <GridPane>
                             <children>
-                        <TableView editable="true" styleClass="articles-table" GridPane.hgrow="SOMETIMES" GridPane.rowIndex="1" GridPane.vgrow="SOMETIMES">
+                        <TableView fx:id="articlesTable" editable="true" styleClass="articles-table" GridPane.hgrow="SOMETIMES" GridPane.rowIndex="1" GridPane.vgrow="SOMETIMES">
                            <columns>
                               <TableColumn fx:id="articlesTableCheckColumn" maxWidth="50.0" minWidth="50.0" prefWidth="50.0" sortable="false" />
                               <TableColumn fx:id="articlesTableIdColumn" maxWidth="60.0" minWidth="60.0" prefWidth="60.0" text="ID" />
                               <TableColumn fx:id="articlesTableNameColumn" maxWidth="130.0" minWidth="130.0" prefWidth="130.0" text="Nombre" />
                               <TableColumn fx:id="articlesTableCodeColumn" maxWidth="220.0" minWidth="220.0" prefWidth="220.0" text="Código" />
-                              <TableColumn fx:id="articlesTableSizeColumn" maxWidth="80.0" minWidth="80.0" text="Talla" />
+                              <TableColumn fx:id="articlesTableBrandColumn" maxWidth="160.0" minWidth="160.0" prefWidth="160.0" text="Marca" />
+                              <TableColumn fx:id="articlesTableSizesColumn" maxWidth="80.0" minWidth="80.0" text="Talla" />
                               <TableColumn fx:id="articlesTableStockColumn" maxWidth="100.0" minWidth="100.0" prefWidth="100.0" text="Stock" />
-                              <TableColumn fx:id="articlesTableCategoriesColumn" prefWidth="-1.0" text="Categorías" />
+                              <TableColumn fx:id="articlesTableCategoriesColumn" minWidth="200.0" prefWidth="300.0" text="Categorías" />
                            </columns>
                         </TableView>
                                 <AnchorPane prefHeight="200.0" prefWidth="200.0">
@@ -191,6 +192,7 @@
                                             </image>
                                         </ImageView>
                                         <JFXButton fx:id="deleteSelected" buttonType="RAISED" layoutX="406.0" layoutY="67.0" onAction="#removeSelectedListener" prefHeight="40.0" styleClass="remove-button" text="Eliminar seleccionados" visible="false" AnchorPane.bottomAnchor="20.0" AnchorPane.rightAnchor="20.0" />
+                              <Button layoutX="497.0" layoutY="68.0" mnemonicParsing="false" onAction="#changes" text="Button" />
                                     </children>
                                 </AnchorPane>
                             </children>

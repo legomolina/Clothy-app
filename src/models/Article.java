@@ -2,34 +2,47 @@ package models;
 
 
 import javafx.beans.property.*;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
+import javafx.fxml.FXML;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 public class Article {
     private IntegerProperty id;
     private StringProperty code;
     private StringProperty name;
     private StringProperty description;
+    private ObservableList<Category> categories;
+    private StringProperty categoriesString;
     private Brand brand;
     private FloatProperty price;
     private BooleanProperty checked;
 
     public Article(int id) {
-        this(id, "", "", "", null, 0.0f);
+        this(id, "", "", "", new ArrayList<Category>(), null, 0.0f);
     }
 
-    public Article(int id, String code, String name, String description, Brand brand, float price) {
+    public Article(int id, String code, String name, String description, List<Category> categories, Brand brand, float price) {
         this.id = new SimpleIntegerProperty(id);
         this.code = new SimpleStringProperty(code);
         this.name = new SimpleStringProperty(name);
         this.description = new SimpleStringProperty(description);
+        this.categories = FXCollections.observableList(categories);
         this.brand = brand;
         this.price = new SimpleFloatProperty(price);
         this.checked = new SimpleBooleanProperty(false);
+
+        categoriesString = new SimpleStringProperty();
+
+        if(!this.categories.isEmpty())
+            categoriesString.set(categories.stream().map(Category::getName).collect(Collectors.joining(", ")));
     }
 
     public int getId() {
@@ -78,6 +91,23 @@ public class Article {
 
     public void setDescription(String description) {
         this.description.set(description);
+    }
+
+    public ObservableList<Category> getCategories() {
+        return categories;
+    }
+
+    public void setCategories(List<Category> categories) {
+        this.categories = FXCollections.observableList(categories);
+
+        System.out.println(categories.stream().map(Category::getName).collect(Collectors.joining(", ")));
+
+        if (!this.categories.isEmpty())
+            categoriesString.set((String) categories.stream().map(Category::getName).collect(Collectors.joining(", ")));
+    }
+
+    public StringProperty getAllCategories() {
+        return categoriesString;
     }
 
     public Brand getBrand() {

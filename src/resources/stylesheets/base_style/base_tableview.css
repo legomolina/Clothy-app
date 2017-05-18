@@ -9,7 +9,7 @@
 }
 
 .table-view:focused .table-row-cell:selected, .tree-table-view:focused .tree-table-view:selected {
-    -fx-background-color: -fx-tree-table-color;
+    -fx-background-color: derive(-fx-tree-table-color, 50%);
     -fx-table-cell-border-color: -fx-tree-table-color;
 }
 

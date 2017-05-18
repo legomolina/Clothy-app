@@ -388,7 +388,16 @@ public class ClientsController extends BaseController {
         //Create table. Adds checkboxes, selection mode, and listener when select row
         createTable();
 
-        super.initialize(url, resourceBundle);
+        //Default information placeholder
+        setInformationLabelsPlaceholder();
+
+        //Set ripple effect for edit and remove button
+        editButtonRippler.setControl(editButton);
+        removeButtonRippler.setControl(removeButton);
+
+        //Binds managed property to visible so when visible is true, it becomes managed as well
+        formButtonsContainer.managedProperty().bind(formButtonsContainer.visibleProperty());
+        loaderContainer.managedProperty().bind(loaderContainer.visibleProperty());
 
         setInputValidator();
 

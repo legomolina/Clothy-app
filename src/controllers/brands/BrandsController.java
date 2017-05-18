@@ -363,7 +363,16 @@ public class BrandsController extends BaseController {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        super.initialize(url, resourceBundle);
+        //Default information placeholder
+        setInformationLabelsPlaceholder();
+
+        //Set ripple effect for edit and remove button
+        editButtonRippler.setControl(editButton);
+        removeButtonRippler.setControl(removeButton);
+
+        //Binds managed property to visible so when visible is true, it becomes managed as well
+        formButtonsContainer.managedProperty().bind(formButtonsContainer.visibleProperty());
+        loaderContainer.managedProperty().bind(loaderContainer.visibleProperty());
 
         //Create table. Adds checkboxes, selection mode, and listener when select row
         createTable();
