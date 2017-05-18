@@ -1,18 +1,13 @@
 package models;
 
 
+import controllers.database.ArticleStockInfo;
 import javafx.beans.property.*;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.ObservableMap;
-import javafx.fxml.FXML;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
 
 public class Article {
     private IntegerProperty id;
@@ -20,29 +15,25 @@ public class Article {
     private StringProperty name;
     private StringProperty description;
     private ObservableList<Category> categories;
-    private StringProperty categoriesString;
+    private ObservableList<ArticleStockInfo> stockInfo;
     private Brand brand;
     private FloatProperty price;
     private BooleanProperty checked;
 
     public Article(int id) {
-        this(id, "", "", "", new ArrayList<Category>(), null, 0.0f);
+        this(id, "", "", "", new ArrayList<>(), new ArrayList<>(), null, 0.0f);
     }
 
-    public Article(int id, String code, String name, String description, List<Category> categories, Brand brand, float price) {
+    public Article(int id, String code, String name, String description, List<Category> categories, List<ArticleStockInfo> stockInfo, Brand brand, float price) {
         this.id = new SimpleIntegerProperty(id);
         this.code = new SimpleStringProperty(code);
         this.name = new SimpleStringProperty(name);
         this.description = new SimpleStringProperty(description);
         this.categories = FXCollections.observableList(categories);
+        this.stockInfo = FXCollections.observableList(stockInfo);
         this.brand = brand;
         this.price = new SimpleFloatProperty(price);
         this.checked = new SimpleBooleanProperty(false);
-
-        categoriesString = new SimpleStringProperty();
-
-        if(!this.categories.isEmpty())
-            categoriesString.set(categories.stream().map(Category::getName).collect(Collectors.joining(", ")));
     }
 
     public int getId() {
@@ -99,15 +90,14 @@ public class Article {
 
     public void setCategories(List<Category> categories) {
         this.categories = FXCollections.observableList(categories);
-
-        System.out.println(categories.stream().map(Category::getName).collect(Collectors.joining(", ")));
-
-        if (!this.categories.isEmpty())
-            categoriesString.set((String) categories.stream().map(Category::getName).collect(Collectors.joining(", ")));
     }
 
-    public StringProperty getAllCategories() {
-        return categoriesString;
+    public ObservableList<ArticleStockInfo> getStockInfo() {
+        return stockInfo;
+    }
+
+    public void setStockInfo(List<ArticleStockInfo> stockInfo) {
+        this.stockInfo = FXCollections.observableList(stockInfo);
     }
 
     public Brand getBrand() {

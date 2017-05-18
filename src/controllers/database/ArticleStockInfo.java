@@ -7,12 +7,10 @@ import models.Size;
 
 public class ArticleStockInfo {
     private Size size;
-    private Article article;
     private IntegerProperty stock;
 
-    public ArticleStockInfo(Size size, Article article, int stock) {
+    public ArticleStockInfo(Size size, int stock) {
         this.size = size;
-        this.article = article;
         this.stock = new SimpleIntegerProperty(stock);
     }
 
@@ -22,14 +20,6 @@ public class ArticleStockInfo {
 
     public void setSize(Size size) {
         this.size = size;
-    }
-
-    public Article getArticle() {
-        return article;
-    }
-
-    public void setArticle(Article article) {
-        this.article = article;
     }
 
     public int getStock() {

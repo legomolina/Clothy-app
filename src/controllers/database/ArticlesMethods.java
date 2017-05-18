@@ -38,6 +38,9 @@ public class ArticlesMethods extends DatabaseMethods {
                 currentArticle.setBrand(new Brand(result.getInt("brand_id"), result.getString("brand_name"),
                         result.getString("brand_address"), result.getString("brand_email"), result.getString("brand_phone")));
 
+                //For stock
+                currentArticle.setStockInfo(getStock(currentArticle));
+
                 //For categories
                 String categoriesQuery = "SELECT categories.* FROM categories, articles, categories_articles_map" +
                         " WHERE articles.article_id = categories_articles_map.article_id AND categories_articles_map.category_id = categories.category_id" +
@@ -81,7 +84,7 @@ public class ArticlesMethods extends DatabaseMethods {
             ResultSet result = statement.executeQuery();
 
             while(result.next())
-                articleStock.add(new ArticleStockInfo(SizesMethods.getSize(result.getInt("size_id")), article, result.getInt("article_stock")));
+                articleStock.add(new ArticleStockInfo(SizesMethods.getSize(result.getInt("size_id")), result.getInt("article_stock")));
 
         } catch (NullPointerException e) {
             System.out.println("An error occurred with Database connection");

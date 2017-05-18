@@ -20,6 +20,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import models.Article;
@@ -30,13 +31,15 @@ import models.Employee;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.concurrent.CountDownLatch;
+import java.util.stream.Collectors;
 
 public class ArticlesController extends BaseController {
-    private ObservableList<ArticleStockInfo> articles;
-    private FilteredList<ArticleStockInfo> filteredArticle;
-    private ArticleStockInfo selectedArticle;
+    private ObservableList<Article> articles;
+    private FilteredList<Article> filteredArticle;
+    private Article selectedArticle;
 
     private int selectedArticlesCount;
 
@@ -48,15 +51,15 @@ public class ArticlesController extends BaseController {
         }
     };
 
-    @FXML private TableView<ArticleStockInfo> articlesTable;
-    @FXML private TableColumn<ArticleStockInfo, Number> articlesTableIdColumn;
-    @FXML private TableColumn<ArticleStockInfo, String> articlesTableNameColumn;
-    @FXML private TableColumn<ArticleStockInfo, String> articlesTableCodeColumn;
-    @FXML private TableColumn<ArticleStockInfo, String> articlesTableSizesColumn;
-    @FXML private TableColumn<ArticleStockInfo, Number> articlesTableStockColumn;
-    @FXML private TableColumn<ArticleStockInfo, String> articlesTableCategoriesColumn;
-    @FXML private TableColumn<ArticleStockInfo, String> articlesTableBrandColumn;
-    @FXML private TableColumn<ArticleStockInfo, Boolean> articlesTableCheckColumn;
+    @FXML private TableView<Article> articlesTable;
+    @FXML private TableColumn<Article, Number> articlesTableIdColumn;
+    @FXML private TableColumn<Article, String> articlesTableNameColumn;
+    @FXML private TableColumn<Article, String> articlesTableCodeColumn;
+    @FXML private TableColumn<Article, String> articlesTableSizesColumn;
+    @FXML private TableColumn<Article, Number> articlesTableStockColumn;
+    @FXML private TableColumn<Article, List<Category>> articlesTableCategoriesColumn;
+    @FXML private TableColumn<Article, Brand> articlesTableBrandColumn;
+    @FXML private TableColumn<Article, Boolean> articlesTableCheckColumn;
 
     public ArticlesController(Employee loggedEmployee, Stage currentStage) {
         super(loggedEmployee, currentStage);
@@ -121,9 +124,9 @@ public class ArticlesController extends BaseController {
             String lowerCaseValue = newValue.toLowerCase();
 
             //Checks for article name
-            if (article.getArticle().getName().toLowerCase().contains(lowerCaseValue))
+            if (article.getName().toLowerCase().contains(lowerCaseValue))
                 return true;
-            else if (article.getArticle().getCode().toLowerCase().contains(lowerCaseValue))
+            else if (article.getCode().toLowerCase().contains(lowerCaseValue))
                 return true;
 
             //check for sizes and categories (array => for)
@@ -133,7 +136,7 @@ public class ArticlesController extends BaseController {
         }));
 
         //As FilterList is immutable, copy the filtered employees to a SortedList and bind it to the TableView
-        SortedList<ArticleStockInfo> sortedData = new SortedList<>(filteredArticle);
+        SortedList<Article> sortedData = new SortedList<>(filteredArticle);
         sortedData.comparatorProperty().bind(articlesTable.comparatorProperty());
 
         //Add sortedItems to the TableView
@@ -145,21 +148,36 @@ public class ArticlesController extends BaseController {
     private void changes() {
         ArrayList<Category> a = new ArrayList<>();
         a.add(new Category(10, "categoria_1", "descripcion"));
-        articles.get(0).getArticle().setCategories(a);
+        articles.get(0).setCategories(a);
     }
 
     private void createTable() {
-        articlesTableIdColumn.setCellValueFactory(param -> param.getValue().getArticle().idProperty());
-        articlesTableNameColumn.setCellValueFactory(param -> param.getValue().getArticle().nameProperty());
-        articlesTableCodeColumn.setCellValueFactory(param -> param.getValue().getArticle().codeProperty());
-        articlesTableSizesColumn.setCellValueFactory(param -> param.getValue().getSize().sizeProperty());
-        articlesTableStockColumn.setCellValueFactory(param -> param.getValue().stockProperty());
-        articlesTableCategoriesColumn.setCellValueFactory(param -> param.getValue().getArticle().getAllCategories());
+        articlesTableIdColumn.setCellValueFactory(param -> param.getValue().idProperty());
+        articlesTableNameColumn.setCellValueFactory(param -> param.getValue().nameProperty());
+        articlesTableCodeColumn.setCellValueFactory(param -> param.getValue().codeProperty());
+        /*articlesTableSizesColumn.setCellValueFactory(param -> param.getValue().get.getSize().sizeProperty());
+        articlesTableStockColumn.setCellValueFactory(param -> param.getValue().stockProperty());*/
 
-        articlesTableCheckColumn.setCellValueFactory(param -> param.getValue().getArticle().checkedProperty());
+        articlesTableCheckColumn.setCellValueFactory(param -> param.getValue().checkedProperty());
         articlesTableCheckColumn.setCellFactory(param -> new MaterialCheckBoxCell<>());
 
-        articlesTableBrandColumn.setCellValueFactory(param -> param.getValue().getArticle().getBrand().nameProperty());
+        articlesTableBrandColumn.setCellValueFactory(new PropertyValueFactory<>("brand"));
+        articlesTableBrandColumn.setCellFactory(articleBrandTableColumn -> new TableCell<Article, Brand>() {
+            @Override
+            protected void updateItem(Brand brand, boolean empty) {
+                if(brand != null)
+                    setGraphic(new Text(brand.getName()));
+            }
+        });
+
+        articlesTableCategoriesColumn.setCellValueFactory(new PropertyValueFactory<>("categories"));
+        articlesTableCategoriesColumn.setCellFactory(articleStringTableColumn -> new TableCell<Article, List<Category>>() {
+            @Override
+            protected void updateItem(List<Category> categories, boolean empty ) {
+                if(categories != null)
+                    setGraphic(new Text(categories.stream().map(Category::getName).collect(Collectors.joining(", "))));
+            }
+        });
 
         /*articlesTable.getSelectionModel().selectedItemProperty().addListener((obs, oldValue, newValue) -> {
             if (currentStatus == ActionStatus.STATUS_NONE || currentStatus == ActionStatus.STATUS_VIEWING) {
@@ -181,8 +199,8 @@ public class ArticlesController extends BaseController {
 
         JFXCheckBox selectAllCheckbox = new JFXCheckBox();
         selectAllCheckbox.selectedProperty().addListener((observableValue, oldValue, newValue) -> {
-            for (ArticleStockInfo a : articles)
-                a.getArticle().setChecked(newValue);
+            for (Article a : articles)
+                a.setChecked(newValue);
         });
         articlesTableCheckColumn.setGraphic(selectAllCheckbox);
     }
@@ -206,10 +224,7 @@ public class ArticlesController extends BaseController {
                 return new Task<Void>() {
                     @Override
                     protected Void call() throws Exception {
-                        articles = FXCollections.observableArrayList();
-                        ArticlesMethods.getAllArticles().forEach(article -> {
-                            articles.addAll(ArticlesMethods.getStock(article));
-                        });
+                        articles = FXCollections.observableArrayList(ArticlesMethods.getAllArticles());
                         filteredArticle = new FilteredList<>(articles, p -> true);
 
                         CountDownLatch latch = new CountDownLatch(1);
@@ -220,8 +235,8 @@ public class ArticlesController extends BaseController {
  *                          ============================================================
  *                          Run here all methods that use employees or filteredEmployees
  */
-                                for (ArticleStockInfo a : articles) {
-                                    a.getArticle().checkedProperty().addListener(selectedArticlesListener);
+                                for (Article a : articles) {
+                                    a.checkedProperty().addListener(selectedArticlesListener);
                                 }
 
                                 searchListener();
