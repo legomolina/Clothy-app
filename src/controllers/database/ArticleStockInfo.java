@@ -26,6 +26,10 @@ public class ArticleStockInfo {
         return stock.get();
     }
 
+    public String getStockAsString() {
+        return String.valueOf(stock.get());
+    }
+
     public IntegerProperty stockProperty() {
         return stock;
     }

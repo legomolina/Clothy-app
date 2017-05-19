@@ -23,10 +23,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Callback;
-import models.Article;
-import models.Brand;
-import models.Category;
-import models.Employee;
+import models.*;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -55,8 +52,8 @@ public class ArticlesController extends BaseController {
     @FXML private TableColumn<Article, Number> articlesTableIdColumn;
     @FXML private TableColumn<Article, String> articlesTableNameColumn;
     @FXML private TableColumn<Article, String> articlesTableCodeColumn;
-    @FXML private TableColumn<Article, String> articlesTableSizesColumn;
-    @FXML private TableColumn<Article, Number> articlesTableStockColumn;
+    @FXML private TableColumn<Article, List<ArticleStockInfo>> articlesTableSizesColumn;
+    @FXML private TableColumn<Article, List<ArticleStockInfo>> articlesTableStockColumn;
     @FXML private TableColumn<Article, List<Category>> articlesTableCategoriesColumn;
     @FXML private TableColumn<Article, Brand> articlesTableBrandColumn;
     @FXML private TableColumn<Article, Boolean> articlesTableCheckColumn;
@@ -155,8 +152,8 @@ public class ArticlesController extends BaseController {
         articlesTableIdColumn.setCellValueFactory(param -> param.getValue().idProperty());
         articlesTableNameColumn.setCellValueFactory(param -> param.getValue().nameProperty());
         articlesTableCodeColumn.setCellValueFactory(param -> param.getValue().codeProperty());
-        /*articlesTableSizesColumn.setCellValueFactory(param -> param.getValue().get.getSize().sizeProperty());
-        articlesTableStockColumn.setCellValueFactory(param -> param.getValue().stockProperty());*/
+        /*articlesTableSizesColumn.setCellValueFactory(param -> param.getValue().getStockInfo().get(0).getSize().sizeProperty());
+        articlesTableStockColumn.setCellValueFactory(param -> param.getValue().getStockInfo().get(0).stockProperty());*/
 
         articlesTableCheckColumn.setCellValueFactory(param -> param.getValue().checkedProperty());
         articlesTableCheckColumn.setCellFactory(param -> new MaterialCheckBoxCell<>());
@@ -176,6 +173,24 @@ public class ArticlesController extends BaseController {
             protected void updateItem(List<Category> categories, boolean empty ) {
                 if(categories != null)
                     setGraphic(new Text(categories.stream().map(Category::getName).collect(Collectors.joining(", "))));
+            }
+        });
+
+        articlesTableSizesColumn.setCellValueFactory(new PropertyValueFactory<>("sizes"));
+        articlesTableSizesColumn.setCellFactory(articleStringTableColumn -> new TableCell<Article, List<ArticleStockInfo>>() {
+            @Override
+            protected void updateItem(List<ArticleStockInfo> sizes, boolean empty) {
+                if(sizes != null)
+                    setGraphic(new Text(sizes.stream().map(ArticleStockInfo::getSize).map(Size::getSize).collect(Collectors.joining("\n"))));
+            }
+        });
+
+        articlesTableStockColumn.setCellValueFactory(new PropertyValueFactory<>("stock"));
+        articlesTableStockColumn.setCellFactory(articleStringTableColumn -> new TableCell<Article, List<ArticleStockInfo>>() {
+            @Override
+            protected void updateItem(List<ArticleStockInfo> sizes, boolean empty) {
+                if(sizes != null)
+                    setGraphic(new Text(sizes.stream().map(ArticleStockInfo::getStockAsString).collect(Collectors.joining("\n"))));
             }
         });
 
