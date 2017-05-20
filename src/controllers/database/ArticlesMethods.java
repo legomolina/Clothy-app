@@ -1,18 +1,12 @@
 package controllers.database;
 
-import javafx.collections.FXCollections;
-import models.Article;
-import models.Brand;
-import models.Category;
-import models.Size;
+import models.*;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class ArticlesMethods extends DatabaseMethods {
     public static ArrayList<Article> getAllArticles() {

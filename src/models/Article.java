@@ -1,7 +1,6 @@
 package models;
 
 
-import controllers.database.ArticleStockInfo;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

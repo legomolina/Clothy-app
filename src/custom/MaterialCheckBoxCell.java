@@ -22,10 +22,16 @@ public class MaterialCheckBoxCell<S, T> extends TableCell<S, T> {
     private ObjectProperty<Callback<Integer, ObservableValue<Boolean>>> selectedStateCallback;
 
     public MaterialCheckBoxCell() {
-        setAlignment(Pos.CENTER);
+        this(Pos.CENTER);
+    }
+
+    public MaterialCheckBoxCell(Pos cellPosition) {
+        setAlignment(cellPosition);
         setPadding(new Insets(50));
 
         setGraphic((Node) null);
+
+        getStyleClass().add("material-checkbox-cell");
 
         checkbox = new JFXCheckBox();
         checkbox.setAlignment(Pos.TOP_LEFT);

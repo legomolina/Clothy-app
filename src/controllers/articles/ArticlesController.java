@@ -3,11 +3,9 @@ package controllers.articles;
 
 import com.jfoenix.controls.JFXCheckBox;
 import controllers.BaseController;
-import controllers.database.ArticleStockInfo;
 import controllers.database.ArticlesMethods;
 import custom.MaterialCheckBoxCell;
 import javafx.application.Platform;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -18,19 +16,17 @@ import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Callback;
-import models.Article;
-import models.Brand;
-import models.Category;
-import models.Employee;
+import models.*;
 
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.concurrent.CountDownLatch;
@@ -55,9 +51,9 @@ public class ArticlesController extends BaseController {
     @FXML private TableColumn<Article, Number> articlesTableIdColumn;
     @FXML private TableColumn<Article, String> articlesTableNameColumn;
     @FXML private TableColumn<Article, String> articlesTableCodeColumn;
-    @FXML private TableColumn<Article, String> articlesTableSizesColumn;
-    @FXML private TableColumn<Article, Number> articlesTableStockColumn;
-    @FXML private TableColumn<Article, List<Category>> articlesTableCategoriesColumn;
+    @FXML private TableColumn<Article, ObservableList<ArticleStockInfo>> articlesTableSizesColumn;
+    @FXML private TableColumn<Article, ObservableList<ArticleStockInfo>> articlesTableStockColumn;
+    @FXML private TableColumn<Article, ObservableList<Category>> articlesTableCategoriesColumn;
     @FXML private TableColumn<Article, Brand> articlesTableBrandColumn;
     @FXML private TableColumn<Article, Boolean> articlesTableCheckColumn;
 
@@ -146,38 +142,73 @@ public class ArticlesController extends BaseController {
 
     @FXML
     private void changes() {
-        ArrayList<Category> a = new ArrayList<>();
-        a.add(new Category(10, "categoria_1", "descripcion"));
-        articles.get(0).setCategories(a);
+        System.out.println("asd");
+        articles.get(0).getCategories().add(new Category(10, "asd", "descripcion"));
     }
 
     private void createTable() {
         articlesTableIdColumn.setCellValueFactory(param -> param.getValue().idProperty());
         articlesTableNameColumn.setCellValueFactory(param -> param.getValue().nameProperty());
         articlesTableCodeColumn.setCellValueFactory(param -> param.getValue().codeProperty());
-        /*articlesTableSizesColumn.setCellValueFactory(param -> param.getValue().get.getSize().sizeProperty());
-        articlesTableStockColumn.setCellValueFactory(param -> param.getValue().stockProperty());*/
 
         articlesTableCheckColumn.setCellValueFactory(param -> param.getValue().checkedProperty());
-        articlesTableCheckColumn.setCellFactory(param -> new MaterialCheckBoxCell<>());
+        articlesTableCheckColumn.setCellFactory(param -> new MaterialCheckBoxCell<>(Pos.TOP_CENTER));
 
         articlesTableBrandColumn.setCellValueFactory(new PropertyValueFactory<>("brand"));
         articlesTableBrandColumn.setCellFactory(articleBrandTableColumn -> new TableCell<Article, Brand>() {
             @Override
             protected void updateItem(Brand brand, boolean empty) {
-                if(brand != null)
+                if (brand != null)
                     setGraphic(new Text(brand.getName()));
             }
         });
 
         articlesTableCategoriesColumn.setCellValueFactory(new PropertyValueFactory<>("categories"));
-        articlesTableCategoriesColumn.setCellFactory(articleStringTableColumn -> new TableCell<Article, List<Category>>() {
+        articlesTableCategoriesColumn.setCellFactory(param -> new TableCell<Article, ObservableList<Category>>() {
             @Override
-            protected void updateItem(List<Category> categories, boolean empty ) {
-                if(categories != null)
+            protected void updateItem(ObservableList<Category> categories, boolean empty) {
+                if (categories != null)
                     setGraphic(new Text(categories.stream().map(Category::getName).collect(Collectors.joining(", "))));
             }
         });
+
+        System.out.println(articles.get(0).getCategories());
+        System.out.println(articles.get(0).getStockInfo());
+
+        articlesTableSizesColumn.setCellValueFactory(new PropertyValueFactory<>("stockInfo"));
+        articlesTableSizesColumn.setCellFactory(param -> new TableCell<Article, ObservableList<ArticleStockInfo>>() {
+            @Override
+            protected void updateItem(ObservableList<ArticleStockInfo> stockInfo, boolean empty) {
+                if(stockInfo != null) {
+                    VBox container = new VBox();
+
+                    for(ArticleStockInfo info : stockInfo)
+                        container.getChildren().add(new Text(info.getSize().getSize()));
+
+                    container.getStyleClass().add("sizes-cell-container");
+
+                    setGraphic(container);
+                }
+            }
+        });
+
+        articlesTableStockColumn.setCellValueFactory(new PropertyValueFactory<>("stockInfo"));
+        articlesTableStockColumn.setCellFactory(param -> new TableCell<Article, ObservableList<ArticleStockInfo>>() {
+            @Override
+            protected void updateItem(ObservableList<ArticleStockInfo> stockInfo, boolean empty) {
+                if(stockInfo != null) {
+                    VBox container = new VBox();
+
+                    for(ArticleStockInfo info : stockInfo)
+                        container.getChildren().add(new Text(String.valueOf(info.getStock())));
+
+                    container.getStyleClass().add("sizes-cell-container");
+
+                    setGraphic(container);
+                }
+            }
+        });
+
 
         /*articlesTable.getSelectionModel().selectedItemProperty().addListener((obs, oldValue, newValue) -> {
             if (currentStatus == ActionStatus.STATUS_NONE || currentStatus == ActionStatus.STATUS_VIEWING) {

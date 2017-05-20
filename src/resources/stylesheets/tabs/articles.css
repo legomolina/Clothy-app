@@ -1,3 +1,21 @@
 .articles-table {
     -fx-tree-table-color: #E2484855;
 }
+
+.articles-table .table-cell {
+   -fx-alignment: center-left;
+    -fx-padding: 0 20px 0 20px;
+}
+
+.articles-table .material-checkbox-cell {
+    -fx-alignment: inherit;
+    -fx-padding: 18px 20px 20px 20px;
+}
+
+
+.sizes-cell-container {
+    /*-fx-min-width: 100px;
+    -fx-pref-width: 100px;*/
+
+    -fx-spacing: 10px;
+}
