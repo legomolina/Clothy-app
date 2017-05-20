@@ -172,9 +172,6 @@ public class ArticlesController extends BaseController {
             }
         });
 
-        System.out.println(articles.get(0).getCategories());
-        System.out.println(articles.get(0).getStockInfo());
-
         articlesTableSizesColumn.setCellValueFactory(new PropertyValueFactory<>("stockInfo"));
         articlesTableSizesColumn.setCellFactory(param -> new TableCell<Article, ObservableList<ArticleStockInfo>>() {
             @Override
