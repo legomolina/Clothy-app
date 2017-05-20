@@ -209,7 +209,6 @@ public class ArticlesController extends BaseController {
             }
         });
 
-
         /*articlesTable.getSelectionModel().selectedItemProperty().addListener((obs, oldValue, newValue) -> {
             if (currentStatus == ActionStatus.STATUS_NONE || currentStatus == ActionStatus.STATUS_VIEWING) {
                 selectedArticle = newValue;
