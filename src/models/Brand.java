@@ -100,4 +100,9 @@ public class Brand {
     public boolean equals(Object object) {
         return object instanceof Brand && this.id.get() == ((Brand) object).getId();
     }
+
+    @Override
+    public String toString() {
+        return this.getName();
+    }
 }

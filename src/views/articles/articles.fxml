@@ -91,13 +91,13 @@
                                                 </Pane>
                                                 <Pane maxWidth="370.0">
                                                     <children>
+                                          <JFXComboBox fx:id="articleBrandInput" focusColor="#e24848" labelFloat="true" layoutX="48.0" layoutY="-1.0" prefWidth="300.0" visible="false" />
                                                         <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
                                                             <image>
                                                                 <Image url="@../../resources/images/icons/brand.png" />
                                                             </image>
                                                         </ImageView>
                                                         <Label fx:id="articleBrandLabel" layoutX="48.0" layoutY="5.0" maxWidth="310.0" text="Marca" />
-                                                        <JFXTextField fx:id="articleBrandInput" focusColor="#e24848" labelFloat="true" layoutX="48.0" layoutY="3.0" prefWidth="300.0" promptText="Marca" visible="false" />
                                                     </children>
                                                 </Pane>
                                                 <Pane maxWidth="370.0">
@@ -111,17 +111,6 @@
                                                         <JFXTextField fx:id="articlePriceInput" focusColor="#e24848" labelFloat="true" layoutX="48.0" layoutY="-1.0" prefWidth="300.0" promptText="Precio" visible="false" />
                                                     </children>
                                                 </Pane>
-                                    <Pane fx:id="employeeLoginPassword1" layoutX="30.0" layoutY="372.0" maxWidth="370.0">
-                                       <children>
-                                          <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
-                                             <image>
-                                                <Image url="@../../resources/images/icons/sizes.png" />
-                                             </image>
-                                          </ImageView>
-                                          <Label fx:id="articleSizeLabel" layoutX="48.0" layoutY="5.0" maxWidth="310.0" text="Tallas" />
-                                          <JFXComboBox fx:id="articleSizeInput" focusColor="#e24848" labelFloat="true" layoutX="48.0" layoutY="-1.0" prefHeight="34.0" prefWidth="300.0" promptText="Tallas" visible="false" />
-                                       </children>
-                                    </Pane>
                                                 <Pane fx:id="employeeLoginPassword" maxWidth="370.0">
                                                     <children>
                                                         <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
@@ -130,7 +119,7 @@
                                                             </image>
                                                         </ImageView>
                                                         <Label fx:id="articleCategoryLabel" layoutX="48.0" layoutY="5.0" maxWidth="310.0" text="Categorías" />
-                                                        <JFXComboBox fx:id="articleCategoryInput" focusColor="#e24848" labelFloat="true" layoutX="48.0" layoutY="-1.0" prefHeight="34.0" prefWidth="300.0" promptText="Categorías" visible="false" />
+                                          <JFXListView fx:id="articleCategoryInput" layoutX="48.0" layoutY="3.0" maxHeight="120.0" prefWidth="300.0" verticalGap="10.0" visible="false" />
                                                     </children>
                                                 </Pane>
                                                 <Pane fx:id="formButtonsContainer" prefWidth="370.0" visible="false">
@@ -175,8 +164,6 @@
                               <TableColumn fx:id="articlesTableNameColumn" maxWidth="130.0" minWidth="130.0" prefWidth="130.0" text="Nombre" />
                               <TableColumn fx:id="articlesTableCodeColumn" maxWidth="220.0" minWidth="220.0" prefWidth="220.0" text="Código" />
                               <TableColumn fx:id="articlesTableBrandColumn" maxWidth="160.0" minWidth="160.0" prefWidth="160.0" text="Marca" />
-                              <TableColumn fx:id="articlesTableSizesColumn" maxWidth="80.0" minWidth="80.0" text="Talla" />
-                              <TableColumn fx:id="articlesTableStockColumn" maxWidth="100.0" minWidth="100.0" prefWidth="100.0" text="Stock" />
                               <TableColumn fx:id="articlesTableCategoriesColumn" minWidth="200.0" prefWidth="300.0" text="Categorías" />
                            </columns>
                         </TableView>
@@ -192,7 +179,6 @@
                                             </image>
                                         </ImageView>
                                         <JFXButton fx:id="deleteSelected" buttonType="RAISED" layoutX="406.0" layoutY="67.0" onAction="#removeSelectedListener" prefHeight="40.0" styleClass="remove-button" text="Eliminar seleccionados" visible="false" AnchorPane.bottomAnchor="20.0" AnchorPane.rightAnchor="20.0" />
-                              <Button layoutX="497.0" layoutY="68.0" mnemonicParsing="false" onAction="#changes" text="Button" />
                                     </children>
                                 </AnchorPane>
                             </children>

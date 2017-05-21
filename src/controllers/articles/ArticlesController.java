@@ -1,10 +1,11 @@
 package controllers.articles;
 
-
-import com.jfoenix.controls.JFXCheckBox;
+import com.jfoenix.controls.*;
+import com.jfoenix.validation.DoubleValidator;
+import com.jfoenix.validation.NumberValidator;
 import controllers.BaseController;
-import controllers.database.ArticlesMethods;
-import custom.MaterialCheckBoxCell;
+import controllers.database.*;
+import custom.*;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -18,13 +19,21 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.CheckBoxListCell;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+import javafx.util.StringConverter;
 import models.*;
+import org.controlsfx.control.CheckComboBox;
+import utils.AnimationHandler;
+import utils.DialogBuilder;
+import utils.ImageUtils;
 
 import java.net.URL;
 import java.util.List;
@@ -51,11 +60,34 @@ public class ArticlesController extends BaseController {
     @FXML private TableColumn<Article, Number> articlesTableIdColumn;
     @FXML private TableColumn<Article, String> articlesTableNameColumn;
     @FXML private TableColumn<Article, String> articlesTableCodeColumn;
-    @FXML private TableColumn<Article, ObservableList<ArticleStockInfo>> articlesTableSizesColumn;
-    @FXML private TableColumn<Article, ObservableList<ArticleStockInfo>> articlesTableStockColumn;
     @FXML private TableColumn<Article, ObservableList<Category>> articlesTableCategoriesColumn;
-    @FXML private TableColumn<Article, Brand> articlesTableBrandColumn;
+    @FXML private TableColumn<Article, String> articlesTableBrandColumn;
     @FXML private TableColumn<Article, Boolean> articlesTableCheckColumn;
+
+    @FXML private JFXTextField articleNameInput;
+    @FXML private JFXTextField articleCodeInput;
+    @FXML private JFXTextArea articleDescriptionInput;
+    @FXML private JFXComboBox<Brand> articleBrandInput;
+    @FXML private JFXListView<Category> articleCategoryInput;
+    @FXML private JFXTextField articlePriceInput;
+
+    @FXML private Label articleNameLabel;
+    @FXML private Label articleCodeLabel;
+    @FXML private Label articleDescriptionLabel;
+    @FXML private Label articlePriceLabel;
+    @FXML private Label articleCategoryLabel;
+    @FXML private Label articleBrandLabel;
+
+    @FXML private Pane formButtonsContainer;
+
+    @FXML private Pane editButton;
+    @FXML private JFXRippler editButtonRippler;
+
+    @FXML private Pane removeButton;
+    @FXML private JFXRippler removeButtonRippler;
+
+    @FXML private JFXButton acceptChanges;
+
 
     public ArticlesController(Employee loggedEmployee, Stage currentStage) {
         super(loggedEmployee, currentStage);
@@ -67,46 +99,223 @@ public class ArticlesController extends BaseController {
 
     @Override
     protected void addListener() {
+        //If there is no edition or addition in course
+        if (currentStatus != ActionStatus.STATUS_NONE && currentStatus != ActionStatus.STATUS_VIEWING)
+            return;
 
+        currentStatus = ActionStatus.STATUS_ADDING;
+        selectedArticle = new Article(DatabaseMethods.getLastId("articles", "article_id") + 1);
+
+        selectedArticle.checkedProperty().addListener(selectedArticlesListener);
+
+        showInformationLabels(false);
+        showModificationInputs(true);
+        //Select first brand
+        articleBrandInput.getSelectionModel().select(0);
     }
 
     @Override
     protected void editListener() {
+        if (currentStatus != ActionStatus.STATUS_VIEWING)
+            return;
 
+        currentStatus = ActionStatus.STATUS_EDITING;
+
+        showInformationLabels(false);
+        showModificationInputs(true);
+
+        setModificationInputsText(selectedArticle);
     }
 
     @Override
     protected void removeListener() {
+        if (currentStatus != ActionStatus.STATUS_VIEWING)
+            return;
 
+        DialogBuilder dialogBuilder = new DialogBuilder(rootStackPane, DialogBuilder.DialogType.CONFIRM, JFXDialog.DialogTransition.CENTER, "custom-dialog");
+        JFXDialog dialog = dialogBuilder.setContent(new Text("¿Seguro que quieres eliminar el artículo " + selectedArticle.getName() + "?"))
+                .setOverlayClose(false)
+                .setCancelButton(actionEvent -> dialogBuilder.getDialog().close())
+                .setAcceptButton(actionEvent -> {
+                    ArticlesMethods.removeArticles(selectedArticle);
+                    selectedArticle.setChecked(false);
+                    articles.remove(selectedArticle);
+                    dialogBuilder.getDialog().close();
+                })
+                .build();
+
+        dialog.show();
     }
 
     @FXML
     private void removeSelectedListener() {
+        if (currentStatus != ActionStatus.STATUS_NONE && currentStatus != ActionStatus.STATUS_VIEWING)
+            return;
+
+        DialogBuilder dialogBuilder = new DialogBuilder(rootStackPane, DialogBuilder.DialogType.CONFIRM, JFXDialog.DialogTransition.CENTER, "custom-dialog");
+        JFXDialog dialog = dialogBuilder.setContent(new Text("¿Seguro que quieres eliminar los artículos seleccionados?"))
+                .setOverlayClose(false)
+                .setCancelButton(actionEvent -> dialogBuilder.getDialog().close())
+                .setAcceptButton(actionEvent -> {
+                    ArticlesMethods.removeArticles(articlesTable.getSelectionModel().getSelectedItems());
+                    articles.removeAll(articlesTable.getSelectionModel().getSelectedItems());
+
+                    deleteSelected.setVisible(false);
+
+                    dialogBuilder.getDialog().close();
+                })
+                .build();
+
+        dialog.show();
     }
 
     @Override
     protected void acceptChanges(ActionEvent event) {
+        //Validate inputs before sending data
+        if (!articleNameInput.validate()) return;
+        if (!articleCodeInput.validate()) return;
+        if (!articlePriceInput.validate()) return;
 
+        loaderContainer.setVisible(true);
+        AnimationHandler.fadeIn(loaderContainer, 500, 0.6).execute();
+
+        selectedArticle.setName(articleNameInput.getText());
+        selectedArticle.setCode(articleCodeInput.getText());
+        selectedArticle.setDescription(articleDescriptionInput.getText());
+        selectedArticle.setPrice(Float.parseFloat(articlePriceInput.getText()));
+        selectedArticle.setBrand(articleBrandInput.getSelectionModel().getSelectedItem());
+        selectedArticle.setCategories(articleCategoryInput.getSelectionModel().getSelectedItems());
+
+        System.out.println(articleCategoryInput.getSelectionModel().getSelectedItems());
+
+        final Service<Void> service = new Service<Void>() {
+            @Override
+            protected Task<Void> createTask() {
+                return new Task<Void>() {
+                    @Override
+                    protected Void call() throws Exception {
+                        CountDownLatch latch = new CountDownLatch(1);
+
+                        if (currentStatus == ActionStatus.STATUS_ADDING) {
+                            ArticlesMethods.addArticles(selectedArticle);
+
+                            articles.add(selectedArticle);
+                        } else if (currentStatus == ActionStatus.STATUS_EDITING) {
+                            ArticlesMethods.updateArticles(selectedArticle);
+
+                            articles.set(articles.indexOf(selectedArticle), selectedArticle);
+                        }
+
+                        Platform.runLater(() -> {
+                            try {
+                                currentStatus = ActionStatus.STATUS_VIEWING;
+
+                                showInformationLabels(true);
+                                showModificationInputs(false);
+
+                                setArticleInformation(selectedArticle);
+
+                                AnimationHandler.fadeOut(loaderContainer, 500).execute(finishedEvent -> loaderContainer.setVisible(false));
+                            } finally {
+                                latch.countDown();
+                            }
+                        });
+                        latch.await();
+
+                        return null;
+                    }
+                };
+            }
+        };
+        service.start();
     }
 
     @Override
     protected void cancelChanges() {
+        DialogBuilder dialogBuilder = new DialogBuilder(rootStackPane, DialogBuilder.DialogType.CONFIRM, JFXDialog.DialogTransition.CENTER, "custom-dialog");
+        JFXDialog dialog = dialogBuilder.setContent(new Text("¿Seguro que quieres cancelar la edición?"))
+                .setOverlayClose(true)
+                .setCancelButton(actionEvent -> dialogBuilder.getDialog().close())
+                .setAcceptButton(actionEvent -> {
+                    if (currentStatus == ActionStatus.STATUS_EDITING) {
+                        setArticleInformation(selectedArticle);
+                        currentStatus = ActionStatus.STATUS_VIEWING;
+                    } else if (currentStatus == ActionStatus.STATUS_ADDING) {
+                        setInformationLabelsPlaceholder();
+                        currentStatus = ActionStatus.STATUS_NONE;
+                    }
 
+                    showInformationLabels(true);
+                    showModificationInputs(false);
+                    dialogBuilder.getDialog().close();
+                })
+                .build();
+
+        dialog.show();
     }
 
     @Override
     protected void showInformationLabels(boolean show) {
-
+        articleNameLabel.setVisible(show);
+        articleCodeLabel.setVisible(show);
+        articleDescriptionLabel.setVisible(show);
+        articlePriceLabel.setVisible(show);
+        articleBrandLabel.setVisible(show);
+        articleCategoryLabel.setVisible(show);
     }
 
     @Override
     protected void showModificationInputs(boolean show) {
+        articleCodeInput.setVisible(show);
+        articleNameInput.setVisible(show);
+        articleDescriptionInput.setVisible(show);
+        articlePriceInput.setVisible(show);
+        articleBrandInput.setVisible(show);
+        articleCategoryInput.setVisible(show);
 
+        formButtonsContainer.setVisible(show);
     }
 
     @Override
     protected void setInformationLabelsPlaceholder() {
+        //Set label default name
+        articleCodeLabel.setText("Nombre");
+        articleNameLabel.setText("email@email.com");
+        articleDescriptionLabel.setText("Dirección");
+        articlePriceLabel.setText("+00 000000000");
+        articleBrandLabel.setText("Nombre de usuario");
+        articleCategoryLabel.setText("Rol del empleado");
 
+        setArticlesLabelsStyle("-fx-text-fill: " + Style.LIGHT_GREY);
+    }
+
+    private void setModificationInputsText(Article article) {
+        articleNameInput.setText(article.getName());
+        articleCodeInput.setText(article.getCode());
+        articleDescriptionInput.setText(article.getDescription());
+        articlePriceInput.setText(String.valueOf(article.getPrice()));
+        articleBrandInput.getSelectionModel().select(article.getBrand());
+    }
+
+    private void setArticleInformation(Article article) {
+        setArticlesLabelsStyle("-fx-text-fill: " + Style.BLACK);
+
+        //Set label text with employee information
+        articleNameLabel.setText(article.getName());
+        articleCodeLabel.setText(article.getCode());
+        articleDescriptionLabel.setText(article.getDescription());
+        articlePriceLabel.setText(String.valueOf(article.getPrice()));
+        articleBrandLabel.setText(article.getBrand().getName());
+        articleCategoryLabel.setText(article.getCategories().stream().map(Category::getName).collect(Collectors.joining(", ")));
+    }
+
+    private void setArticlesLabelsStyle(String style) {
+        articleNameLabel.setStyle(style);
+        articleCodeLabel.setStyle(style);
+        articleDescriptionLabel.setStyle(style);
+        articlePriceLabel.setStyle(style);
+        articleBrandLabel.setStyle(style);
+        articleCategoryLabel.setStyle(style);
     }
 
     private void searchListener() {
@@ -124,8 +333,8 @@ public class ArticlesController extends BaseController {
                 return true;
             else if (article.getCode().toLowerCase().contains(lowerCaseValue))
                 return true;
-
-            //check for sizes and categories (array => for)
+            else if (article.getBrand().getName().toLowerCase().contains(lowerCaseValue))
+                return true;
 
             //If there are not coincidences
             return false;
@@ -136,32 +345,18 @@ public class ArticlesController extends BaseController {
         sortedData.comparatorProperty().bind(articlesTable.comparatorProperty());
 
         //Add sortedItems to the TableView
-
         articlesTable.setItems(sortedData);
-    }
-
-    @FXML
-    private void changes() {
-        System.out.println("asd");
-        articles.get(0).getCategories().add(new Category(10, "asd", "descripcion"));
     }
 
     private void createTable() {
         articlesTableIdColumn.setCellValueFactory(param -> param.getValue().idProperty());
         articlesTableNameColumn.setCellValueFactory(param -> param.getValue().nameProperty());
         articlesTableCodeColumn.setCellValueFactory(param -> param.getValue().codeProperty());
+        articlesTableBrandColumn.setCellValueFactory(param -> param.getValue().getBrand().nameProperty());
 
         articlesTableCheckColumn.setCellValueFactory(param -> param.getValue().checkedProperty());
-        articlesTableCheckColumn.setCellFactory(param -> new MaterialCheckBoxCell<>(Pos.TOP_CENTER));
+        articlesTableCheckColumn.setCellFactory(param -> new MaterialCheckBoxCell<>());
 
-        articlesTableBrandColumn.setCellValueFactory(new PropertyValueFactory<>("brand"));
-        articlesTableBrandColumn.setCellFactory(articleBrandTableColumn -> new TableCell<Article, Brand>() {
-            @Override
-            protected void updateItem(Brand brand, boolean empty) {
-                if (brand != null)
-                    setGraphic(new Text(brand.getName()));
-            }
-        });
 
         articlesTableCategoriesColumn.setCellValueFactory(new PropertyValueFactory<>("categories"));
         articlesTableCategoriesColumn.setCellFactory(param -> new TableCell<Article, ObservableList<Category>>() {
@@ -172,41 +367,7 @@ public class ArticlesController extends BaseController {
             }
         });
 
-        articlesTableSizesColumn.setCellValueFactory(new PropertyValueFactory<>("stockInfo"));
-        articlesTableSizesColumn.setCellFactory(param -> new TableCell<Article, ObservableList<ArticleStockInfo>>() {
-            @Override
-            protected void updateItem(ObservableList<ArticleStockInfo> stockInfo, boolean empty) {
-                if(stockInfo != null) {
-                    VBox container = new VBox();
-
-                    for(ArticleStockInfo info : stockInfo)
-                        container.getChildren().add(new Text(info.getSize().getSize()));
-
-                    container.getStyleClass().add("sizes-cell-container");
-
-                    setGraphic(container);
-                }
-            }
-        });
-
-        articlesTableStockColumn.setCellValueFactory(new PropertyValueFactory<>("stockInfo"));
-        articlesTableStockColumn.setCellFactory(param -> new TableCell<Article, ObservableList<ArticleStockInfo>>() {
-            @Override
-            protected void updateItem(ObservableList<ArticleStockInfo> stockInfo, boolean empty) {
-                if(stockInfo != null) {
-                    VBox container = new VBox();
-
-                    for(ArticleStockInfo info : stockInfo)
-                        container.getChildren().add(new Text(String.valueOf(info.getStock())));
-
-                    container.getStyleClass().add("sizes-cell-container");
-
-                    setGraphic(container);
-                }
-            }
-        });
-
-        /*articlesTable.getSelectionModel().selectedItemProperty().addListener((obs, oldValue, newValue) -> {
+        articlesTable.getSelectionModel().selectedItemProperty().addListener((obs, oldValue, newValue) -> {
             if (currentStatus == ActionStatus.STATUS_NONE || currentStatus == ActionStatus.STATUS_VIEWING) {
                 selectedArticle = newValue;
                 currentStatus = ActionStatus.STATUS_VIEWING;
@@ -219,7 +380,7 @@ public class ArticlesController extends BaseController {
                     setInformationLabelsPlaceholder();
                 }
             }
-        });*/
+        });
 
         articlesTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         articlesTable.setPlaceholder(new Label("No hay artículos registrados"));
@@ -230,6 +391,13 @@ public class ArticlesController extends BaseController {
                 a.setChecked(newValue);
         });
         articlesTableCheckColumn.setGraphic(selectAllCheckbox);
+    }
+
+    private void setInputValidator() {
+        articleNameInput.getValidators().add(new CustomRequiredFieldValidator("El campo no puede estar vacío"));
+        articleCodeInput.getValidators().add(new CustomRequiredFieldValidator("El campo no puede estar vacío"));
+        articlePriceInput.getValidators().add(new CustomRequiredFieldValidator("El campo no puede estar vacío"));
+        articlePriceInput.getValidators().add(new CustomDoubleValidator("El campo no es un número"));
     }
 
     @Override
@@ -244,6 +412,33 @@ public class ArticlesController extends BaseController {
         //Binds managed property to visible so when visible is true, it becomes managed as well
         formButtonsContainer.managedProperty().bind(formButtonsContainer.visibleProperty());
         loaderContainer.managedProperty().bind(loaderContainer.visibleProperty());
+
+        articleBrandInput.setCellFactory(new Callback<ListView<Brand>, ListCell<Brand>>() {
+            @Override
+            public ListCell<Brand> call(ListView<Brand> brandListView) {
+                return new ListCell<Brand>() {
+                    @Override
+                    protected void updateItem(Brand item, boolean empty) {
+                        super.updateItem(item, empty);
+
+                        if(item != null)
+                            setText(item.getName());
+                        else
+                            setGraphic(null);
+                    }
+                };
+            }
+        });
+        //Fill brand comboBox
+        articleBrandInput.getItems().addAll(BrandsMethods.getAllBrands());
+
+        articleCategoryInput.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        articleCategoryInput.setCellFactory(MaterialCheckBoxListCell.forListView(Category::checkedProperty));
+        //Fill category list
+        articleCategoryInput.getItems().addAll(CategoriesMethods.getAllCategories());
+
+        setInputValidator();
+        createTable();
 
         final Service<Void> service = new Service<Void>() {
             @Override
@@ -267,7 +462,6 @@ public class ArticlesController extends BaseController {
                                 }
 
                                 searchListener();
-                                createTable();
                             } finally {
                                 latch.countDown();
                             }

@@ -75,7 +75,7 @@
                                                             </image>
                                                         </ImageView>
                                                         <Label fx:id="categoryDescriptionLabel" contentDisplay="CENTER" layoutX="48.0" layoutY="5.0" maxWidth="310.0" text="Descripción" wrapText="true" />
-                                                        <JFXTextArea fx:id="categoryDescriptionInput" focusColor="#ff2626" labelFloat="true" layoutX="48.0" layoutY="5.0" maxHeight="50.0" prefHeight="20.0" prefRowCount="3" prefWidth="300.0" promptText="Dirección" visible="false" wrapText="true" />
+                                                        <JFXTextArea fx:id="categoryDescriptionInput" focusColor="#ff2626" labelFloat="true" layoutX="48.0" layoutY="5.0" maxHeight="50.0" prefHeight="20.0" prefRowCount="3" prefWidth="300.0" promptText="Descripción" visible="false" wrapText="true" />
                                                     </children>
                                                 </Pane>
                                                 <Pane fx:id="formButtonsContainer" prefWidth="370.0" visible="false">

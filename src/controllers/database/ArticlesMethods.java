@@ -32,9 +32,6 @@ public class ArticlesMethods extends DatabaseMethods {
                 currentArticle.setBrand(new Brand(result.getInt("brand_id"), result.getString("brand_name"),
                         result.getString("brand_address"), result.getString("brand_email"), result.getString("brand_phone")));
 
-                //For stock
-                currentArticle.setStockInfo(getStock(currentArticle));
-
                 //For categories
                 String categoriesQuery = "SELECT categories.* FROM categories, articles, categories_articles_map" +
                         " WHERE articles.article_id = categories_articles_map.article_id AND categories_articles_map.category_id = categories.category_id" +
@@ -68,31 +65,7 @@ public class ArticlesMethods extends DatabaseMethods {
         return articles;
     }
 
-    public static ArrayList<ArticleStockInfo> getStock(Article article) {
-        ArrayList<ArticleStockInfo> articleStock = new ArrayList<>();
-        String sqlQuery = "SELECT article_stock, size_id FROM sizes_articles_map WHERE article_id = ?";
-
-        try {
-            PreparedStatement statement = connection.prepareStatement(sqlQuery);
-            statement.setInt(1, article.getId());
-            ResultSet result = statement.executeQuery();
-
-            while(result.next())
-                articleStock.add(new ArticleStockInfo(SizesMethods.getSize(result.getInt("size_id")), result.getInt("article_stock")));
-
-        } catch (NullPointerException e) {
-            System.out.println("An error occurred with Database connection");
-            e.printStackTrace();
-        } catch (SQLException e) {
-            System.out.println("An error occurred preparing the Query: " + sqlQuery);
-            e.printStackTrace();
-        }
-
-        return articleStock;
-    }
-
-    //TODO finish this
-    public static void addArticles(List<Size> sizes, List<Category> categories, Article... addArticle) {
+    public static void addArticles(Article... addArticle) {
         String sqlQuery = "INSERT INTO articles (article_id, article_name, article_code, article_description, " +
                 "article_price, article_brand) VALUES (?, ?, ?, ?, ?, ?)";
 
@@ -108,7 +81,101 @@ public class ArticlesMethods extends DatabaseMethods {
                 statement.setInt(6, a.getBrand().getId());
 
                 statement.executeUpdate();
+
+                addCategories(a.getId(), a.getCategories());
             }
+        } catch (NullPointerException e) {
+            System.out.println("An error occurred with Database connection");
+            e.printStackTrace();
+        } catch (SQLException e) {
+            System.out.println("An error occurred preparing the Query: " + sqlQuery);
+            e.printStackTrace();
+        }
+    }
+
+    public static void updateArticles(Article... updateArticles) {
+        String sqlQuery = "UPDATE articles SET article_name = ?, article_code = ?, article_description = ?, article_brand = ?, " +
+                "article_price = ?  WHERE article_id = ?";
+
+        try {
+            PreparedStatement statement = connection.prepareStatement(sqlQuery);
+
+            for (Article a : updateArticles) {
+                statement.setString(1, a.getName());
+                statement.setString(2, a.getCode());
+                statement.setString(3, a.getDescription());
+                statement.setInt(4, a.getBrand().getId());
+                statement.setFloat(5, a.getPrice());
+                statement.setInt(6, a.getId());
+
+                statement.executeUpdate();
+
+                removeCategories(a.getId());
+                addCategories(a.getId(), a.getCategories());
+            }
+        } catch (NullPointerException e) {
+            System.out.println("An error occurred with Database connection");
+            e.printStackTrace();
+        } catch (SQLException e) {
+            System.out.println("An error occurred preparing the Query: " + sqlQuery);
+            e.printStackTrace();
+        }
+    }
+
+    public static void removeArticles(List<Article> removeArticle) {
+        removeArticles(removeArticle.toArray(new Article[removeArticle.size()]));
+    }
+
+    public static void removeArticles(Article... removeArticle) {
+        String sqlQuery = "DELETE FROM articles WHERE article_id = ?";
+
+        try {
+            PreparedStatement statement = connection.prepareStatement(sqlQuery);
+
+            for (Article a : removeArticle) {
+                removeCategories(a.getId());
+
+                statement.setInt(1, a.getId());
+                statement.executeUpdate();
+            }
+        } catch (NullPointerException e) {
+            System.out.println("An error occurred with Database connection");
+            e.printStackTrace();
+        } catch (SQLException e) {
+            System.out.println("An error occurred preparing the Query: " + sqlQuery);
+            e.printStackTrace();
+        }
+    }
+
+    private static void addCategories(int articleId, List<Category> categories) {
+        String sqlQuery = "INSERT INTO categories_articles_map (article_id, category_id) VALUES (?, ?)";
+
+        try {
+            PreparedStatement statement = connection.prepareStatement(sqlQuery);
+
+            for (Category c : categories) {
+                statement.setInt(1, articleId);
+                statement.setInt(2, c.getId());
+
+                statement.executeUpdate();
+            }
+        } catch (NullPointerException e) {
+            System.out.println("An error occurred with Database connection");
+            e.printStackTrace();
+        } catch (SQLException e) {
+            System.out.println("An error occurred preparing the Query: " + sqlQuery);
+            e.printStackTrace();
+        }
+    }
+
+    private static void removeCategories(int articleId) {
+        String sqlQuery = "DELETE FROM categories_articles_map WHERE article_id = ?";
+        try {
+            PreparedStatement statement = connection.prepareStatement(sqlQuery);
+
+            statement.setInt(1, articleId);
+            statement.executeUpdate();
+
         } catch (NullPointerException e) {
             System.out.println("An error occurred with Database connection");
             e.printStackTrace();

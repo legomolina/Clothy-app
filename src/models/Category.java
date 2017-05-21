@@ -72,4 +72,9 @@ public class Category {
     public boolean equals(Object object) {
         return object instanceof Category && this.id.get() == ((Category) object).getId();
     }
+
+    @Override
+    public String toString() {
+        return this.getName();
+    }
 }

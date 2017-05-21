@@ -14,22 +14,20 @@ public class Article {
     private StringProperty name;
     private StringProperty description;
     private ObservableList<Category> categories;
-    private ObservableList<ArticleStockInfo> stockInfo;
     private Brand brand;
     private FloatProperty price;
     private BooleanProperty checked;
 
     public Article(int id) {
-        this(id, "", "", "", new ArrayList<>(), new ArrayList<>(), null, 0.0f);
+        this(id, "", "", "", new ArrayList<>(), null, 0.0f);
     }
 
-    public Article(int id, String code, String name, String description, List<Category> categories, List<ArticleStockInfo> stockInfo, Brand brand, float price) {
+    public Article(int id, String code, String name, String description, List<Category> categories, Brand brand, float price) {
         this.id = new SimpleIntegerProperty(id);
         this.code = new SimpleStringProperty(code);
         this.name = new SimpleStringProperty(name);
         this.description = new SimpleStringProperty(description);
         this.categories = FXCollections.observableList(categories);
-        this.stockInfo = FXCollections.observableList(stockInfo);
         this.brand = brand;
         this.price = new SimpleFloatProperty(price);
         this.checked = new SimpleBooleanProperty(false);
@@ -89,14 +87,6 @@ public class Article {
 
     public void setCategories(List<Category> categories) {
         this.categories = FXCollections.observableList(categories);
-    }
-
-    public ObservableList<ArticleStockInfo> getStockInfo() {
-        return stockInfo;
-    }
-
-    public void setStockInfo(List<ArticleStockInfo> stockInfo) {
-        this.stockInfo = FXCollections.observableList(stockInfo);
     }
 
     public Brand getBrand() {
