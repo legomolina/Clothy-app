@@ -23,7 +23,7 @@ public class Clothy extends Application {
         loginStage.setResizable(false);
         loginStage.show();
 
-        /*new Thread(() -> {
+        Thread t = new Thread(() -> {
             try {
                 System.out.println("Started socket on port " + Constants.SOCKET_PORT);
                 DatagramSocket serverSocket = new DatagramSocket(Constants.SOCKET_PORT);
@@ -51,7 +51,9 @@ public class Clothy extends Application {
 
                 e.printStackTrace();
             }
-        }).start();*/
+        });
+        t.start();
+        t.interrupt();
     }
 
     public static void main(String[] args) {

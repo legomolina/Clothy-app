@@ -98,7 +98,7 @@ public class BrandsController extends BaseController {
 
     @Override
     protected void editListener() {
-        if (currentStatus != ActionStatus.STATUS_VIEWING)
+        if (currentStatus != ActionStatus.STATUS_VIEWING  || selectedBrand == null)
             return;
 
         currentStatus = ActionStatus.STATUS_EDITING;

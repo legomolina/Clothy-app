@@ -16,12 +16,16 @@ import javafx.collections.transformation.SortedList;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
+import javafx.event.EventHandler;
+import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.CheckBoxListCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -39,10 +43,13 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.concurrent.CountDownLatch;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class ArticlesController extends BaseController {
     private ObservableList<Article> articles;
+    private ObservableList<Category> categories;
     private FilteredList<Article> filteredArticle;
     private Article selectedArticle;
 
@@ -110,13 +117,16 @@ public class ArticlesController extends BaseController {
 
         showInformationLabels(false);
         showModificationInputs(true);
+
+        setModificationInputsText(selectedArticle);
+
         //Select first brand
-        articleBrandInput.getSelectionModel().select(0);
+        articleBrandInput.getSelectionModel().clearSelection();
     }
 
     @Override
     protected void editListener() {
-        if (currentStatus != ActionStatus.STATUS_VIEWING)
+        if (currentStatus != ActionStatus.STATUS_VIEWING || selectedArticle == null)
             return;
 
         currentStatus = ActionStatus.STATUS_EDITING;
@@ -184,9 +194,11 @@ public class ArticlesController extends BaseController {
         selectedArticle.setDescription(articleDescriptionInput.getText());
         selectedArticle.setPrice(Float.parseFloat(articlePriceInput.getText()));
         selectedArticle.setBrand(articleBrandInput.getSelectionModel().getSelectedItem());
-        selectedArticle.setCategories(articleCategoryInput.getSelectionModel().getSelectedItems());
+        selectedArticle.getCategories().clear();
 
-        System.out.println(articleCategoryInput.getSelectionModel().getSelectedItems());
+        for(Category c : categories)
+            if(c.isChecked())
+                selectedArticle.getCategories().add(c);
 
         final Service<Void> service = new Service<Void>() {
             @Override
@@ -295,6 +307,10 @@ public class ArticlesController extends BaseController {
         articleDescriptionInput.setText(article.getDescription());
         articlePriceInput.setText(String.valueOf(article.getPrice()));
         articleBrandInput.getSelectionModel().select(article.getBrand());
+
+        for(Category c : categories) {
+            c.setChecked(article.getCategories().contains(c));
+        }
     }
 
     private void setArticleInformation(Article article) {
@@ -363,7 +379,9 @@ public class ArticlesController extends BaseController {
             @Override
             protected void updateItem(ObservableList<Category> categories, boolean empty) {
                 if (categories != null)
-                    setGraphic(new Text(categories.stream().map(Category::getName).collect(Collectors.joining(", "))));
+                        setGraphic(new Text(categories.stream().map(Category::getName).collect(Collectors.joining(", "))));
+                if(empty)
+                    setGraphic(null);
             }
         });
 
@@ -434,8 +452,6 @@ public class ArticlesController extends BaseController {
 
         articleCategoryInput.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         articleCategoryInput.setCellFactory(MaterialCheckBoxListCell.forListView(Category::checkedProperty));
-        //Fill category list
-        articleCategoryInput.getItems().addAll(CategoriesMethods.getAllCategories());
 
         setInputValidator();
         createTable();
@@ -447,6 +463,7 @@ public class ArticlesController extends BaseController {
                     @Override
                     protected Void call() throws Exception {
                         articles = FXCollections.observableArrayList(ArticlesMethods.getAllArticles());
+                        categories = FXCollections.observableArrayList(CategoriesMethods.getAllCategories());
                         filteredArticle = new FilteredList<>(articles, p -> true);
 
                         CountDownLatch latch = new CountDownLatch(1);
@@ -460,6 +477,9 @@ public class ArticlesController extends BaseController {
                                 for (Article a : articles) {
                                     a.checkedProperty().addListener(selectedArticlesListener);
                                 }
+
+                                //Fill category list
+                                articleCategoryInput.getItems().addAll(categories);
 
                                 searchListener();
                             } finally {

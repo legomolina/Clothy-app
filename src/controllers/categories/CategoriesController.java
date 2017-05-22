@@ -94,7 +94,7 @@ public class CategoriesController extends BaseController {
 
     @Override
     protected void editListener() {
-        if (currentStatus != ActionStatus.STATUS_VIEWING)
+        if (currentStatus != ActionStatus.STATUS_VIEWING  || selectedCategory == null)
             return;
 
         currentStatus = ActionStatus.STATUS_EDITING;

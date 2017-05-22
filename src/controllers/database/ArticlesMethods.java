@@ -1,6 +1,8 @@
 package controllers.database;
 
-import models.*;
+import models.Article;
+import models.Brand;
+import models.Category;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -110,7 +112,6 @@ public class ArticlesMethods extends DatabaseMethods {
 
                 statement.executeUpdate();
 
-                removeCategories(a.getId());
                 addCategories(a.getId(), a.getCategories());
             }
         } catch (NullPointerException e) {
@@ -148,6 +149,8 @@ public class ArticlesMethods extends DatabaseMethods {
     }
 
     private static void addCategories(int articleId, List<Category> categories) {
+        removeCategories(articleId);
+
         String sqlQuery = "INSERT INTO categories_articles_map (article_id, category_id) VALUES (?, ?)";
 
         try {

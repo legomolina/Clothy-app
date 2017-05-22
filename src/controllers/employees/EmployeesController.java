@@ -129,7 +129,7 @@ public class EmployeesController extends BaseController {
 
     @Override
     protected void editListener() {
-        if (currentStatus != ActionStatus.STATUS_VIEWING)
+        if (currentStatus != ActionStatus.STATUS_VIEWING  || selectedEmployee == null)
             return;
 
         currentStatus = ActionStatus.STATUS_EDITING;

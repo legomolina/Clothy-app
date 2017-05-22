@@ -100,7 +100,7 @@ public class SizesController extends BaseController {
 
     @Override
     protected void editListener() {
-        if (currentStatus != ActionStatus.STATUS_VIEWING)
+        if (currentStatus != ActionStatus.STATUS_VIEWING  || selectedSize == null)
             return;
 
         currentStatus = ActionStatus.STATUS_EDITING;
@@ -155,7 +155,7 @@ public class SizesController extends BaseController {
 
     @Override
     protected void acceptChanges(ActionEvent event) {
-//Validate inputs before sending data
+        //Validate inputs before sending data
         if (!sizeSizeInput.validate()) return;
 
         loaderContainer.setVisible(true);
