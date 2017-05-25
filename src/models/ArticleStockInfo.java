@@ -2,8 +2,6 @@ package models;
 
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
-import models.Article;
-import models.Size;
 
 public class ArticleStockInfo {
     private Size size;

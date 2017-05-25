@@ -1,5 +1,6 @@
 package controllers.database;
 
+import com.sun.org.apache.regexp.internal.RE;
 import models.Employee;
 
 import java.sql.PreparedStatement;
@@ -10,6 +11,32 @@ import java.util.List;
 
 
 public class EmployeesMethods extends DatabaseMethods {
+    public static Employee getEmployee(int employeeId) {
+        String sqlQuery = "SELECT * FROM employees WHERE employee_id = ?";
+
+        try {
+            PreparedStatement statement = connection.prepareStatement(sqlQuery);
+            statement.setInt(1, employeeId);
+            ResultSet result = statement.executeQuery();
+
+            if (result.next())
+                return new Employee(result.getInt("employee_id"), result.getString("employee_name"),
+                        result.getString("employee_surname"), result.getString("employee_address"),
+                        result.getString("employee_email"), result.getString("employee_phone"),
+                        result.getString("employee_login_name"), result.getString("employee_login_password"),
+                        result.getString("employee_login_type"), result.getInt("employee_is_active") > 0);
+
+        } catch (NullPointerException e) {
+            System.out.println("An error occurred with Database connection");
+            e.printStackTrace();
+        } catch (SQLException e) {
+            System.out.println("An error occurred preparing the Query: " + sqlQuery);
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
     public static ArrayList<Employee> getAllEmployees() {
         ArrayList<Employee> employees = new ArrayList<>();
 
@@ -37,7 +64,7 @@ public class EmployeesMethods extends DatabaseMethods {
         return employees;
     }
 
-    public static void addEmployees(Employee... addEmployee){
+    public static void addEmployees(Employee... addEmployee) {
         String sqlQuery = "INSERT INTO employees (employee_id, employee_name, employee_surname, employee_address, employee_email, " +
                 "employee_phone, employee_login_name, employee_login_password, employee_login_type, " +
                 "employee_is_active) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -45,7 +72,7 @@ public class EmployeesMethods extends DatabaseMethods {
         try {
             PreparedStatement statement = connection.prepareStatement(sqlQuery);
 
-            for(Employee e : addEmployee) {
+            for (Employee e : addEmployee) {
                 statement.setInt(1, e.getId());
                 statement.setString(2, e.getName());
                 statement.setString(3, e.getSurname());
@@ -76,7 +103,7 @@ public class EmployeesMethods extends DatabaseMethods {
         try {
             PreparedStatement statement = connection.prepareStatement(sqlQuery);
 
-            for(Employee e : updateEmployees) {
+            for (Employee e : updateEmployees) {
                 statement.setString(1, e.getName());
                 statement.setString(2, e.getSurname());
                 statement.setString(3, e.getAddress());
@@ -108,7 +135,7 @@ public class EmployeesMethods extends DatabaseMethods {
         try {
             PreparedStatement statement = connection.prepareStatement(sqlQuery);
 
-            for(Employee e : removeEmployees) {
+            for (Employee e : removeEmployees) {
                 statement.setInt(1, e.getId());
                 statement.executeUpdate();
             }

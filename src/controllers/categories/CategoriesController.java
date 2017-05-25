@@ -6,13 +6,10 @@ import com.jfoenix.controls.JFXDialog;
 import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
 import controllers.BaseController;
-import controllers.database.BrandsMethods;
 import controllers.database.CategoriesMethods;
 import controllers.database.DatabaseMethods;
-import custom.CustomRequiredFieldValidator;
-import custom.EmailFieldValidator;
 import custom.MaterialCheckBoxCell;
-import custom.PhoneFieldValidator;
+import custom.validators.CustomRequiredFieldValidator;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -30,7 +27,6 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import models.Brand;
 import models.Category;
 import models.Employee;
 import utils.AnimationHandler;
@@ -55,16 +51,24 @@ public class CategoriesController extends BaseController {
         }
     };
 
-    @FXML private Label categoryNameLabel;
-    @FXML private Label categoryDescriptionLabel;
+    @FXML
+    private Label categoryNameLabel;
+    @FXML
+    private Label categoryDescriptionLabel;
 
-    @FXML private JFXTextField categoryNameInput;
-    @FXML private JFXTextArea categoryDescriptionInput;
+    @FXML
+    private JFXTextField categoryNameInput;
+    @FXML
+    private JFXTextArea categoryDescriptionInput;
 
-    @FXML private TableView<Category> categoriesTable;
-    @FXML private TableColumn<Category, Boolean> categoriesTableCheckColumn;
-    @FXML private TableColumn<Category, Number> categoriesTableIdColumn;
-    @FXML private TableColumn<Category, String> categoriesTableNameColumn;
+    @FXML
+    private TableView<Category> categoriesTable;
+    @FXML
+    private TableColumn<Category, Boolean> categoriesTableCheckColumn;
+    @FXML
+    private TableColumn<Category, Number> categoriesTableIdColumn;
+    @FXML
+    private TableColumn<Category, String> categoriesTableNameColumn;
 
     public CategoriesController(Employee loggedEmployee, Stage currentStage) {
         super(loggedEmployee, currentStage);
@@ -94,7 +98,7 @@ public class CategoriesController extends BaseController {
 
     @Override
     protected void editListener() {
-        if (currentStatus != ActionStatus.STATUS_VIEWING  || selectedCategory == null)
+        if (currentStatus != ActionStatus.STATUS_VIEWING || selectedCategory == null)
             return;
 
         currentStatus = ActionStatus.STATUS_EDITING;

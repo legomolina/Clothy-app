@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.paint.*?>
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.text.*?>
+<?import com.jfoenix.controls.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Text?>
+<?import java.net.URL?>
+
+<StackPane fx:id="rootStackPane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <AnchorPane>
+            <children>
+                <GridPane fx:id="gp" layoutY="76.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="600.0" minWidth="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                    <children>
+                        <ScrollPane fx:id="infoContainer" styleClass="info-container" GridPane.columnIndex="1">
+                            <content>
+                                <AnchorPane minHeight="475.0" minWidth="0.0" prefWidth="422.0" styleClass="info-content">
+                                    <children>
+                                        <Text layoutX="32.0" layoutY="44.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="user-info-title" text="Información de la venta" />
+                                        <Pane prefHeight="50.0" prefWidth="50.0" styleClass="edit-button" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
+                                            <children>
+                                                <JFXRippler fx:id="editButtonRippler" maskType="CIRCLE" prefHeight="50.0" prefWidth="50.0" ripplerFill="#7856ff" styleClass="edit-button" />
+                                                <Pane fx:id="editButton" onMouseClicked="#editListener" prefHeight="50.0" prefWidth="50.0">
+                                                    <children>
+                                                        <ImageView fitHeight="28.0" fitWidth="28.0" focusTraversable="true" layoutX="11.0" layoutY="11.0" pickOnBounds="true" preserveRatio="true" styleClass="edit-button">
+                                                            <image>
+                                                                <Image url="@../../resources/images/icons/edit.png" />
+                                                            </image>
+                                                        </ImageView>
+                                                    </children>
+                                                </Pane>
+                                            </children>
+                                        </Pane>
+                                        <FlowPane layoutX="6.0" layoutY="82.0" prefHeight="550.0" prefWidth="390.0" vgap="40.0">
+                                            <children>
+                                                <Pane maxHeight="1.7976931348623157E308" maxWidth="370.0">
+                                                    <children>
+                                                        <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                                                            <image>
+                                                                <Image url="@../../resources/images/icons/user.png" />
+                                                            </image>
+                                                        </ImageView>
+                                                        <Label fx:id="saleClientLabel" layoutX="51.0" layoutY="5.0" maxWidth="310.0" text="Cliente" />
+                                                        <JFXTextField fx:id="saleClientInput" focusColor="#7856ff" labelFloat="true" layoutX="51.0" layoutY="1.0" prefWidth="300.0" promptText="Cliente" visible="false" />
+                                                    </children>
+                                                </Pane>
+                                                <Pane maxWidth="370.0">
+                                                    <children>
+                                                        <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                                                            <image>
+                                                                <Image url="@../../resources/images/icons/user.png" />
+                                                            </image>
+                                                        </ImageView>
+                                                        <Label fx:id="saleEmployeeLabel" contentDisplay="CENTER" layoutX="51.0" layoutY="5.0" maxWidth="310.0" text="Empleado" />
+                                                        <JFXTextField fx:id="saleEmployeeInput" focusColor="#7856ff" labelFloat="true" layoutX="51.0" layoutY="1.0" prefWidth="300.0" promptText="Empleado" visible="false" />
+                                                    </children>
+                                                </Pane>
+                                                <Pane fx:id="saleDatePane" maxWidth="370.0">
+                                                    <children>
+                                                        <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                                                            <image>
+                                                                <Image url="@../../resources/images/icons/date.png" />
+                                                            </image>
+                                                        </ImageView>
+                                                        <Label fx:id="saleDateLabel" contentDisplay="CENTER" layoutX="48.0" layoutY="5.0" maxWidth="310.0" text="Fecha" wrapText="true" />
+                                                    </children>
+                                                </Pane>
+                                    <Pane layoutX="30.0" layoutY="154.0" maxWidth="370.0">
+                                       <children>
+                                          <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../../resources/images/icons/payment_method.png" />
+                                             </image>
+                                          </ImageView>
+                                          <Label fx:id="salePaymentLabel" contentDisplay="CENTER" layoutX="48.0" layoutY="5.0" maxWidth="310.0" text="Pago" wrapText="true" />
+                                                        <JFXComboBox fx:id="salePaymentInput" focusColor="#7856ff" labelFloat="true" layoutX="51.0" layoutY="1.0" prefWidth="300.0" promptText="Pago" visible="false" />
+                                       </children>
+                                    </Pane>
+                                                <Pane maxWidth="370.0" prefWidth="300.0">
+                                                    <children>
+                                                        <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                                                            <image>
+                                                                <Image url="@../../resources/images/icons/articles.png" />
+                                                            </image>
+                                                        </ImageView>
+                                          <JFXButton fx:id="saleArticleViewButton" layoutX="35.0" ripplerFill="#7857ff" text="Ver artículos" />
+                                                    </children>
+                                                </Pane>
+                                                <Pane maxWidth="370.0">
+                                                    <children>
+                                                        <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                                                            <image>
+                                                                <Image url="@../../resources/images/icons/sales.png" />
+                                                            </image>
+                                                        </ImageView>
+                                                        <Label fx:id="saleTotalLabel" layoutX="48.0" layoutY="5.0" maxWidth="310.0" text="Total" />
+                                                    </children>
+                                                </Pane>
+                                                <Pane fx:id="formButtonsContainer" prefWidth="370.0" visible="false">
+                                                    <children>
+                                                        <JFXButton buttonType="RAISED" layoutX="160.0" onAction="#cancelChanges" styleClass="cancel-button" text="Cancelar" />
+                                                        <JFXButton fx:id="acceptChanges" buttonType="RAISED" layoutX="277.0" onAction="#acceptChanges" styleClass="save-button" text="Guardar" />
+                                                    </children>
+                                                </Pane>
+                                            </children>
+                                            <padding>
+                                                <Insets bottom="20.0" left="20.0" right="20.0" />
+                                            </padding>
+                                        </FlowPane>
+                                        <AnchorPane fx:id="loaderContainer" styleClass="loader-container" visible="false" AnchorPane.bottomAnchor="-20.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                            <children>
+                                                <StackPane styleClass="loader-background" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                    <children>
+                                                        <JFXSpinner radius="32.0" />
+                                                    </children>
+                                                </StackPane>
+                                            </children>
+                                            <padding>
+                                                <Insets bottom="12.0" left="12.0" right="12.0" top="12.0" />
+                                            </padding>
+                                        </AnchorPane>
+                                    </children>
+                                    <padding>
+                                        <Insets bottom="20.0" />
+                                    </padding>
+                                </AnchorPane>
+                            </content>
+                            <padding>
+                                <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
+                            </padding>
+                        </ScrollPane>
+                        <GridPane>
+                            <children>
+                                <TableView fx:id="salesTable" editable="true" styleClass="sales-table" GridPane.hgrow="SOMETIMES" GridPane.rowIndex="1" GridPane.vgrow="SOMETIMES">
+                                    <columns>
+                                        <TableColumn fx:id="salesTableCheckColumn" maxWidth="50.0" minWidth="50.0" prefWidth="50.0" sortable="false" />
+                                        <TableColumn fx:id="salesTableIdColumn" maxWidth="60.0" minWidth="60.0" prefWidth="60.0" text="ID" />
+                                        <TableColumn fx:id="salesTableClientColumn" maxWidth="150.0" minWidth="150.0" prefWidth="150.0" text="Cliente" />
+                                        <TableColumn fx:id="salesTableEmployeeColumn" maxWidth="150.0" minWidth="150.0" prefWidth="150.0" text="Empleado" />
+                                        <TableColumn fx:id="salesTableDateColumn" maxWidth="120.0" minWidth="120.0" prefWidth="120.0" text="Fecha" />
+                                        <TableColumn fx:id="salesTablePaymentColumn" minWidth="200.0" prefWidth="300.0" text="Pago" />
+                                    </columns>
+                                </TableView>
+                                <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                                    <children>
+                                        <JFXTextField fx:id="searchInput" focusColor="#7856ff" layoutX="14.0" layoutY="60.0" prefHeight="40.0" prefWidth="452.0" promptText="Buscar" styleClass="search-input" />
+                                        <ImageView fx:id="clearSearchInput" fitHeight="38.0" fitWidth="26.0" layoutX="433.0" layoutY="67.0" onMouseClicked="#clearSearchInput" pickOnBounds="true" preserveRatio="true">
+                                            <cursor>
+                                                <Cursor fx:constant="HAND" />
+                                            </cursor>
+                                            <image>
+                                                <Image url="@../../resources/images/icons/clear_light.png" />
+                                            </image>
+                                        </ImageView>
+                                    </children>
+                                </AnchorPane>
+                            </children>
+                            <columnConstraints>
+                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                            </columnConstraints>
+                            <rowConstraints>
+                                <RowConstraints maxHeight="120.0" minHeight="120.0" prefHeight="120.0" vgrow="SOMETIMES" />
+                                <RowConstraints vgrow="ALWAYS" />
+                            </rowConstraints>
+                        </GridPane>
+                    </children>
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="600.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="500.0" minWidth="400.0" prefWidth="500.0" />
+                    </columnConstraints>
+                    <padding>
+                        <Insets bottom="20.0" left="20.0" />
+                    </padding>
+                    <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                </GridPane>
+                <JFXButton fx:id="addButton" alignment="TOP_CENTER" buttonType="RAISED" contentDisplay="TEXT_ONLY" graphicTextGap="0.0" maxHeight="50.0" maxWidth="50.0" onAction="#addListener" prefHeight="50.0" prefWidth="50.0" styleClass="add-button" text="+" textAlignment="CENTER" AnchorPane.bottomAnchor="50.0" AnchorPane.rightAnchor="500.0">
+                    <padding>
+                        <Insets top="11.0" />
+                    </padding>
+                </JFXButton>
+            </children>
+        </AnchorPane>
+    </children>
+    <stylesheets>
+        <URL value="@../../resources/stylesheets/style.css" />
+        <URL value="@../../resources/stylesheets/base_style/base_tableview.css" />
+        <URL value="@../../resources/stylesheets/base_style/base_information.css" />
+        <URL value="@../../resources/stylesheets/tabs/sales.css" />
+    </stylesheets>
+</StackPane>

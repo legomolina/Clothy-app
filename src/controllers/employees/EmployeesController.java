@@ -4,10 +4,10 @@ import com.jfoenix.controls.*;
 import controllers.BaseController;
 import controllers.database.DatabaseMethods;
 import controllers.database.EmployeesMethods;
-import custom.CustomRequiredFieldValidator;
-import custom.EmailFieldValidator;
 import custom.MaterialCheckBoxCell;
-import custom.PhoneFieldValidator;
+import custom.validators.CustomRequiredFieldValidator;
+import custom.validators.EmailFieldValidator;
+import custom.validators.PhoneFieldValidator;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -60,45 +60,77 @@ public class EmployeesController extends BaseController {
     private final static String USER_ROLE_TEXT = "Usuario";
     private final static String GUESTS_ROLE_TEXT = "Invitado";
 
-    @FXML private ImageView employeeImage;
-    @FXML private Label employeeNameLabel;
-    @FXML private Label employeeEmailLabel;
-    @FXML private Label employeeAddressLabel;
-    @FXML private Label employeePhoneLabel;
-    @FXML private Label employeeLoginNameLabel;
-    @FXML private Label employeeLoginTypeLabel;
-    @FXML private Label employeeStatusLabel;
+    @FXML
+    private ImageView employeeImage;
+    @FXML
+    private Label employeeNameLabel;
+    @FXML
+    private Label employeeEmailLabel;
+    @FXML
+    private Label employeeAddressLabel;
+    @FXML
+    private Label employeePhoneLabel;
+    @FXML
+    private Label employeeLoginNameLabel;
+    @FXML
+    private Label employeeLoginTypeLabel;
+    @FXML
+    private Label employeeStatusLabel;
 
-    @FXML private JFXTextField employeeNameInput;
-    @FXML private JFXTextField employeeSurnameInput;
-    @FXML private JFXTextField employeeEmailInput;
-    @FXML private JFXTextArea employeeAddressInput;
-    @FXML private JFXTextField employeePhoneInput;
-    @FXML private JFXTextField employeeLoginNameInput;
-    @FXML private JFXComboBox<Label> employeeLoginTypeInput;
-    @FXML private JFXToggleButton employeeStatusInput;
+    @FXML
+    private JFXTextField employeeNameInput;
+    @FXML
+    private JFXTextField employeeSurnameInput;
+    @FXML
+    private JFXTextField employeeEmailInput;
+    @FXML
+    private JFXTextArea employeeAddressInput;
+    @FXML
+    private JFXTextField employeePhoneInput;
+    @FXML
+    private JFXTextField employeeLoginNameInput;
+    @FXML
+    private JFXComboBox<Label> employeeLoginTypeInput;
+    @FXML
+    private JFXToggleButton employeeStatusInput;
 
-    @FXML private JFXButton acceptChanges;
+    @FXML
+    private JFXButton acceptChanges;
 
-    @FXML private TableView<Employee> employeesTable;
-    @FXML private TableColumn<Employee, Boolean> employeesTableCheckColumn;
-    @FXML private TableColumn<Employee, Number> employeesTableIdColumn;
-    @FXML private TableColumn<Employee, String> employeesTableNameColumn;
-    @FXML private TableColumn<Employee, String> employeesTableSurnameColumn;
-    @FXML private TableColumn<Employee, String> employeesTableAddressColumn;
-    @FXML private TableColumn<Employee, String> employeesTablePhoneColumn;
-    @FXML private TableColumn<Employee, String> employeesTableEmailColumn;
+    @FXML
+    private TableView<Employee> employeesTable;
+    @FXML
+    private TableColumn<Employee, Boolean> employeesTableCheckColumn;
+    @FXML
+    private TableColumn<Employee, Number> employeesTableIdColumn;
+    @FXML
+    private TableColumn<Employee, String> employeesTableNameColumn;
+    @FXML
+    private TableColumn<Employee, String> employeesTableSurnameColumn;
+    @FXML
+    private TableColumn<Employee, String> employeesTableAddressColumn;
+    @FXML
+    private TableColumn<Employee, String> employeesTablePhoneColumn;
+    @FXML
+    private TableColumn<Employee, String> employeesTableEmailColumn;
 
-    @FXML private Pane removeButton;
-    @FXML private JFXRippler removeButtonRippler;
+    @FXML
+    private Pane removeButton;
+    @FXML
+    private JFXRippler removeButtonRippler;
 
-    @FXML private Pane editButton;
-    @FXML private JFXRippler editButtonRippler;
+    @FXML
+    private Pane editButton;
+    @FXML
+    private JFXRippler editButtonRippler;
 
-    @FXML private Pane formButtonsContainer;
-    @FXML private AnchorPane loaderContainer;
+    @FXML
+    private Pane formButtonsContainer;
+    @FXML
+    private AnchorPane loaderContainer;
 
-    @FXML private JFXButton deleteSelected;
+    @FXML
+    private JFXButton deleteSelected;
 
     public EmployeesController(Employee loggedEmployee, Stage currentStage) {
         super(loggedEmployee, currentStage);
@@ -129,7 +161,7 @@ public class EmployeesController extends BaseController {
 
     @Override
     protected void editListener() {
-        if (currentStatus != ActionStatus.STATUS_VIEWING  || selectedEmployee == null)
+        if (currentStatus != ActionStatus.STATUS_VIEWING || selectedEmployee == null)
             return;
 
         currentStatus = ActionStatus.STATUS_EDITING;

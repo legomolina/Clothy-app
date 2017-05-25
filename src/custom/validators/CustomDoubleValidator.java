@@ -1,4 +1,4 @@
-package custom;
+package custom.validators;
 
 import com.jfoenix.validation.DoubleValidator;
 

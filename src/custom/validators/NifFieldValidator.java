@@ -1,4 +1,4 @@
-package custom;
+package custom.validators;
 
 
 import javafx.scene.control.TextInputControl;
@@ -6,10 +6,10 @@ import javafx.scene.control.TextInputControl;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class EmailFieldValidator extends CustomRequiredFieldValidator {
-    private static final Pattern EMAIL_ADDRESS_REGEX = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
+public class NifFieldValidator extends CustomRequiredFieldValidator {
+    private static final Pattern NIF_REGEX = Pattern.compile("^\\d{8}-?[A-z]{1}$", Pattern.MULTILINE);
 
-    public EmailFieldValidator(String message) {
+    public NifFieldValidator(String message) {
         super(message);
     }
 
@@ -21,18 +21,18 @@ public class EmailFieldValidator extends CustomRequiredFieldValidator {
     private void evalTextInputField() {
         TextInputControl textField = (TextInputControl) this.srcControl.get();
 
-        if(textField.getText().isEmpty() || textField.getText().equals(""))
+        if (textField.getText().isEmpty() || textField.getText().equals(""))
             this.hasErrors.set(false);
         else {
-            if (validateEmail(textField.getText()))
+            if (validateNif(textField.getText()))
                 this.hasErrors.set(false);
             else
                 this.hasErrors.set(true);
         }
     }
 
-    private boolean validateEmail(String emailStr) {
-        Matcher matcher = EMAIL_ADDRESS_REGEX.matcher(emailStr);
+    private boolean validateNif(String nifStr) {
+        Matcher matcher = NIF_REGEX.matcher(nifStr);
         return matcher.find();
     }
 }

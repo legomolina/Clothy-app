@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.jfoenix.controls.JFXButton?>
-<?import com.jfoenix.controls.JFXMasonryPane?>
-<?import java.lang.String?>
-<?import java.net.URL?>
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.text.*?>
+<?import com.jfoenix.controls.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.effect.BoxBlur?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.Pane?>
-<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Text?>
+<?import java.lang.String?>
+<?import java.net.URL?>
 
-<Pane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1">
+<Pane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
     <children>
         <GridPane prefHeight="600.0" prefWidth="800.0">
             <columnConstraints>
@@ -39,89 +39,89 @@
                         <Text fx:id="titleText" layoutX="613.0" layoutY="118.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="main-menu-title" text="Clothy" />
                     </children>
                 </Pane>
-            <AnchorPane prefHeight="171.0" prefWidth="600.0" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
-               <children>
-                  <JFXMasonryPane fx:id="menuButtons" styleClass="menu-buttons" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="80.0" AnchorPane.rightAnchor="60.0" AnchorPane.topAnchor="10.0">
-                     <children>
-                        <JFXButton contentDisplay="TOP" onAction="#openEmployeesManagement" prefHeight="150.0" prefWidth="150.0" ripplerFill="#ddb546" style="-fx-background-color: #ffd35133; -fx-background-radius: 4px;" text="Empleados" textAlignment="CENTER" textFill="#222222">
-                           <graphic>
-                              <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../../resources/images/icons/user.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic>
-                        </JFXButton>
-                        <JFXButton contentDisplay="TOP" onAction="#openClientsManagement" prefHeight="150.0" prefWidth="150.0" ripplerFill="#00c8ff" style="-fx-background-color: #00c8ff33; -fx-background-radius: 4px;" text="Clientes" textAlignment="CENTER" textFill="#222222">
-                           <graphic>
-                              <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../../resources/images/icons/clients.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic>
-                        </JFXButton>
-                        <JFXButton contentDisplay="TOP" onAction="#openArticlesManagement" prefHeight="150.0" prefWidth="150.0" ripplerFill="#e24848" style="-fx-background-color: #e2484833; -fx-background-radius: 4px;" text="Artículos" textAlignment="CENTER" textFill="#222222">
-                           <graphic>
-                              <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../../resources/images/icons/articles.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic>
-                        </JFXButton>
-                        <JFXButton contentDisplay="TOP" onAction="#openSizesManagement" prefWidth="150.0" ripplerFill="#000cff" style="-fx-background-color: #000cff44; -fx-background-radius: 4px;" text="Tallas" textAlignment="CENTER" textFill="WHITE">
-                           <graphic>
-                                 <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
-                                     <image>
-                                         <Image url="@../../resources/images/icons/sizes_white.png" />
-                                     </image>
-                                 </ImageView>
-                           </graphic>
-                        </JFXButton>
-                        <JFXButton contentDisplay="TOP" onAction="#openCategoriesManagement" prefWidth="150.0" ripplerFill="#ff2626" style="-fx-background-color: #ff262670; -fx-background-radius: 4px;" text="Categorías" textAlignment="CENTER">
-                           <graphic>
-                              <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../../resources/images/icons/categories.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic>
-                        </JFXButton>
-                        <JFXButton contentDisplay="TOP" onAction="#openBrandsManagement" prefHeight="150.0" prefWidth="150.0" ripplerFill="#4d4d4d" style="-fx-background-color: #969696; -fx-background-radius: 4px;" text="Marcas" textAlignment="CENTER" textFill="WHITE">
-                           <graphic>
-                                 <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
-                                     <image>
-                                         <Image url="@../../resources/images/icons/brand_white.png" />
-                                     </image>
-                                 </ImageView>
-                           </graphic>
-                        </JFXButton>
-                        <JFXButton contentDisplay="TOP" prefHeight="150.0" prefWidth="150.0" ripplerFill="#7856ff" style="-fx-background-color: #7856ff55; -fx-background-radius: 4px;" text="Ventas" textAlignment="CENTER" textFill="#222222">
-                           <graphic>
-                              <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../../resources/images/icons/sales.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic>
-                        </JFXButton>
-                        <JFXButton contentDisplay="TOP" prefHeight="150.0" prefWidth="150.0" ripplerFill="#6ab574" style="-fx-background-color: #76e28555; -fx-background-radius: 4px;" text="Pedidos" textAlignment="CENTER" textFill="#222222">
-                           <graphic>
-                              <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../../resources/images/icons/orders.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic>
-                        </JFXButton>
-                     </children>
-                     <opaqueInsets>
-                        <Insets />
-                     </opaqueInsets>
-                  </JFXMasonryPane>
-               </children>
-            </AnchorPane>
+                <AnchorPane prefHeight="171.0" prefWidth="600.0" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+                    <children>
+                        <JFXMasonryPane fx:id="menuButtons" styleClass="menu-buttons" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="80.0" AnchorPane.rightAnchor="60.0" AnchorPane.topAnchor="10.0">
+                            <children>
+                                <JFXButton contentDisplay="TOP" onAction="#openEmployeesManagement" prefHeight="150.0" prefWidth="150.0" ripplerFill="#ddb546" style="-fx-background-color: #ffd35133; -fx-background-radius: 4px;" text="Empleados" textAlignment="CENTER" textFill="#222222">
+                                    <graphic>
+                                        <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
+                                            <image>
+                                                <Image url="@../../resources/images/icons/user.png" />
+                                            </image>
+                                        </ImageView>
+                                    </graphic>
+                                </JFXButton>
+                                <JFXButton contentDisplay="TOP" onAction="#openClientsManagement" prefHeight="150.0" prefWidth="150.0" ripplerFill="#00c8ff" style="-fx-background-color: #00c8ff33; -fx-background-radius: 4px;" text="Clientes" textAlignment="CENTER" textFill="#222222">
+                                    <graphic>
+                                        <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
+                                            <image>
+                                                <Image url="@../../resources/images/icons/clients.png" />
+                                            </image>
+                                        </ImageView>
+                                    </graphic>
+                                </JFXButton>
+                                <JFXButton contentDisplay="TOP" onAction="#openArticlesManagement" prefHeight="150.0" prefWidth="150.0" ripplerFill="#e24848" style="-fx-background-color: #e2484833; -fx-background-radius: 4px;" text="Artículos" textAlignment="CENTER" textFill="#222222">
+                                    <graphic>
+                                        <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
+                                            <image>
+                                                <Image url="@../../resources/images/icons/articles.png" />
+                                            </image>
+                                        </ImageView>
+                                    </graphic>
+                                </JFXButton>
+                                <JFXButton contentDisplay="TOP" onAction="#openSizesManagement" prefWidth="150.0" ripplerFill="#000cff" style="-fx-background-color: #000cff44; -fx-background-radius: 4px;" text="Tallas" textAlignment="CENTER" textFill="WHITE">
+                                    <graphic>
+                                        <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                                            <image>
+                                                <Image url="@../../resources/images/icons/sizes_white.png" />
+                                            </image>
+                                        </ImageView>
+                                    </graphic>
+                                </JFXButton>
+                                <JFXButton contentDisplay="TOP" onAction="#openCategoriesManagement" prefWidth="150.0" ripplerFill="#ff2626" style="-fx-background-color: #ff262670; -fx-background-radius: 4px;" text="Categorías" textAlignment="CENTER">
+                                    <graphic>
+                                        <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                                            <image>
+                                                <Image url="@../../resources/images/icons/categories.png" />
+                                            </image>
+                                        </ImageView>
+                                    </graphic>
+                                </JFXButton>
+                                <JFXButton contentDisplay="TOP" onAction="#openBrandsManagement" prefHeight="150.0" prefWidth="150.0" ripplerFill="#4d4d4d" style="-fx-background-color: #969696; -fx-background-radius: 4px;" text="Marcas" textAlignment="CENTER" textFill="WHITE">
+                                    <graphic>
+                                        <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
+                                            <image>
+                                                <Image url="@../../resources/images/icons/brand_white.png" />
+                                            </image>
+                                        </ImageView>
+                                    </graphic>
+                                </JFXButton>
+                                <JFXButton contentDisplay="TOP" onAction="#openSalesManagement" prefHeight="150.0" prefWidth="150.0" ripplerFill="#7856ff" style="-fx-background-color: #7856ff55; -fx-background-radius: 4px;" text="Ventas" textAlignment="CENTER" textFill="#222222">
+                                    <graphic>
+                                        <ImageView fx:id="openSalesManagement" fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
+                                            <image>
+                                                <Image url="@../../resources/images/icons/sales.png" />
+                                            </image>
+                                        </ImageView>
+                                    </graphic>
+                                </JFXButton>
+                                <JFXButton contentDisplay="TOP" prefHeight="150.0" prefWidth="150.0" ripplerFill="#6ab574" style="-fx-background-color: #76e28555; -fx-background-radius: 4px;" text="Pedidos" textAlignment="CENTER" textFill="#222222">
+                                    <graphic>
+                                        <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
+                                            <image>
+                                                <Image url="@../../resources/images/icons/orders.png" />
+                                            </image>
+                                        </ImageView>
+                                    </graphic>
+                                </JFXButton>
+                            </children>
+                            <opaqueInsets>
+                                <Insets />
+                            </opaqueInsets>
+                        </JFXMasonryPane>
+                    </children>
+                </AnchorPane>
             </children>
             <styleClass>
                 <String fx:value="main-menu-container" />

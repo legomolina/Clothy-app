@@ -25,13 +25,20 @@ import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class LoginController implements Initializable {
-    @FXML private JFXTextField username;
-    @FXML private JFXPasswordField password;
-    @FXML private JFXButton submit;
-    @FXML private Label errorText;
-    @FXML private Pane loader;
-    @FXML private Pane frostView;
-    @FXML private ImageView frostImage;
+    @FXML
+    private JFXTextField username;
+    @FXML
+    private JFXPasswordField password;
+    @FXML
+    private JFXButton submit;
+    @FXML
+    private Label errorText;
+    @FXML
+    private Pane loader;
+    @FXML
+    private Pane frostView;
+    @FXML
+    private ImageView frostImage;
 
     @FXML
     private void submitLogin() {

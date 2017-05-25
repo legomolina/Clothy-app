@@ -5,8 +5,8 @@ import com.jfoenix.controls.*;
 import controllers.BaseController;
 import controllers.database.DatabaseMethods;
 import controllers.database.SizesMethods;
-import custom.CustomRequiredFieldValidator;
 import custom.MaterialCheckBoxCell;
+import custom.validators.CustomRequiredFieldValidator;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -51,26 +51,40 @@ public class SizesController extends BaseController {
         }
     };
 
-    @FXML private Label sizeSizeLabel;
-    @FXML private JFXTextField sizeSizeInput;
+    @FXML
+    private Label sizeSizeLabel;
+    @FXML
+    private JFXTextField sizeSizeInput;
 
-    @FXML private TableView<Size> sizesTable;
-    @FXML private TableColumn<Size, Boolean> sizesTableCheckColumn;
-    @FXML private TableColumn<Size, Number> sizesTableIdColumn;
-    @FXML private TableColumn<Size, String> sizesTableSizeColumn;
+    @FXML
+    private TableView<Size> sizesTable;
+    @FXML
+    private TableColumn<Size, Boolean> sizesTableCheckColumn;
+    @FXML
+    private TableColumn<Size, Number> sizesTableIdColumn;
+    @FXML
+    private TableColumn<Size, String> sizesTableSizeColumn;
 
-    @FXML private JFXButton acceptChanges;
+    @FXML
+    private JFXButton acceptChanges;
 
-    @FXML private Pane removeButton;
-    @FXML private JFXRippler removeButtonRippler;
+    @FXML
+    private Pane removeButton;
+    @FXML
+    private JFXRippler removeButtonRippler;
 
-    @FXML private Pane editButton;
-    @FXML private JFXRippler editButtonRippler;
+    @FXML
+    private Pane editButton;
+    @FXML
+    private JFXRippler editButtonRippler;
 
-    @FXML private Pane formButtonsContainer;
-    @FXML private AnchorPane loaderContainer;
+    @FXML
+    private Pane formButtonsContainer;
+    @FXML
+    private AnchorPane loaderContainer;
 
-    @FXML private JFXButton deleteSelected;
+    @FXML
+    private JFXButton deleteSelected;
 
     public SizesController(Employee loggedEmployee, Stage currentStage) {
         super(loggedEmployee, currentStage);
@@ -100,7 +114,7 @@ public class SizesController extends BaseController {
 
     @Override
     protected void editListener() {
-        if (currentStatus != ActionStatus.STATUS_VIEWING  || selectedSize == null)
+        if (currentStatus != ActionStatus.STATUS_VIEWING || selectedSize == null)
             return;
 
         currentStatus = ActionStatus.STATUS_EDITING;
@@ -338,7 +352,8 @@ public class SizesController extends BaseController {
 
         //Binds managed property to visible so when visible is true, it becomes managed as well
         formButtonsContainer.managedProperty().bind(formButtonsContainer.visibleProperty());
-        loaderContainer.managedProperty().bind(loaderContainer.visibleProperty());createTable();
+        loaderContainer.managedProperty().bind(loaderContainer.visibleProperty());
+        createTable();
 
         //Create table. Adds checkboxes, selection mode, and listener when select row
         createTable();

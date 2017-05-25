@@ -7,10 +7,10 @@ import com.jfoenix.controls.JFXTextField;
 import controllers.BaseController;
 import controllers.database.BrandsMethods;
 import controllers.database.DatabaseMethods;
-import custom.CustomRequiredFieldValidator;
-import custom.EmailFieldValidator;
 import custom.MaterialCheckBoxCell;
-import custom.PhoneFieldValidator;
+import custom.validators.CustomRequiredFieldValidator;
+import custom.validators.EmailFieldValidator;
+import custom.validators.PhoneFieldValidator;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -52,23 +52,38 @@ public class BrandsController extends BaseController {
         }
     };
 
-    @FXML private Label brandNameLabel;
-    @FXML private Label brandEmailLabel;
-    @FXML private Label brandAddressLabel;
-    @FXML private Label brandPhoneLabel;
+    @FXML
+    private Label brandNameLabel;
+    @FXML
+    private Label brandEmailLabel;
+    @FXML
+    private Label brandAddressLabel;
+    @FXML
+    private Label brandPhoneLabel;
 
-    @FXML private JFXTextField brandNameInput;
-    @FXML private JFXTextField brandEmailInput;
-    @FXML private JFXTextArea brandAddressInput;
-    @FXML private JFXTextField brandPhoneInput;
+    @FXML
+    private JFXTextField brandNameInput;
+    @FXML
+    private JFXTextField brandEmailInput;
+    @FXML
+    private JFXTextArea brandAddressInput;
+    @FXML
+    private JFXTextField brandPhoneInput;
 
-    @FXML private TableView<Brand> brandsTable;
-    @FXML private TableColumn<Brand, Boolean> brandsTableCheckColumn;
-    @FXML private TableColumn<Brand, Number> brandsTableIdColumn;
-    @FXML private TableColumn<Brand, String> brandsTableNameColumn;
-    @FXML private TableColumn<Brand, String> brandsTableAddressColumn;
-    @FXML private TableColumn<Brand, String> brandsTablePhoneColumn;
-    @FXML private TableColumn<Brand, String> brandsTableEmailColumn;
+    @FXML
+    private TableView<Brand> brandsTable;
+    @FXML
+    private TableColumn<Brand, Boolean> brandsTableCheckColumn;
+    @FXML
+    private TableColumn<Brand, Number> brandsTableIdColumn;
+    @FXML
+    private TableColumn<Brand, String> brandsTableNameColumn;
+    @FXML
+    private TableColumn<Brand, String> brandsTableAddressColumn;
+    @FXML
+    private TableColumn<Brand, String> brandsTablePhoneColumn;
+    @FXML
+    private TableColumn<Brand, String> brandsTableEmailColumn;
 
     public BrandsController(Employee loggedEmployee, Stage currentStage) {
         super(loggedEmployee, currentStage);
@@ -98,7 +113,7 @@ public class BrandsController extends BaseController {
 
     @Override
     protected void editListener() {
-        if (currentStatus != ActionStatus.STATUS_VIEWING  || selectedBrand == null)
+        if (currentStatus != ActionStatus.STATUS_VIEWING || selectedBrand == null)
             return;
 
         currentStatus = ActionStatus.STATUS_EDITING;

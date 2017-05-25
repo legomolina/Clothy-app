@@ -58,13 +58,13 @@ public class SizesMethods extends DatabaseMethods {
         return size;
     }
 
-    public static void addSizes(Size... addSizes){
+    public static void addSizes(Size... addSizes) {
         String sqlQuery = "INSERT INTO sizes (size_id, size_value) VALUES (?, ?)";
 
         try {
             PreparedStatement statement = connection.prepareStatement(sqlQuery);
 
-            for(Size s : addSizes) {
+            for (Size s : addSizes) {
                 statement.setInt(1, s.getId());
                 statement.setString(2, s.getSize());
 
@@ -85,7 +85,7 @@ public class SizesMethods extends DatabaseMethods {
         try {
             PreparedStatement statement = connection.prepareStatement(sqlQuery);
 
-            for(Size s : updateSizes) {
+            for (Size s : updateSizes) {
                 statement.setString(1, s.getSize());
                 statement.setInt(2, s.getId());
 
@@ -111,7 +111,7 @@ public class SizesMethods extends DatabaseMethods {
         try {
             PreparedStatement statement = connection.prepareStatement(sqlQuery);
 
-            for(Size s : removeSizes) {
+            for (Size s : removeSizes) {
                 statement.setInt(1, s.getId());
                 statement.executeUpdate();
             }

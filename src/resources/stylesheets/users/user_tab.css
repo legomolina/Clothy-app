@@ -4,10 +4,10 @@
 }
 
 .user-information {
-      -fx-effect: dropshadow(three-pass-box, #00000033, 10, 0, 0, 0);
-      -fx-background-color: #FFFFFFFF;
-      -fx-background-insets: 12;
-      -fx-background-radius: 2;
+    -fx-effect: dropshadow(three-pass-box, #00000033, 10, 0, 0, 0);
+    -fx-background-color: #FFFFFFFF;
+    -fx-background-insets: 12;
+    -fx-background-radius: 2;
 }
 
 .user-info-title {

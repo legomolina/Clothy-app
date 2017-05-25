@@ -1,4 +1,4 @@
-package custom;
+package custom.validators;
 
 
 import javafx.scene.control.TextInputControl;
@@ -21,7 +21,7 @@ public class PhoneFieldValidator extends CustomRequiredFieldValidator {
     private void evalTextInputField() {
         TextInputControl textField = (TextInputControl) this.srcControl.get();
 
-        if(textField.getText().isEmpty() || textField.getText().equals(""))
+        if (textField.getText().isEmpty() || textField.getText().equals(""))
             this.hasErrors.set(false);
         else {
             if (validatePhone(textField.getText()))

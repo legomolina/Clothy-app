@@ -1,11 +1,18 @@
 package controllers.clients;
 
 
-import com.jfoenix.controls.*;
+import com.jfoenix.controls.JFXCheckBox;
+import com.jfoenix.controls.JFXDialog;
+import com.jfoenix.controls.JFXTextArea;
+import com.jfoenix.controls.JFXTextField;
 import controllers.BaseController;
 import controllers.database.ClientsMethods;
 import controllers.database.DatabaseMethods;
-import custom.*;
+import custom.MaterialCheckBoxCell;
+import custom.validators.CustomRequiredFieldValidator;
+import custom.validators.EmailFieldValidator;
+import custom.validators.NifFieldValidator;
+import custom.validators.PhoneFieldValidator;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -21,8 +28,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import models.Client;
@@ -49,27 +54,46 @@ public class ClientsController extends BaseController {
         }
     };
 
-    @FXML private Label clientNameLabel;
-    @FXML private Label clientNifLabel;
-    @FXML private Label clientEmailLabel;
-    @FXML private Label clientAddressLabel;
-    @FXML private Label clientPhoneLabel;
+    @FXML
+    private Label clientNameLabel;
+    @FXML
+    private Label clientNifLabel;
+    @FXML
+    private Label clientEmailLabel;
+    @FXML
+    private Label clientAddressLabel;
+    @FXML
+    private Label clientPhoneLabel;
 
-    @FXML private JFXTextField clientNameInput;
-    @FXML private JFXTextField clientSurnameInput;
-    @FXML private JFXTextField clientNifInput;
-    @FXML private JFXTextField clientEmailInput;
-    @FXML private JFXTextArea clientAddressInput;
-    @FXML private JFXTextField clientPhoneInput;
+    @FXML
+    private JFXTextField clientNameInput;
+    @FXML
+    private JFXTextField clientSurnameInput;
+    @FXML
+    private JFXTextField clientNifInput;
+    @FXML
+    private JFXTextField clientEmailInput;
+    @FXML
+    private JFXTextArea clientAddressInput;
+    @FXML
+    private JFXTextField clientPhoneInput;
 
-    @FXML private TableView<Client> clientsTable;
-    @FXML private TableColumn<Client, Boolean> clientsTableCheckColumn;
-    @FXML private TableColumn<Client, Number> clientsTableIdColumn;
-    @FXML private TableColumn<Client, String> clientsTableNameColumn;
-    @FXML private TableColumn<Client, String> clientsTableSurnameColumn;
-    @FXML private TableColumn<Client, String> clientsTableAddressColumn;
-    @FXML private TableColumn<Client, String> clientsTablePhoneColumn;
-    @FXML private TableColumn<Client, String> clientsTableEmailColumn;
+    @FXML
+    private TableView<Client> clientsTable;
+    @FXML
+    private TableColumn<Client, Boolean> clientsTableCheckColumn;
+    @FXML
+    private TableColumn<Client, Number> clientsTableIdColumn;
+    @FXML
+    private TableColumn<Client, String> clientsTableNameColumn;
+    @FXML
+    private TableColumn<Client, String> clientsTableSurnameColumn;
+    @FXML
+    private TableColumn<Client, String> clientsTableAddressColumn;
+    @FXML
+    private TableColumn<Client, String> clientsTablePhoneColumn;
+    @FXML
+    private TableColumn<Client, String> clientsTableEmailColumn;
 
     public ClientsController(Employee loggedEmployee, Stage currentStage) {
         super(loggedEmployee, currentStage);
@@ -99,7 +123,7 @@ public class ClientsController extends BaseController {
 
     @Override
     protected void editListener() {
-        if (currentStatus != ActionStatus.STATUS_VIEWING  || selectedClient == null)
+        if (currentStatus != ActionStatus.STATUS_VIEWING || selectedClient == null)
             return;
 
         currentStatus = ActionStatus.STATUS_EDITING;

@@ -17,6 +17,7 @@ import views.brands.Brands;
 import views.categories.Categories;
 import views.clients.Clients;
 import views.employees.Employees;
+import views.sales.Sales;
 import views.sizes.Sizes;
 
 import java.net.URL;
@@ -24,9 +25,12 @@ import java.util.ResourceBundle;
 
 public class MainMenuController extends BaseController {
 
-    @FXML private Label welcomeLabel;
-    @FXML private Pane titleContainer;
-    @FXML private JFXMasonryPane menuButtons;
+    @FXML
+    private Label welcomeLabel;
+    @FXML
+    private Pane titleContainer;
+    @FXML
+    private JFXMasonryPane menuButtons;
 
     @FXML
     private void openEmployeesManagement() {
@@ -116,6 +120,21 @@ public class MainMenuController extends BaseController {
 
         if (!opened)
             new Articles((Stage) menuButtons.getScene().getWindow(), loggedEmployee);
+    }
+
+    @FXML
+    private void openSalesManagement() {
+        boolean opened = false;
+
+        for (Stage s : StageHelper.getStages()) {
+            if (((BaseStage) s).getStageIdentification().equals("sales")) {
+                opened = true;
+                break;
+            }
+        }
+
+        if (!opened)
+            new Sales((Stage) menuButtons.getScene().getWindow(), loggedEmployee);
     }
 
     @Override

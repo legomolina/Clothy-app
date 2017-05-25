@@ -1,11 +1,15 @@
 package controllers.articles;
 
 import com.jfoenix.controls.*;
-import com.jfoenix.validation.DoubleValidator;
-import com.jfoenix.validation.NumberValidator;
 import controllers.BaseController;
-import controllers.database.*;
-import custom.*;
+import controllers.database.ArticlesMethods;
+import controllers.database.BrandsMethods;
+import controllers.database.CategoriesMethods;
+import controllers.database.DatabaseMethods;
+import custom.MaterialCheckBoxCell;
+import custom.MaterialCheckBoxListCell;
+import custom.validators.CustomDoubleValidator;
+import custom.validators.CustomRequiredFieldValidator;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -16,35 +20,23 @@ import javafx.collections.transformation.SortedList;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
-import javafx.event.EventHandler;
-import javafx.event.EventType;
 import javafx.fxml.FXML;
-import javafx.geometry.Pos;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.CheckBoxListCell;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.image.Image;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Callback;
-import javafx.util.StringConverter;
-import models.*;
-import org.controlsfx.control.CheckComboBox;
+import models.Article;
+import models.Brand;
+import models.Category;
+import models.Employee;
 import utils.AnimationHandler;
 import utils.DialogBuilder;
-import utils.ImageUtils;
 
 import java.net.URL;
-import java.util.List;
 import java.util.ResourceBundle;
 import java.util.concurrent.CountDownLatch;
-import java.util.function.Consumer;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class ArticlesController extends BaseController {
@@ -63,37 +55,62 @@ public class ArticlesController extends BaseController {
         }
     };
 
-    @FXML private TableView<Article> articlesTable;
-    @FXML private TableColumn<Article, Number> articlesTableIdColumn;
-    @FXML private TableColumn<Article, String> articlesTableNameColumn;
-    @FXML private TableColumn<Article, String> articlesTableCodeColumn;
-    @FXML private TableColumn<Article, ObservableList<Category>> articlesTableCategoriesColumn;
-    @FXML private TableColumn<Article, String> articlesTableBrandColumn;
-    @FXML private TableColumn<Article, Boolean> articlesTableCheckColumn;
+    @FXML
+    private TableView<Article> articlesTable;
+    @FXML
+    private TableColumn<Article, Number> articlesTableIdColumn;
+    @FXML
+    private TableColumn<Article, String> articlesTableNameColumn;
+    @FXML
+    private TableColumn<Article, String> articlesTableCodeColumn;
+    @FXML
+    private TableColumn<Article, ObservableList<Category>> articlesTableCategoriesColumn;
+    @FXML
+    private TableColumn<Article, String> articlesTableBrandColumn;
+    @FXML
+    private TableColumn<Article, Boolean> articlesTableCheckColumn;
 
-    @FXML private JFXTextField articleNameInput;
-    @FXML private JFXTextField articleCodeInput;
-    @FXML private JFXTextArea articleDescriptionInput;
-    @FXML private JFXComboBox<Brand> articleBrandInput;
-    @FXML private JFXListView<Category> articleCategoryInput;
-    @FXML private JFXTextField articlePriceInput;
+    @FXML
+    private JFXTextField articleNameInput;
+    @FXML
+    private JFXTextField articleCodeInput;
+    @FXML
+    private JFXTextArea articleDescriptionInput;
+    @FXML
+    private JFXComboBox<Brand> articleBrandInput;
+    @FXML
+    private JFXListView<Category> articleCategoryInput;
+    @FXML
+    private JFXTextField articlePriceInput;
 
-    @FXML private Label articleNameLabel;
-    @FXML private Label articleCodeLabel;
-    @FXML private Label articleDescriptionLabel;
-    @FXML private Label articlePriceLabel;
-    @FXML private Label articleCategoryLabel;
-    @FXML private Label articleBrandLabel;
+    @FXML
+    private Label articleNameLabel;
+    @FXML
+    private Label articleCodeLabel;
+    @FXML
+    private Label articleDescriptionLabel;
+    @FXML
+    private Label articlePriceLabel;
+    @FXML
+    private Label articleCategoryLabel;
+    @FXML
+    private Label articleBrandLabel;
 
-    @FXML private Pane formButtonsContainer;
+    @FXML
+    private Pane formButtonsContainer;
 
-    @FXML private Pane editButton;
-    @FXML private JFXRippler editButtonRippler;
+    @FXML
+    private Pane editButton;
+    @FXML
+    private JFXRippler editButtonRippler;
 
-    @FXML private Pane removeButton;
-    @FXML private JFXRippler removeButtonRippler;
+    @FXML
+    private Pane removeButton;
+    @FXML
+    private JFXRippler removeButtonRippler;
 
-    @FXML private JFXButton acceptChanges;
+    @FXML
+    private JFXButton acceptChanges;
 
 
     public ArticlesController(Employee loggedEmployee, Stage currentStage) {
@@ -196,8 +213,8 @@ public class ArticlesController extends BaseController {
         selectedArticle.setBrand(articleBrandInput.getSelectionModel().getSelectedItem());
         selectedArticle.getCategories().clear();
 
-        for(Category c : categories)
-            if(c.isChecked())
+        for (Category c : categories)
+            if (c.isChecked())
                 selectedArticle.getCategories().add(c);
 
         final Service<Void> service = new Service<Void>() {
@@ -308,7 +325,7 @@ public class ArticlesController extends BaseController {
         articlePriceInput.setText(String.valueOf(article.getPrice()));
         articleBrandInput.getSelectionModel().select(article.getBrand());
 
-        for(Category c : categories) {
+        for (Category c : categories) {
             c.setChecked(article.getCategories().contains(c));
         }
     }
@@ -379,8 +396,8 @@ public class ArticlesController extends BaseController {
             @Override
             protected void updateItem(ObservableList<Category> categories, boolean empty) {
                 if (categories != null)
-                        setGraphic(new Text(categories.stream().map(Category::getName).collect(Collectors.joining(", "))));
-                if(empty)
+                    setGraphic(new Text(categories.stream().map(Category::getName).collect(Collectors.joining(", "))));
+                if (empty)
                     setGraphic(null);
             }
         });
@@ -439,7 +456,7 @@ public class ArticlesController extends BaseController {
                     protected void updateItem(Brand item, boolean empty) {
                         super.updateItem(item, empty);
 
-                        if(item != null)
+                        if (item != null)
                             setText(item.getName());
                         else
                             setGraphic(null);

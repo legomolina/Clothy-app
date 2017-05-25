@@ -10,7 +10,6 @@ import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.control.Label;
 import javafx.scene.control.SelectionModel;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableRow;
@@ -69,8 +68,7 @@ public class MaterialCheckBoxCell<S, T> extends TableCell<S, T> {
                 else
                     selectionModel.clearSelection(rowIndex);
             }
-        }
-        else {
+        } else {
             //this throws exception
             this.setGraphic((Node) null);
         }

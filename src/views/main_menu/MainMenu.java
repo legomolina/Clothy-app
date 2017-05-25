@@ -37,8 +37,7 @@ public class MainMenu extends BaseView {
             if (result.get() == ButtonType.OK) {
                 DatabaseHandler.closeConnection();
                 Platform.exit();
-            }
-            else
+            } else
                 event.consume();
         });
     }

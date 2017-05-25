@@ -1,53 +1,64 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.effect.*?>
-<?import java.lang.*?>
-<?import java.net.*?>
-<?import javafx.geometry.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.text.*?>
 <?import com.jfoenix.controls.*?>
-<?import javafx.geometry.Insets?>
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Text?>
 <?import java.net.URL?>
-
 <StackPane fx:id="rootStackPane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
     <children>
         <AnchorPane>
             <children>
-                <GridPane fx:id="gp" layoutY="76.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="600.0" minWidth="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                <GridPane fx:id="gp" layoutY="76.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="600.0"
+                          minWidth="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+                          AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <children>
                         <ScrollPane fx:id="infoContainer" styleClass="info-container" GridPane.columnIndex="1">
                             <content>
-                                <AnchorPane minHeight="475.0" minWidth="0.0" prefWidth="422.0" styleClass="info-content">
+                                <AnchorPane minHeight="475.0" minWidth="0.0" prefWidth="422.0"
+                                            styleClass="info-content">
                                     <children>
-                                        <Text layoutX="32.0" layoutY="44.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="user-info-title" text="Información del empleado" />
-                                        <Pane prefHeight="50.0" prefWidth="50.0" styleClass="edit-button" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
+                                        <Text layoutX="32.0" layoutY="44.0" strokeType="OUTSIDE" strokeWidth="0.0"
+                                              styleClass="user-info-title" text="Información del empleado"/>
+                                        <Pane prefHeight="50.0" prefWidth="50.0" styleClass="edit-button"
+                                              AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
                                             <children>
-                                                <JFXRippler fx:id="editButtonRippler" maskType="CIRCLE" prefHeight="50.0" prefWidth="50.0" ripplerFill="#ffd351" styleClass="edit-button" />
-                                                <Pane fx:id="editButton" onMouseClicked="#editListener" prefHeight="50.0" prefWidth="50.0">
+                                                <JFXRippler fx:id="editButtonRippler" maskType="CIRCLE"
+                                                            prefHeight="50.0" prefWidth="50.0" ripplerFill="#ffd351"
+                                                            styleClass="edit-button"/>
+                                                <Pane fx:id="editButton" onMouseClicked="#editListener"
+                                                      prefHeight="50.0" prefWidth="50.0">
                                                     <children>
-                                                        <ImageView fitHeight="28.0" fitWidth="28.0" focusTraversable="true" layoutX="11.0" layoutY="11.0" pickOnBounds="true" preserveRatio="true" styleClass="edit-button">
+                                                        <ImageView fitHeight="28.0" fitWidth="28.0"
+                                                                   focusTraversable="true" layoutX="11.0" layoutY="11.0"
+                                                                   pickOnBounds="true" preserveRatio="true"
+                                                                   styleClass="edit-button">
                                                             <image>
-                                                                <Image url="@../../resources/images/icons/edit.png" />
+                                                                <Image url="@../../resources/images/icons/edit.png"/>
                                                             </image>
                                                         </ImageView>
                                                     </children>
                                                 </Pane>
                                             </children>
                                         </Pane>
-                                        <Pane layoutX="302.0" layoutY="20.0" prefHeight="50.0" prefWidth="50.0" styleClass="edit-button">
+                                        <Pane layoutX="302.0" layoutY="20.0" prefHeight="50.0" prefWidth="50.0"
+                                              styleClass="edit-button">
                                             <children>
-                                                <JFXRippler fx:id="removeButtonRippler" maskType="CIRCLE" prefHeight="50.0" prefWidth="50.0" ripplerFill="#ffd351" styleClass="edit-button" />
-                                                <Pane fx:id="removeButton" onMouseClicked="#removeListener" prefHeight="50.0" prefWidth="50.0">
+                                                <JFXRippler fx:id="removeButtonRippler" maskType="CIRCLE"
+                                                            prefHeight="50.0" prefWidth="50.0" ripplerFill="#ffd351"
+                                                            styleClass="edit-button"/>
+                                                <Pane fx:id="removeButton" onMouseClicked="#removeListener"
+                                                      prefHeight="50.0" prefWidth="50.0">
                                                     <children>
-                                                        <ImageView fitHeight="28.0" fitWidth="28.0" focusTraversable="true" layoutX="11.0" layoutY="11.0" pickOnBounds="true" preserveRatio="true" styleClass="edit-button">
+                                                        <ImageView fitHeight="28.0" fitWidth="28.0"
+                                                                   focusTraversable="true" layoutX="11.0" layoutY="11.0"
+                                                                   pickOnBounds="true" preserveRatio="true"
+                                                                   styleClass="edit-button">
                                                             <image>
-                                                                <Image url="@../../resources/images/icons/delete.png" />
+                                                                <Image url="@../../resources/images/icons/delete.png"/>
                                                             </image>
                                                         </ImageView>
                                                     </children>
@@ -56,185 +67,257 @@
                                         </Pane>
                                         <Pane fx:id="userImageContainer" layoutX="144.0" layoutY="70.0">
                                             <children>
-                                                <ImageView fx:id="employeeImage" fitHeight="150.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" styleClass="user-image">
+                                                <ImageView fx:id="employeeImage" fitHeight="150.0" fitWidth="150.0"
+                                                           pickOnBounds="true" preserveRatio="true"
+                                                           styleClass="user-image">
                                                     <image>
-                                                        <Image url="@../../resources/images/employees_image/default.png" />
+                                                        <Image url="@../../resources/images/employees_image/default.png"/>
                                                     </image>
                                                 </ImageView>
                                             </children>
                                         </Pane>
-                                        <FlowPane layoutX="14.0" layoutY="234.0" prefHeight="550.0" prefWidth="390.0" vgap="40.0">
+                                        <FlowPane layoutX="14.0" layoutY="234.0" prefHeight="550.0" prefWidth="390.0"
+                                                  vgap="40.0">
                                             <children>
                                                 <Pane maxHeight="1.7976931348623157E308" maxWidth="370.0">
                                                     <children>
-                                                        <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                                                        <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true"
+                                                                   preserveRatio="true">
                                                             <image>
-                                                                <Image url="@../../resources/images/icons/user.png" />
+                                                                <Image url="@../../resources/images/icons/user.png"/>
                                                             </image>
                                                         </ImageView>
-                                                        <Label fx:id="employeeNameLabel" layoutX="51.0" layoutY="5.0" maxWidth="310.0" text="Nombre" />
-                                                        <JFXTextField fx:id="employeeNameInput" focusColor="#ffd351" labelFloat="true" layoutX="51.0" layoutY="1.0" prefWidth="300.0" promptText="Nombre" visible="false" />
-                                                        <JFXTextField fx:id="employeeSurnameInput" focusColor="#ffd351" labelFloat="true" layoutX="51.0" layoutY="1.0" prefWidth="300.0" promptText="Apellidos" visible="false" />
+                                                        <Label fx:id="employeeNameLabel" layoutX="51.0" layoutY="5.0"
+                                                               maxWidth="310.0" text="Nombre"/>
+                                                        <JFXTextField fx:id="employeeNameInput" focusColor="#ffd351"
+                                                                      labelFloat="true" layoutX="51.0" layoutY="1.0"
+                                                                      prefWidth="300.0" promptText="Nombre"
+                                                                      visible="false"/>
+                                                        <JFXTextField fx:id="employeeSurnameInput" focusColor="#ffd351"
+                                                                      labelFloat="true" layoutX="51.0" layoutY="1.0"
+                                                                      prefWidth="300.0" promptText="Apellidos"
+                                                                      visible="false"/>
                                                     </children>
                                                 </Pane>
                                                 <Pane maxWidth="370.0">
                                                     <children>
-                                                        <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                                                        <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true"
+                                                                   preserveRatio="true">
                                                             <image>
-                                                                <Image url="@../../resources/images/icons/mail.png" />
+                                                                <Image url="@../../resources/images/icons/mail.png"/>
                                                             </image>
                                                         </ImageView>
-                                                        <Label fx:id="employeeEmailLabel" contentDisplay="CENTER" layoutX="51.0" layoutY="5.0" maxWidth="310.0" text="email@email.com" />
-                                                        <JFXTextField fx:id="employeeEmailInput" focusColor="#ffd351" labelFloat="true" layoutX="51.0" layoutY="1.0" prefWidth="300.0" promptText="Email" visible="false" />
+                                                        <Label fx:id="employeeEmailLabel" contentDisplay="CENTER"
+                                                               layoutX="51.0" layoutY="5.0" maxWidth="310.0"
+                                                               text="email@email.com"/>
+                                                        <JFXTextField fx:id="employeeEmailInput" focusColor="#ffd351"
+                                                                      labelFloat="true" layoutX="51.0" layoutY="1.0"
+                                                                      prefWidth="300.0" promptText="Email"
+                                                                      visible="false"/>
                                                     </children>
                                                 </Pane>
                                                 <Pane maxWidth="370.0">
                                                     <children>
-                                                        <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                                                        <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true"
+                                                                   preserveRatio="true">
                                                             <image>
-                                                                <Image url="@../../resources/images/icons/phone.png" />
+                                                                <Image url="@../../resources/images/icons/phone.png"/>
                                                             </image>
                                                         </ImageView>
-                                                        <Label fx:id="employeePhoneLabel" layoutX="48.0" layoutY="5.0" maxWidth="310.0" text="+00 000000000" />
-                                                        <JFXTextField fx:id="employeePhoneInput" focusColor="#ffd351" labelFloat="true" layoutX="48.0" layoutY="3.0" prefWidth="300.0" promptText="Teléfono" visible="false" />
+                                                        <Label fx:id="employeePhoneLabel" layoutX="48.0" layoutY="5.0"
+                                                               maxWidth="310.0" text="+00 000000000"/>
+                                                        <JFXTextField fx:id="employeePhoneInput" focusColor="#ffd351"
+                                                                      labelFloat="true" layoutX="48.0" layoutY="3.0"
+                                                                      prefWidth="300.0" promptText="Teléfono"
+                                                                      visible="false"/>
                                                     </children>
                                                 </Pane>
                                                 <Pane maxWidth="370.0">
                                                     <children>
-                                                        <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                                                        <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true"
+                                                                   preserveRatio="true">
                                                             <image>
-                                                                <Image url="@../../resources/images/icons/address.png" />
+                                                                <Image url="@../../resources/images/icons/address.png"/>
                                                             </image>
                                                         </ImageView>
-                                                        <Label fx:id="employeeAddressLabel" contentDisplay="CENTER" layoutX="48.0" layoutY="5.0" maxWidth="310.0" text="Dirección" wrapText="true" />
-                                                        <JFXTextArea fx:id="employeeAddressInput" focusColor="#ffd351" labelFloat="true" layoutX="48.0" layoutY="5.0" maxHeight="50.0" prefHeight="20.0" prefRowCount="3" prefWidth="300.0" promptText="Dirección" visible="false" wrapText="true" />
+                                                        <Label fx:id="employeeAddressLabel" contentDisplay="CENTER"
+                                                               layoutX="48.0" layoutY="5.0" maxWidth="310.0"
+                                                               text="Dirección" wrapText="true"/>
+                                                        <JFXTextArea fx:id="employeeAddressInput" focusColor="#ffd351"
+                                                                     labelFloat="true" layoutX="48.0" layoutY="5.0"
+                                                                     maxHeight="50.0" prefHeight="20.0" prefRowCount="3"
+                                                                     prefWidth="300.0" promptText="Dirección"
+                                                                     visible="false" wrapText="true"/>
                                                     </children>
                                                 </Pane>
                                                 <Pane maxWidth="370.0">
                                                     <children>
-                                                        <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                                                        <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true"
+                                                                   preserveRatio="true">
                                                             <image>
-                                                                <Image url="@../../resources/images/icons/clients.png" />
+                                                                <Image url="@../../resources/images/icons/clients.png"/>
                                                             </image>
                                                         </ImageView>
-                                                        <Label fx:id="employeeLoginNameLabel" layoutX="48.0" layoutY="5.0" maxWidth="310.0" text="Nombre de usuario" />
-                                                        <JFXTextField fx:id="employeeLoginNameInput" focusColor="#ffd351" labelFloat="true" layoutX="48.0" layoutY="-1.0" prefWidth="300.0" promptText="Nombre de usuario" visible="false" />
+                                                        <Label fx:id="employeeLoginNameLabel" layoutX="48.0"
+                                                               layoutY="5.0" maxWidth="310.0" text="Nombre de usuario"/>
+                                                        <JFXTextField fx:id="employeeLoginNameInput"
+                                                                      focusColor="#ffd351" labelFloat="true"
+                                                                      layoutX="48.0" layoutY="-1.0" prefWidth="300.0"
+                                                                      promptText="Nombre de usuario" visible="false"/>
                                                     </children>
                                                 </Pane>
                                                 <Pane fx:id="employeeLoginPassword" maxWidth="370.0">
                                                     <children>
-                                                        <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                                                        <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true"
+                                                                   preserveRatio="true">
                                                             <image>
-                                                                <Image url="@../../resources/images/icons/lock.png" />
+                                                                <Image url="@../../resources/images/icons/lock.png"/>
                                                             </image>
                                                         </ImageView>
-                                                        <Label fx:id="employeeLoginTypeLabel" layoutX="48.0" layoutY="5.0" maxWidth="310.0" text="Rol del empleado" />
-                                                        <JFXComboBox fx:id="employeeLoginTypeInput" focusColor="#ffd351" labelFloat="true" layoutX="48.0" layoutY="-1.0" prefHeight="34.0" prefWidth="300.0" promptText="Rol del empleado" visible="false" />
+                                                        <Label fx:id="employeeLoginTypeLabel" layoutX="48.0"
+                                                               layoutY="5.0" maxWidth="310.0" text="Rol del empleado"/>
+                                                        <JFXComboBox fx:id="employeeLoginTypeInput" focusColor="#ffd351"
+                                                                     labelFloat="true" layoutX="48.0" layoutY="-1.0"
+                                                                     prefHeight="34.0" prefWidth="300.0"
+                                                                     promptText="Rol del empleado" visible="false"/>
                                                     </children>
                                                 </Pane>
                                                 <Pane fx:id="employeeLoginPassword1" maxWidth="370.0">
                                                     <children>
-                                                        <JFXToggleButton fx:id="employeeStatusInput" contentDisplay="GRAPHIC_ONLY" layoutX="59.0" layoutY="-11.0" text="Estado" toggleColor="#ffd351" toggleLineColor="#ffd351" visible="false" />
-                                                        <Label layoutY="8.0" maxWidth="310.0" text="Estado: " />
-                                                        <Label fx:id="employeeStatusLabel" layoutX="64.0" layoutY="8.0" maxWidth="310.0" text="estado" />
+                                                        <JFXToggleButton fx:id="employeeStatusInput"
+                                                                         contentDisplay="GRAPHIC_ONLY" layoutX="59.0"
+                                                                         layoutY="-11.0" text="Estado"
+                                                                         toggleColor="#ffd351" toggleLineColor="#ffd351"
+                                                                         visible="false"/>
+                                                        <Label layoutY="8.0" maxWidth="310.0" text="Estado: "/>
+                                                        <Label fx:id="employeeStatusLabel" layoutX="64.0" layoutY="8.0"
+                                                               maxWidth="310.0" text="estado"/>
                                                     </children>
                                                 </Pane>
                                                 <Pane fx:id="formButtonsContainer" prefWidth="370.0" visible="false">
                                                     <children>
-                                                        <JFXButton buttonType="RAISED" layoutX="160.0" onAction="#cancelChanges" styleClass="cancel-button" text="Cancelar" />
-                                                        <JFXButton fx:id="acceptChanges" buttonType="RAISED" layoutX="277.0" onAction="#acceptChanges" styleClass="save-button" text="Guardar" />
+                                                        <JFXButton buttonType="RAISED" layoutX="160.0"
+                                                                   onAction="#cancelChanges" styleClass="cancel-button"
+                                                                   text="Cancelar"/>
+                                                        <JFXButton fx:id="acceptChanges" buttonType="RAISED"
+                                                                   layoutX="277.0" onAction="#acceptChanges"
+                                                                   styleClass="save-button" text="Guardar"/>
                                                     </children>
                                                 </Pane>
                                             </children>
                                             <padding>
-                                                <Insets bottom="20.0" left="20.0" right="20.0" />
+                                                <Insets bottom="20.0" left="20.0" right="20.0"/>
                                             </padding>
                                         </FlowPane>
-                                        <AnchorPane fx:id="loaderContainer" styleClass="loader-container" visible="false" AnchorPane.bottomAnchor="-20.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                        <AnchorPane fx:id="loaderContainer" styleClass="loader-container"
+                                                    visible="false" AnchorPane.bottomAnchor="-20.0"
+                                                    AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+                                                    AnchorPane.topAnchor="0.0">
                                             <children>
-                                                <StackPane styleClass="loader-background" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                <StackPane styleClass="loader-background" AnchorPane.bottomAnchor="0.0"
+                                                           AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+                                                           AnchorPane.topAnchor="0.0">
                                                     <children>
-                                                        <JFXSpinner radius="32.0" />
+                                                        <JFXSpinner radius="32.0"/>
                                                     </children>
                                                 </StackPane>
                                             </children>
                                             <padding>
-                                                <Insets bottom="12.0" left="12.0" right="12.0" top="12.0" />
+                                                <Insets bottom="12.0" left="12.0" right="12.0" top="12.0"/>
                                             </padding>
                                         </AnchorPane>
                                     </children>
                                     <padding>
-                                        <Insets bottom="20.0" />
+                                        <Insets bottom="20.0"/>
                                     </padding>
                                 </AnchorPane>
                             </content>
                             <padding>
-                                <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
+                                <Insets bottom="30.0" left="30.0" right="30.0" top="30.0"/>
                             </padding>
                         </ScrollPane>
                         <GridPane>
                             <children>
-                                <TableView fx:id="employeesTable" editable="true" styleClass="employee-table" GridPane.hgrow="SOMETIMES" GridPane.rowIndex="1" GridPane.vgrow="SOMETIMES">
+                                <TableView fx:id="employeesTable" editable="true" styleClass="employee-table"
+                                           GridPane.hgrow="SOMETIMES" GridPane.rowIndex="1" GridPane.vgrow="SOMETIMES">
                                     <columnResizePolicy>
-                                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
                                     </columnResizePolicy>
                                     <columns>
-                                        <TableColumn fx:id="employeesTableCheckColumn" maxWidth="50.0" minWidth="50.0" prefWidth="50.0" sortable="false" />
-                                        <TableColumn fx:id="employeesTableIdColumn" maxWidth="60.0" minWidth="60.0" prefWidth="60.0" text="ID" />
-                                        <TableColumn fx:id="employeesTableNameColumn" maxWidth="130.0" minWidth="130.0" prefWidth="130.0" text="Nombre" />
-                                        <TableColumn fx:id="employeesTableSurnameColumn" maxWidth="200.0" minWidth="200.0" prefWidth="200.0" text="Apellidos" />
-                                        <TableColumn fx:id="employeesTableAddressColumn" minWidth="200.0" prefWidth="420.0" text="Dirección" />
-                                        <TableColumn fx:id="employeesTablePhoneColumn" maxWidth="120.0" minWidth="120.0" prefWidth="120.0" text="Teléfono" />
-                                        <TableColumn fx:id="employeesTableEmailColumn" prefWidth="203.0" text="Email" />
+                                        <TableColumn fx:id="employeesTableCheckColumn" maxWidth="50.0" minWidth="50.0"
+                                                     prefWidth="50.0" sortable="false"/>
+                                        <TableColumn fx:id="employeesTableIdColumn" maxWidth="60.0" minWidth="60.0"
+                                                     prefWidth="60.0" text="ID"/>
+                                        <TableColumn fx:id="employeesTableNameColumn" maxWidth="130.0" minWidth="130.0"
+                                                     prefWidth="130.0" text="Nombre"/>
+                                        <TableColumn fx:id="employeesTableSurnameColumn" maxWidth="200.0"
+                                                     minWidth="200.0" prefWidth="200.0" text="Apellidos"/>
+                                        <TableColumn fx:id="employeesTableAddressColumn" minWidth="200.0"
+                                                     prefWidth="420.0" text="Dirección"/>
+                                        <TableColumn fx:id="employeesTablePhoneColumn" maxWidth="120.0" minWidth="120.0"
+                                                     prefWidth="120.0" text="Teléfono"/>
+                                        <TableColumn fx:id="employeesTableEmailColumn" prefWidth="203.0" text="Email"/>
                                     </columns>
                                 </TableView>
                                 <AnchorPane prefHeight="200.0" prefWidth="200.0">
                                     <children>
-                                        <JFXTextField fx:id="searchInput" focusColor="#ffd351" layoutX="14.0" layoutY="60.0" prefHeight="40.0" prefWidth="452.0" promptText="Buscar" styleClass="search-input" />
-                                        <ImageView fx:id="clearSearchInput" fitHeight="38.0" fitWidth="26.0" layoutX="433.0" layoutY="67.0" onMouseClicked="#clearSearchInput" pickOnBounds="true" preserveRatio="true">
+                                        <JFXTextField fx:id="searchInput" focusColor="#ffd351" layoutX="14.0"
+                                                      layoutY="60.0" prefHeight="40.0" prefWidth="452.0"
+                                                      promptText="Buscar" styleClass="search-input"/>
+                                        <ImageView fx:id="clearSearchInput" fitHeight="38.0" fitWidth="26.0"
+                                                   layoutX="433.0" layoutY="67.0" onMouseClicked="#clearSearchInput"
+                                                   pickOnBounds="true" preserveRatio="true">
                                             <cursor>
-                                                <Cursor fx:constant="HAND" />
+                                                <Cursor fx:constant="HAND"/>
                                             </cursor>
                                             <image>
-                                                <Image url="@../../resources/images/icons/clear_light.png" />
+                                                <Image url="@../../resources/images/icons/clear_light.png"/>
                                             </image>
                                         </ImageView>
-                                        <JFXButton fx:id="deleteSelected" buttonType="RAISED" layoutX="406.0" layoutY="67.0" onAction="#removeSelectedListener" prefHeight="40.0" styleClass="remove-button" text="Eliminar seleccionados" visible="false" AnchorPane.bottomAnchor="20.0" AnchorPane.rightAnchor="20.0" />
+                                        <JFXButton fx:id="deleteSelected" buttonType="RAISED" layoutX="406.0"
+                                                   layoutY="67.0" onAction="#removeSelectedListener" prefHeight="40.0"
+                                                   styleClass="remove-button" text="Eliminar seleccionados"
+                                                   visible="false" AnchorPane.bottomAnchor="20.0"
+                                                   AnchorPane.rightAnchor="20.0"/>
                                     </children>
                                 </AnchorPane>
                             </children>
                             <columnConstraints>
-                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
                             </columnConstraints>
                             <rowConstraints>
-                                <RowConstraints maxHeight="120.0" minHeight="120.0" prefHeight="120.0" vgrow="SOMETIMES" />
-                                <RowConstraints vgrow="ALWAYS" />
+                                <RowConstraints maxHeight="120.0" minHeight="120.0" prefHeight="120.0"
+                                                vgrow="SOMETIMES"/>
+                                <RowConstraints vgrow="ALWAYS"/>
                             </rowConstraints>
                         </GridPane>
                     </children>
                     <columnConstraints>
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="600.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="500.0" minWidth="400.0" prefWidth="500.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="600.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="500.0" minWidth="400.0" prefWidth="500.0"/>
                     </columnConstraints>
                     <padding>
-                        <Insets bottom="20.0" left="20.0" />
+                        <Insets bottom="20.0" left="20.0"/>
                     </padding>
                     <rowConstraints>
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
                     </rowConstraints>
                 </GridPane>
-                <JFXButton fx:id="addButton" alignment="TOP_CENTER" buttonType="RAISED" contentDisplay="TEXT_ONLY" graphicTextGap="0.0" maxHeight="50.0" maxWidth="50.0" onAction="#addListener" prefHeight="50.0" prefWidth="50.0" styleClass="add-button" text="+" textAlignment="CENTER" AnchorPane.bottomAnchor="50.0" AnchorPane.rightAnchor="500.0">
+                <JFXButton fx:id="addButton" alignment="TOP_CENTER" buttonType="RAISED" contentDisplay="TEXT_ONLY"
+                           graphicTextGap="0.0" maxHeight="50.0" maxWidth="50.0" onAction="#addListener"
+                           prefHeight="50.0" prefWidth="50.0" styleClass="add-button" text="+" textAlignment="CENTER"
+                           AnchorPane.bottomAnchor="50.0" AnchorPane.rightAnchor="500.0">
                     <padding>
-                        <Insets top="11.0" />
+                        <Insets top="11.0"/>
                     </padding>
                 </JFXButton>
             </children>
         </AnchorPane>
     </children>
     <stylesheets>
-        <URL value="@../../resources/stylesheets/style.css" />
-        <URL value="@../../resources/stylesheets/base_style/base_tableview.css" />
-        <URL value="@../../resources/stylesheets/base_style/base_information.css" />
-        <URL value="@../../resources/stylesheets/tabs/employees.css" />
+        <URL value="@../../resources/stylesheets/style.css"/>
+        <URL value="@../../resources/stylesheets/base_style/base_tableview.css"/>
+        <URL value="@../../resources/stylesheets/base_style/base_information.css"/>
+        <URL value="@../../resources/stylesheets/tabs/employees.css"/>
     </stylesheets>
 </StackPane>

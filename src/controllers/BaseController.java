@@ -39,21 +39,31 @@ public abstract class BaseController implements Initializable {
     protected final Employee loggedEmployee;
     private final Stage currentStage;
 
-    @FXML protected StackPane rootStackPane;
-    @FXML protected JFXTextField searchInput;
+    @FXML
+    protected StackPane rootStackPane;
+    @FXML
+    protected JFXTextField searchInput;
 
-    @FXML protected Pane removeButton;
-    @FXML protected JFXRippler removeButtonRippler;
+    @FXML
+    protected Pane removeButton;
+    @FXML
+    protected JFXRippler removeButtonRippler;
 
-    @FXML protected Pane editButton;
-    @FXML protected JFXRippler editButtonRippler;
+    @FXML
+    protected Pane editButton;
+    @FXML
+    protected JFXRippler editButtonRippler;
 
-    @FXML protected Pane formButtonsContainer;
-    @FXML protected AnchorPane loaderContainer;
+    @FXML
+    protected Pane formButtonsContainer;
+    @FXML
+    protected AnchorPane loaderContainer;
 
-    @FXML protected JFXButton deleteSelected;
+    @FXML
+    protected JFXButton deleteSelected;
 
-    @FXML protected JFXButton acceptChanges;
+    @FXML
+    protected JFXButton acceptChanges;
 
     @FXML
     protected abstract void addListener();
