@@ -21,14 +21,12 @@ import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
-import javafx.scene.control.SelectionMode;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 import models.Employee;
 import models.Sale;
 import utils.AnimationHandler;
@@ -37,8 +35,9 @@ import utils.DialogBuilder;
 import java.net.URL;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.ZoneId;
-import java.util.Date;
+import java.sql.Date;
 import java.util.ResourceBundle;
 import java.util.concurrent.CountDownLatch;
 
@@ -151,7 +150,7 @@ public class SalesController extends BaseController {
         //TODO validate employee id with validators
         selectedSale.setEmployee(EmployeesMethods.getEmployee(Integer.parseInt(saleEmployeeInput.getText())));
         selectedSale.setClient(ClientsMethods.getClient(Integer.parseInt(saleClientInput.getText())));
-        selectedSale.setDate(Date.from(Instant.from(saleDateInput.getValue().atStartOfDay(ZoneId.systemDefault()))));
+        selectedSale.setDate(Date.valueOf(saleDateInput.getValue()));
 
         switch (salePaymentInput.getSelectionModel().getSelectedItem().getText()) {
             case PAYMENT_CARD_TEXT:
@@ -265,7 +264,7 @@ public class SalesController extends BaseController {
     private void setModificationInputsText(Sale sale) {
         saleClientInput.setText(String.valueOf(sale.getClient().getId()));
         saleEmployeeInput.setText(String.valueOf(sale.getEmployee().getId()));
-        saleDateInput.setValue(sale.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+        saleDateInput.setValue(sale.getDate().toLocalDate());
 
         switch (sale.getPayment()) {
             case "TYPE_CASH":
@@ -316,6 +315,21 @@ public class SalesController extends BaseController {
         saleDateInput.setLayoutX(51);
         saleDateInput.setLayoutY(1);
         saleDateInput.setDefaultColor(Color.valueOf("#7856ff"));
+        //Prevent choosing past days??
+        saleDateInput.setDayCellFactory(new Callback<DatePicker, DateCell>() {
+            @Override
+            public DateCell call(DatePicker datePicker) {
+                return new DateCell() {
+                    @Override
+                    public void updateItem(LocalDate item, boolean empty) {
+                        super.updateItem(item, empty);
+
+                        if(item.isBefore(LocalDate.now()))
+                            setDisable(true);
+                    }
+                };
+            }
+        });
         saleDatePane.getChildren().add(saleDateInput);
     }
 

@@ -4,7 +4,7 @@ package models;
 import javafx.beans.property.*;
 
 import java.util.Calendar;
-import java.util.Date;
+import java.sql.Date;
 
 public class Sale {
     private IntegerProperty id;
@@ -16,7 +16,7 @@ public class Sale {
     private BooleanProperty checked;
 
     public Sale(int id, Employee loggedEmployee) {
-        this(id, loggedEmployee, new Client(0), Calendar.getInstance().getTime(), "");
+        this(id, loggedEmployee, new Client(0), new Date(Calendar.getInstance().getTime().getTime()), "");
     }
 
     public Sale(int id, Employee employee, Client client, Date date, String payment) {
