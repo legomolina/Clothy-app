@@ -1,10 +1,7 @@
 package models;
 
 
-import javafx.beans.property.FloatProperty;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleFloatProperty;
-import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.*;
 
 public class SaleLine {
     private IntegerProperty id;
@@ -12,6 +9,7 @@ public class SaleLine {
     private Sale sale;
     private FloatProperty discount;
     private IntegerProperty quantity;
+    private BooleanProperty checked;
 
     public SaleLine(int id, Article article, Sale sale, float discount, int quantity) {
         this.id = new SimpleIntegerProperty(id);
@@ -19,6 +17,7 @@ public class SaleLine {
         this.sale = sale;
         this.discount = new SimpleFloatProperty(discount);
         this.quantity = new SimpleIntegerProperty(quantity);
+        this.checked = new SimpleBooleanProperty(false);
     }
 
     public int getId() {
@@ -71,5 +70,17 @@ public class SaleLine {
 
     public void setQuantity(int quantity) {
         this.quantity.set(quantity);
+    }
+
+    public boolean isChecked() {
+        return checked.get();
+    }
+
+    public BooleanProperty checkedProperty() {
+        return checked;
+    }
+
+    public void setChecked(boolean checked) {
+        this.checked.set(checked);
     }
 }

@@ -29,6 +29,7 @@ import javafx.stage.Stage;
 import javafx.util.Callback;
 import models.Employee;
 import models.Sale;
+import models.SaleLine;
 import utils.AnimationHandler;
 import utils.DialogBuilder;
 
@@ -103,7 +104,10 @@ public class SalesController extends BaseController {
 
     @FXML
     private void showLines() {
+        if(currentStatus == ActionStatus.STATUS_NONE || selectedSale == null)
+            return;
 
+        new SaleLinesController(selectedSale).buildDialog(rootStackPane);
     }
 
     @Override
