@@ -12,6 +12,30 @@ import java.util.List;
 public class BrandsMethods extends DatabaseMethods {
     private static final String REMOVE_BRAND_NAME = "Sin marca";
 
+    public static Brand getBrand(int brandId) {
+        String sqlQuery = "SELECT * FROM brands WHERE brand_id = ?";
+
+        try {
+            PreparedStatement statement = connection.prepareStatement(sqlQuery);
+            statement.setInt(1, brandId);
+            ResultSet result = statement.executeQuery();
+
+            if(result.next())
+                return new Brand(result.getInt("brand_id"), result.getString("brand_name"),
+                        result.getString("brand_address"), result.getString("brand_email"),
+                        result.getString("brand_phone"));
+
+        } catch (NullPointerException e) {
+            System.out.println("An error occurred with Database connection");
+            e.printStackTrace();
+        } catch (SQLException e) {
+            System.out.println("An error occurred preparing the Query: " + sqlQuery);
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
     public static ArrayList<Brand> getAllBrands() {
         ArrayList<Brand> brands = new ArrayList<>();
 

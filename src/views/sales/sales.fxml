@@ -91,7 +91,7 @@
                                                                 <Image url="@../../resources/images/icons/articles.png" />
                                                             </image>
                                                         </ImageView>
-                                          <JFXButton fx:id="saleArticleViewButton" layoutX="35.0" ripplerFill="#7857ff" text="Ver artículos" />
+                                          <JFXButton fx:id="saleArticleViewButton" layoutX="35.0" onAction="#showLines" ripplerFill="#7857ff" text="Ver artículos" />
                                                     </children>
                                                 </Pane>
                                                 <Pane maxWidth="370.0">

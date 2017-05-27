@@ -1,14 +1,38 @@
 package controllers.database;
 
+import com.sun.org.apache.regexp.internal.RE;
 import models.Sale;
+import models.SaleLine;
 
-import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import javax.xml.transform.Result;
+import java.sql.*;
 import java.util.ArrayList;
 
 public class SalesMethods extends DatabaseMethods {
+    public static ArrayList<SaleLine> getSaleLines(Sale sale) {
+        ArrayList<SaleLine> lines = new ArrayList<>();
+        String sqlQuery = "SELECT * FROM sale_lines WHERE sale_lines.sale_line_sale = ?";
+
+        try {
+            PreparedStatement statement = connection.prepareStatement(sqlQuery);
+            statement.setInt(1, sale.getId());
+            ResultSet result = statement.executeQuery();
+
+            while(result.next())
+                lines.add(new SaleLine(result.getInt("sale_line_id"), ArticlesMethods.getArticle(result.getInt("sale_line_article")),
+                        sale, result.getFloat("sale_line_discount"), result.getInt("sale_line_quantity")));
+
+        } catch (NullPointerException e) {
+            System.out.println("An error occurred with Database connection");
+            e.printStackTrace();
+        } catch (SQLException e) {
+            System.out.println("An error occurred preparing the Query: " + sqlQuery);
+            e.printStackTrace();
+        }
+
+        return lines;
+    }
+
     public static ArrayList<Sale> getAllSales() {
         ArrayList<Sale> sales = new ArrayList<>();
         String sqlQuery = "SELECT * FROM sales, employees, clients WHERE sales.sale_client = clients.client_id AND sales.sale_employee = employees.employee_id";
@@ -17,12 +41,11 @@ public class SalesMethods extends DatabaseMethods {
             PreparedStatement statement = connection.prepareStatement(sqlQuery);
             ResultSet result = statement.executeQuery();
 
-            while (result.next()) {
+            while (result.next())
                 sales.add(new Sale(result.getInt("sale_id"),
                         EmployeesMethods.getEmployee(result.getInt("sale_employee")),
                         ClientsMethods.getClient(result.getInt("sale_client")),
                         result.getDate("sale_date"), result.getString("sale_payment")));
-            }
 
         } catch (NullPointerException e) {
             System.out.println("An error occurred with Database connection");

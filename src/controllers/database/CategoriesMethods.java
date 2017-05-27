@@ -2,6 +2,7 @@ package controllers.database;
 
 
 import models.Category;
+import views.categories.Categories;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -11,6 +12,34 @@ import java.util.List;
 
 public class CategoriesMethods extends DatabaseMethods {
     private static final String REMOVE_CATEGORY_NAME = "Sin categoría";
+
+    public static ArrayList<Category> getArticleCategories(int articleId) {
+        ArrayList<Category> categories = new ArrayList<>();
+        String sqlQuery = "SELECT categories.* FROM categories, articles, categories_articles_map" +
+                " WHERE articles.article_id = categories_articles_map.article_id AND categories_articles_map.category_id = categories.category_id" +
+                " AND articles.article_id = ?";
+
+        try {
+            PreparedStatement categoriesStatement = connection.prepareStatement(sqlQuery);
+            categoriesStatement.setInt(1, articleId);
+
+            ResultSet categoriesResult = categoriesStatement.executeQuery();
+            categories = new ArrayList<>();
+
+            //Put every category
+            while (categoriesResult.next())
+                categories.add(new Category(categoriesResult.getInt("category_id"), categoriesResult.getString("category_name"), categoriesResult.getString("category_description")));
+
+        } catch (NullPointerException e) {
+            System.out.println("An error occurred with Database connection");
+            e.printStackTrace();
+        } catch (SQLException e) {
+            System.out.println("An error occurred preparing the Query: " + sqlQuery);
+            e.printStackTrace();
+        }
+
+        return categories;
+    }
 
     public static ArrayList<Category> getAllCategories() {
         ArrayList<Category> categories = new ArrayList<>();

@@ -33,11 +33,8 @@ import utils.AnimationHandler;
 import utils.DialogBuilder;
 
 import java.net.URL;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.ZoneId;
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ResourceBundle;
 import java.util.concurrent.CountDownLatch;
 
@@ -102,6 +99,11 @@ public class SalesController extends BaseController {
 
         //There's no selected sale
         selectedSalesCount = 0;
+    }
+
+    @FXML
+    private void showLines() {
+
     }
 
     @Override
@@ -315,7 +317,6 @@ public class SalesController extends BaseController {
         saleDateInput.setLayoutX(51);
         saleDateInput.setLayoutY(1);
         saleDateInput.setDefaultColor(Color.valueOf("#7856ff"));
-        //Prevent choosing past days??
         saleDateInput.setDayCellFactory(new Callback<DatePicker, DateCell>() {
             @Override
             public DateCell call(DatePicker datePicker) {
@@ -324,7 +325,7 @@ public class SalesController extends BaseController {
                     public void updateItem(LocalDate item, boolean empty) {
                         super.updateItem(item, empty);
 
-                        if(item.isBefore(LocalDate.now()))
+                        if (item.isAfter(LocalDate.now()))
                             setDisable(true);
                     }
                 };
@@ -343,11 +344,17 @@ public class SalesController extends BaseController {
 
             String lowerCaseValue = newValue.toLowerCase();
 
-            //Checks for employee name
+            //Checks for employee
             if (sale.getEmployee().getName().toLowerCase().contains(lowerCaseValue))
                 return true;
-                //Checks for employee surname
+                //Checks for client
             else if (sale.getClient().getName().toLowerCase().contains(lowerCaseValue))
+                return true;
+                //Checks for cash payment
+            else if (sale.getPayment().equals("TYPE_CASH") && ("efectivo").contains(lowerCaseValue))
+                return true;
+                //Checks for cash payment
+            else if (sale.getPayment().equals("TYPE_CARD") && ("tarjeta").contains(lowerCaseValue))
                 return true;
 
             //If there are not coincidences
@@ -367,7 +374,35 @@ public class SalesController extends BaseController {
         salesTableClientColumn.setCellValueFactory(param -> param.getValue().getClient().nameProperty());
         salesTableEmployeeColumn.setCellValueFactory(param -> param.getValue().getEmployee().nameProperty());
         salesTableDateColumn.setCellValueFactory(param -> param.getValue().dateProperty());
+
         salesTablePaymentColumn.setCellValueFactory(param -> param.getValue().paymentProperty());
+        salesTablePaymentColumn.setCellFactory(new Callback<TableColumn<Sale, String>, TableCell<Sale, String>>() {
+            @Override
+            public TableCell<Sale, String> call(TableColumn<Sale, String> saleStringTableColumn) {
+                return new TableCell<Sale, String>() {
+                    @Override
+                    protected void updateItem(String item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (!empty) {
+                            switch (item) {
+                                case "TYPE_CASH":
+                                    setGraphic(new Text(PAYMENT_CASH_TEXT));
+                                    break;
+
+                                case "TYPE_CARD":
+                                    setGraphic(new Text(PAYMENT_CARD_TEXT));
+                                    break;
+
+                                default:
+                                    setGraphic(new Text(PAYMENT_CASH_TEXT));
+                                    break;
+                            }
+                        } else
+                            setGraphic(null);
+                    }
+                };
+            }
+        });
 
         salesTableCheckColumn.setCellValueFactory(param -> param.getValue().checkedProperty());
         salesTableCheckColumn.setCellFactory(param -> new MaterialCheckBoxCell<>());
