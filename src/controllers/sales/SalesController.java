@@ -50,7 +50,7 @@ public class SalesController extends BaseController {
         @Override
         public void changed(ObservableValue<? extends Boolean> observableValue, Boolean oldValue, Boolean newValue) {
             selectedSalesCount += (newValue) ? 1 : -1;
-            deleteSelected.setVisible(selectedSalesCount > 0);
+            //deleteSelected.setVisible(selectedSalesCount > 0);
         }
     };
 

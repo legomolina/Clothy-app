@@ -46,8 +46,8 @@ public class LoginController implements Initializable {
         AnimationHandler.fadeIn(loader, 500, 0.6).execute();
 
         //DEBUG
-        Employee activeEmployeeDEBUG = new Employee(1, "Cristian", "Molina", "", "", "", "", "", "TYPE_ADMIN", true);
-        Platform.runLater(() -> new MainMenu((Stage) submit.getScene().getWindow(), activeEmployeeDEBUG));
+        /*Employee activeEmployeeDEBUG = new Employee(1, "Cristian", "Molina", "", "", "", "", "", "TYPE_ADMIN", true);
+        Platform.runLater(() -> new MainMenu((Stage) submit.getScene().getWindow(), activeEmployeeDEBUG));*/
 
         new Thread(() -> {
             Connection connection = DatabaseHandler.getConnection();
@@ -101,7 +101,7 @@ public class LoginController implements Initializable {
 
     private void setListeners() {
         //DEBUG
-        //submit.disableProperty().bind((username.textProperty().isNotEmpty()).and(password.textProperty().isNotEmpty()).not());
+        submit.disableProperty().bind((username.textProperty().isNotEmpty()).and(password.textProperty().isNotEmpty()).not());
 
         username.textProperty().addListener((observableValue, s, t1) -> {
             if (errorText.isVisible())
@@ -118,6 +118,8 @@ public class LoginController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         frostImage.setClip(new Rectangle(frostView.getLayoutX(), frostView.getLayoutY(), frostView.getPrefWidth(), frostView.getPrefHeight()));
         frostView.setClip(new Rectangle(0, 0, frostView.getPrefWidth(), frostView.getPrefHeight()));
+
+        System.out.println(BCrypt.hashpw("123", BCrypt.gensalt(12)));
 
         setListeners();
     }
