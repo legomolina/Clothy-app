@@ -6,6 +6,7 @@ import com.jfoenix.controls.JFXDialog;
 import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
 import controllers.BaseController;
+import controllers.database.ArticlesMethods;
 import controllers.database.CategoriesMethods;
 import controllers.database.DatabaseMethods;
 import custom.MaterialCheckBoxCell;
@@ -27,6 +28,8 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import models.Article;
+import models.Brand;
 import models.Category;
 import models.Employee;
 import utils.AnimationHandler;
@@ -109,6 +112,19 @@ public class CategoriesController extends BaseController {
         setModificationInputsText(selectedCategory);
     }
 
+    private boolean usedCategories(Category... categories) {
+        for (Article a : ArticlesMethods.getAllArticles()) {
+            for(Category ac : a.getCategories()) {
+                for (Category c : categories) {
+                    if (ac.equals(c))
+                        return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
     @Override
     protected void removeListener() {
         if (currentStatus != ActionStatus.STATUS_VIEWING)
@@ -119,6 +135,19 @@ public class CategoriesController extends BaseController {
                 .setOverlayClose(false)
                 .setCancelButton(actionEvent -> dialogBuilder.getDialog().close())
                 .setAcceptButton(actionEvent -> {
+                    if(usedCategories(selectedCategory)) {
+                        DialogBuilder dialogBuilder1 = new DialogBuilder(rootStackPane, DialogBuilder.DialogType.ALERT, JFXDialog.DialogTransition.CENTER, "custom-dialog");
+                        JFXDialog dialog1 = dialogBuilder1.setContent(new Text("No se puede eliminar la categoría porque hay artículos relacionadas"))
+                                .setOverlayClose(false)
+                                .setAcceptButton(actionEvent1 -> {
+                                    dialogBuilder1.getDialog().close();
+                                    dialogBuilder.getDialog().close();
+                                }).build();
+                        dialog1.show();
+                        actionEvent.consume();
+                        return;
+                    }
+
                     CategoriesMethods.removeCategories(selectedCategory);
                     selectedCategory.setChecked(false);
                     categories.remove(selectedCategory);
@@ -139,6 +168,19 @@ public class CategoriesController extends BaseController {
                 .setOverlayClose(false)
                 .setCancelButton(actionEvent -> dialogBuilder.getDialog().close())
                 .setAcceptButton(actionEvent -> {
+                    if(usedCategories(categoriesTable.getSelectionModel().getSelectedItems().toArray(new Category[categoriesTable.getSelectionModel().getSelectedItems().size()]))) {
+                        DialogBuilder dialogBuilder1 = new DialogBuilder(rootStackPane, DialogBuilder.DialogType.ALERT, JFXDialog.DialogTransition.CENTER, "custom-dialog");
+                        JFXDialog dialog1 = dialogBuilder1.setContent(new Text("No se pueden eliminar las categorías porque hay alguna que tiene artículos relacionados"))
+                                .setOverlayClose(false)
+                                .setAcceptButton(actionEvent1 -> {
+                                    dialogBuilder1.getDialog().close();
+                                    dialogBuilder.getDialog().close();
+                                }).build();
+                        dialog1.show();
+                        actionEvent.consume();
+                        return;
+                    }
+
                     CategoriesMethods.removeCategories(categoriesTable.getSelectionModel().getSelectedItems());
                     categories.removeAll(categoriesTable.getSelectionModel().getSelectedItems());
 

@@ -116,7 +116,7 @@ public class BrandsMethods extends DatabaseMethods {
     }
 
     public static void removeBrands(Brand... removeBrands) {
-        String sqlQuery = "UPDATE brands SET brand_name = '" + REMOVE_BRAND_NAME + "' WHERE brand_id = ?";
+        String sqlQuery = "DELETE FROM brands WHERE brand_id = ?";
 
         try {
             PreparedStatement statement = connection.prepareStatement(sqlQuery);

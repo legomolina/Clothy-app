@@ -5,8 +5,10 @@ import com.jfoenix.controls.JFXDialog;
 import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
 import controllers.BaseController;
+import controllers.database.ArticlesMethods;
 import controllers.database.BrandsMethods;
 import controllers.database.DatabaseMethods;
+import controllers.database.SalesMethods;
 import custom.MaterialCheckBoxCell;
 import custom.validators.CustomRequiredFieldValidator;
 import custom.validators.EmailFieldValidator;
@@ -28,8 +30,10 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import models.Article;
 import models.Brand;
 import models.Employee;
+import models.Sale;
 import utils.AnimationHandler;
 import utils.DialogBuilder;
 
@@ -124,6 +128,17 @@ public class BrandsController extends BaseController {
         setModificationInputsText(selectedBrand);
     }
 
+    private boolean usedBrand(Brand... brands) {
+        for (Article a : ArticlesMethods.getAllArticles()) {
+            for (Brand b : brands) {
+                if (a.getBrand().equals(b))
+                    return true;
+            }
+        }
+
+        return false;
+    }
+
     @Override
     protected void removeListener() {
         if (currentStatus != ActionStatus.STATUS_VIEWING)
@@ -134,6 +149,19 @@ public class BrandsController extends BaseController {
                 .setOverlayClose(false)
                 .setCancelButton(actionEvent -> dialogBuilder.getDialog().close())
                 .setAcceptButton(actionEvent -> {
+                    if(usedBrand(selectedBrand)) {
+                        DialogBuilder dialogBuilder1 = new DialogBuilder(rootStackPane, DialogBuilder.DialogType.ALERT, JFXDialog.DialogTransition.CENTER, "custom-dialog");
+                        JFXDialog dialog1 = dialogBuilder1.setContent(new Text("No se puede eliminar la marca porque hay artículos relacionadas"))
+                                .setOverlayClose(false)
+                                .setAcceptButton(actionEvent1 -> {
+                                    dialogBuilder1.getDialog().close();
+                                    dialogBuilder.getDialog().close();
+                                }).build();
+                        dialog1.show();
+                        actionEvent.consume();
+                        return;
+                    }
+
                     BrandsMethods.removeBrands(selectedBrand);
                     selectedBrand.setChecked(false);
                     brands.remove(selectedBrand);
@@ -154,6 +182,19 @@ public class BrandsController extends BaseController {
                 .setOverlayClose(false)
                 .setCancelButton(actionEvent -> dialogBuilder.getDialog().close())
                 .setAcceptButton(actionEvent -> {
+                    if(usedBrand(brandsTable.getSelectionModel().getSelectedItems().toArray(new Brand[brandsTable.getSelectionModel().getSelectedItems().size()]))) {
+                        DialogBuilder dialogBuilder1 = new DialogBuilder(rootStackPane, DialogBuilder.DialogType.ALERT, JFXDialog.DialogTransition.CENTER, "custom-dialog");
+                        JFXDialog dialog1 = dialogBuilder1.setContent(new Text("No se pueden eliminar las marcas porque hay alguna que tiene artículos relacionados"))
+                                .setOverlayClose(false)
+                                .setAcceptButton(actionEvent1 -> {
+                                    dialogBuilder1.getDialog().close();
+                                    dialogBuilder.getDialog().close();
+                                }).build();
+                        dialog1.show();
+                        actionEvent.consume();
+                        return;
+                    }
+
                     BrandsMethods.removeBrands(brandsTable.getSelectionModel().getSelectedItems());
                     brands.removeAll(brandsTable.getSelectionModel().getSelectedItems());
 

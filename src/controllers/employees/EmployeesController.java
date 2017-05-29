@@ -2,8 +2,10 @@ package controllers.employees;
 
 import com.jfoenix.controls.*;
 import controllers.BaseController;
+import controllers.database.ArticlesMethods;
 import controllers.database.DatabaseMethods;
 import controllers.database.EmployeesMethods;
+import controllers.database.SalesMethods;
 import custom.MaterialCheckBoxCell;
 import custom.validators.CustomRequiredFieldValidator;
 import custom.validators.EmailFieldValidator;
@@ -29,7 +31,10 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import models.Article;
+import models.Brand;
 import models.Employee;
+import models.Sale;
 import utils.AnimationHandler;
 import utils.DialogBuilder;
 import utils.ImageUtils;
@@ -172,6 +177,17 @@ public class EmployeesController extends BaseController {
         setModificationInputsText(selectedEmployee);
     }
 
+    private boolean usedEmployee(Employee... employees) {
+        for (Sale s : SalesMethods.getAllSales()) {
+            for (Employee e : employees) {
+                if (s.getEmployee().equals(e))
+                    return true;
+            }
+        }
+
+        return false;
+    }
+
     //TODO Watch for logged employee. Prevent removing itself
     @Override
     protected void removeListener() {
@@ -183,6 +199,19 @@ public class EmployeesController extends BaseController {
                 .setOverlayClose(false)
                 .setCancelButton(actionEvent -> dialogBuilder.getDialog().close())
                 .setAcceptButton(actionEvent -> {
+                    if(usedEmployee(selectedEmployee)) {
+                        DialogBuilder dialogBuilder1 = new DialogBuilder(rootStackPane, DialogBuilder.DialogType.ALERT, JFXDialog.DialogTransition.CENTER, "custom-dialog");
+                        JFXDialog dialog1 = dialogBuilder1.setContent(new Text("No se puede eliminar el empleado porque hay ventas relacionadas"))
+                                .setOverlayClose(false)
+                                .setAcceptButton(actionEvent1 -> {
+                                    dialogBuilder1.getDialog().close();
+                                    dialogBuilder.getDialog().close();
+                                }).build();
+                        dialog1.show();
+                        actionEvent.consume();
+                        return;
+                    }
+
                     EmployeesMethods.removeEmployees(selectedEmployee);
                     selectedEmployee.setChecked(false);
                     employees.remove(selectedEmployee);
@@ -203,6 +232,19 @@ public class EmployeesController extends BaseController {
                 .setOverlayClose(false)
                 .setCancelButton(actionEvent -> dialogBuilder.getDialog().close())
                 .setAcceptButton(actionEvent -> {
+                    if(usedEmployee(employeesTable.getSelectionModel().getSelectedItems().toArray(new Employee[employeesTable.getSelectionModel().getSelectedItems().size()]))) {
+                        DialogBuilder dialogBuilder1 = new DialogBuilder(rootStackPane, DialogBuilder.DialogType.ALERT, JFXDialog.DialogTransition.CENTER, "custom-dialog");
+                        JFXDialog dialog1 = dialogBuilder1.setContent(new Text("No se pueden eliminar los empleados porque hay alguno que tiene ventas relacionadas"))
+                                .setOverlayClose(false)
+                                .setAcceptButton(actionEvent1 -> {
+                                    dialogBuilder1.getDialog().close();
+                                    dialogBuilder.getDialog().close();
+                                }).build();
+                        dialog1.show();
+                        actionEvent.consume();
+                        return;
+                    }
+
                     EmployeesMethods.removeEmployees(employeesTable.getSelectionModel().getSelectedItems());
                     employees.removeAll(employeesTable.getSelectionModel().getSelectedItems());
 

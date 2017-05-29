@@ -39,6 +39,32 @@ public class ArticlesMethods extends DatabaseMethods {
         return null;
     }
 
+    public static ArrayList<Article> getArticlesByCode(String articleCode) {
+        ArrayList<Article> articles = new ArrayList<>();
+        String sqlQuery = "SELECT * FROM articles WHERE article_code = ?";
+
+        try {
+            PreparedStatement statement = connection.prepareStatement(sqlQuery);
+            statement.setString(1, articleCode);
+            ResultSet result = statement.executeQuery();
+
+            while(result.next())
+                articles.add(new Article(result.getInt("article_id"), result.getString("article_code"),
+                        result.getString("article_name"), result.getString("article_description"),
+                        CategoriesMethods.getArticleCategories(result.getInt("article_id")),
+                        BrandsMethods.getBrand(result.getInt("article_brand")), result.getFloat("article_price")));
+
+        } catch (NullPointerException e) {
+            System.out.println("An error occurred with Database connection");
+            e.printStackTrace();
+        } catch (SQLException e) {
+            System.out.println("An error occurred preparing the Query: " + sqlQuery);
+            e.printStackTrace();
+        }
+
+        return articles;
+    }
+
     public static ArrayList<Article> getAllArticles() {
         ArrayList<Article> articles = new ArrayList<>();
         ArrayList<Category> categories;

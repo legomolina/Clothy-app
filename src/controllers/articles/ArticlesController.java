@@ -2,10 +2,7 @@ package controllers.articles;
 
 import com.jfoenix.controls.*;
 import controllers.BaseController;
-import controllers.database.ArticlesMethods;
-import controllers.database.BrandsMethods;
-import controllers.database.CategoriesMethods;
-import controllers.database.DatabaseMethods;
+import controllers.database.*;
 import custom.MaterialCheckBoxCell;
 import custom.MaterialCheckBoxListCell;
 import custom.validators.CustomDoubleValidator;
@@ -27,10 +24,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Callback;
-import models.Article;
-import models.Brand;
-import models.Category;
-import models.Employee;
+import models.*;
 import utils.AnimationHandler;
 import utils.DialogBuilder;
 
@@ -154,6 +148,19 @@ public class ArticlesController extends BaseController {
         setModificationInputsText(selectedArticle);
     }
 
+    private boolean usedArticle(Article... articles) {
+        for(Sale s : SalesMethods.getAllSales()) {
+            for(SaleLine sl : SalesMethods.getSaleLines(s)) {
+                for (Article a : articles) {
+                    if (sl.getArticle().equals(a))
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
     @Override
     protected void removeListener() {
         if (currentStatus != ActionStatus.STATUS_VIEWING)
@@ -164,6 +171,19 @@ public class ArticlesController extends BaseController {
                 .setOverlayClose(false)
                 .setCancelButton(actionEvent -> dialogBuilder.getDialog().close())
                 .setAcceptButton(actionEvent -> {
+                    if(usedArticle(selectedArticle)) {
+                        DialogBuilder dialogBuilder1 = new DialogBuilder(rootStackPane, DialogBuilder.DialogType.ALERT, JFXDialog.DialogTransition.CENTER, "custom-dialog");
+                        JFXDialog dialog1 = dialogBuilder1.setContent(new Text("No se puede eliminar el artículo porque hay ventas relacionadas"))
+                                .setOverlayClose(false)
+                                .setAcceptButton(actionEvent1 -> {
+                                    dialogBuilder1.getDialog().close();
+                                    dialogBuilder.getDialog().close();
+                                }).build();
+                        dialog1.show();
+                        actionEvent.consume();
+                        return;
+                    }
+
                     ArticlesMethods.removeArticles(selectedArticle);
                     selectedArticle.setChecked(false);
                     articles.remove(selectedArticle);
@@ -184,6 +204,19 @@ public class ArticlesController extends BaseController {
                 .setOverlayClose(false)
                 .setCancelButton(actionEvent -> dialogBuilder.getDialog().close())
                 .setAcceptButton(actionEvent -> {
+                    if(usedArticle(articlesTable.getSelectionModel().getSelectedItems().toArray(new Article[articlesTable.getSelectionModel().getSelectedItems().size()]))) {
+                        DialogBuilder dialogBuilder1 = new DialogBuilder(rootStackPane, DialogBuilder.DialogType.ALERT, JFXDialog.DialogTransition.CENTER, "custom-dialog");
+                        JFXDialog dialog1 = dialogBuilder1.setContent(new Text("No se pueden eliminar los artículos porque hay alguno que tiene ventas relacionadas"))
+                                .setOverlayClose(false)
+                                .setAcceptButton(actionEvent1 -> {
+                                    dialogBuilder1.getDialog().close();
+                                    dialogBuilder.getDialog().close();
+                                }).build();
+                        dialog1.show();
+                        actionEvent.consume();
+                        return;
+                    }
+
                     ArticlesMethods.removeArticles(articlesTable.getSelectionModel().getSelectedItems());
                     articles.removeAll(articlesTable.getSelectionModel().getSelectedItems());
 

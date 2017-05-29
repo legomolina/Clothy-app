@@ -107,7 +107,7 @@ public class SalesController extends BaseController {
         if(currentStatus == ActionStatus.STATUS_NONE || selectedSale == null)
             return;
 
-        new SaleLinesController(selectedSale).buildDialog(rootStackPane);
+        new SaleLinesController(selectedSale, currentStatus).buildDialog(rootStackPane);
     }
 
     @Override

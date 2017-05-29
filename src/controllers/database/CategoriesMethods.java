@@ -114,7 +114,7 @@ public class CategoriesMethods extends DatabaseMethods {
     }
 
     public static void removeCategories(Category... removeCategories) {
-        String sqlQuery = "UPDATE categories SET category_name = '" + REMOVE_CATEGORY_NAME + "' WHERE category_id = ?";
+        String sqlQuery = "DELETE FROM categories WHERE category_id = ?";
 
         try {
             PreparedStatement statement = connection.prepareStatement(sqlQuery);

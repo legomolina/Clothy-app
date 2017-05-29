@@ -1,5 +1,8 @@
 package custom;
 
+import com.jfoenix.controls.JFXTextField;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Side;
 import javafx.scene.Cursor;
 import javafx.scene.control.ContextMenu;
@@ -18,15 +21,20 @@ import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 
-public class AutoCompleteTextField extends TextField {
-    private final SortedSet<String> entries;
+public class AutoCompleteTextField extends JFXTextField {
+    protected SortedSet<String> entries;
     private ContextMenu entriesPopup;
     private static int MAX_ENTRIES = 5;
     private static Paint COINCIDENT_COLOR = Color.TOMATO;
     private static String SUGGESTION_STYLE_CLASS = "suggestion-item";
 
     public AutoCompleteTextField() {
-        super();
+        this("");
+    }
+
+    public AutoCompleteTextField(String text) {
+        super(text);
+
         this.entries = new TreeSet<>();
         this.entriesPopup = new ContextMenu();
 
@@ -48,7 +56,9 @@ public class AutoCompleteTextField extends TextField {
                     populatePopup(filteredEntries, enteredText);
 
                     if (!entriesPopup.isShowing())
-                        entriesPopup.show(AutoCompleteTextField.this, Side.BOTTOM, 0, 0);
+                        try {
+                            entriesPopup.show(AutoCompleteTextField.this, Side.BOTTOM, 0, 0);
+                        } catch (IllegalArgumentException e) {}
                 } else {
                     entriesPopup.hide();
                 }
@@ -100,5 +110,9 @@ public class AutoCompleteTextField extends TextField {
 
     public SortedSet<String> getEntries() {
         return entries;
+    }
+
+    public ContextMenu getEntriesPopup() {
+        return entriesPopup;
     }
 }

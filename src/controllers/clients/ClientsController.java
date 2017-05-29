@@ -8,6 +8,7 @@ import com.jfoenix.controls.JFXTextField;
 import controllers.BaseController;
 import controllers.database.ClientsMethods;
 import controllers.database.DatabaseMethods;
+import controllers.database.SalesMethods;
 import custom.MaterialCheckBoxCell;
 import custom.validators.CustomRequiredFieldValidator;
 import custom.validators.EmailFieldValidator;
@@ -32,6 +33,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import models.Client;
 import models.Employee;
+import models.Sale;
 import utils.AnimationHandler;
 import utils.DialogBuilder;
 
@@ -134,6 +136,17 @@ public class ClientsController extends BaseController {
         setModificationInputsText(selectedClient);
     }
 
+    private boolean usedClient(Client... clients) {
+        for(Sale s : SalesMethods.getAllSales()) {
+            for(Client c : clients) {
+                if(s.getClient().equals(c))
+                    return true;
+            }
+        }
+
+        return false;
+    }
+
     @Override
     protected void removeListener() {
         if (currentStatus != ActionStatus.STATUS_VIEWING)
@@ -144,6 +157,19 @@ public class ClientsController extends BaseController {
                 .setOverlayClose(false)
                 .setCancelButton(actionEvent -> dialogBuilder.getDialog().close())
                 .setAcceptButton(actionEvent -> {
+                    if(usedClient(selectedClient)) {
+                        DialogBuilder dialogBuilder1 = new DialogBuilder(rootStackPane, DialogBuilder.DialogType.ALERT, JFXDialog.DialogTransition.CENTER, "custom-dialog");
+                        JFXDialog dialog1 = dialogBuilder1.setContent(new Text("No se puede eliminar al cliente porque hay ventas relacionadas"))
+                                .setOverlayClose(false)
+                                .setAcceptButton(actionEvent1 -> {
+                                    dialogBuilder1.getDialog().close();
+                                    dialogBuilder.getDialog().close();
+                                }).build();
+                        dialog1.show();
+                        actionEvent.consume();
+                        return;
+                    }
+
                     ClientsMethods.removeClients(selectedClient);
                     selectedClient.setChecked(false);
                     clients.remove(selectedClient);
@@ -164,6 +190,19 @@ public class ClientsController extends BaseController {
                 .setOverlayClose(false)
                 .setCancelButton(actionEvent -> dialogBuilder.getDialog().close())
                 .setAcceptButton(actionEvent -> {
+                    if(usedClient(clientsTable.getSelectionModel().getSelectedItems().toArray(new Client[clientsTable.getSelectionModel().getSelectedItems().size()]))) {
+                        DialogBuilder dialogBuilder1 = new DialogBuilder(rootStackPane, DialogBuilder.DialogType.ALERT, JFXDialog.DialogTransition.CENTER, "custom-dialog");
+                        JFXDialog dialog1 = dialogBuilder1.setContent(new Text("No se pueden eliminar los clientes porque hay alguno que tiene ventas relacionadas"))
+                                .setOverlayClose(false)
+                                .setAcceptButton(actionEvent1 -> {
+                                    dialogBuilder1.getDialog().close();
+                                    dialogBuilder.getDialog().close();
+                                }).build();
+                        dialog1.show();
+                        actionEvent.consume();
+                        return;
+                    }
+
                     ClientsMethods.removeClients(clientsTable.getSelectionModel().getSelectedItems());
                     clients.removeAll(clientsTable.getSelectionModel().getSelectedItems());
 

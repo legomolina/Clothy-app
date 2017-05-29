@@ -1,23 +1,28 @@
 package models;
 
 
+import javafx.beans.binding.Bindings;
 import javafx.beans.property.*;
 
 public class SaleLine {
     private IntegerProperty id;
-    private Article article;
+    private ObjectProperty<Article> article;
     private Sale sale;
     private FloatProperty discount;
     private IntegerProperty quantity;
+    private FloatProperty total;
     private BooleanProperty checked;
 
     public SaleLine(int id, Article article, Sale sale, float discount, int quantity) {
         this.id = new SimpleIntegerProperty(id);
-        this.article = article;
+        this.article = new SimpleObjectProperty<>(article);
         this.sale = sale;
         this.discount = new SimpleFloatProperty(discount);
         this.quantity = new SimpleIntegerProperty(quantity);
         this.checked = new SimpleBooleanProperty(false);
+
+        this.total = new SimpleFloatProperty();
+        this.total.bind(Bindings.multiply(Bindings.subtract(Bindings.selectFloat(this.article, "price"), Bindings.multiply(Bindings.selectFloat(this.article, "price"), this.discount)), this.quantity));
     }
 
     public int getId() {
@@ -33,11 +38,15 @@ public class SaleLine {
     }
 
     public Article getArticle() {
+        return article.get();
+    }
+
+    public ObjectProperty<Article> articleProperty() {
         return article;
     }
 
     public void setArticle(Article article) {
-        this.article = article;
+        this.article.set(article);
     }
 
     public Sale getSale() {
@@ -82,5 +91,18 @@ public class SaleLine {
 
     public void setChecked(boolean checked) {
         this.checked.set(checked);
+    }
+
+    public float getTotal() {
+        return total.get();
+    }
+
+    public FloatProperty totalProperty() {
+        return total;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        return object instanceof SaleLine && (this.id.get() == ((SaleLine) object).getId() && this.sale.getId() == ((SaleLine) object).getSale().getId());
     }
 }

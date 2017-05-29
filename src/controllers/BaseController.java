@@ -27,7 +27,7 @@ public abstract class BaseController implements Initializable {
         public static final String RED = "#FF5440";
     }
 
-    protected enum ActionStatus {
+    public enum ActionStatus {
         STATUS_NONE,
         STATUS_VIEWING,
         STATUS_ADDING,
